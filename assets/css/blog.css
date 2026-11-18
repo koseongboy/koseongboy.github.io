@@ -116,3 +116,9 @@ a.cat-badge:hover { color: var(--accent-hover); text-decoration: underline; }
 .hljs-meta, .hljs-deletion { color: var(--danger); }
 .hljs-emphasis { font-style: italic; }
 .hljs-strong { font-weight: 700; }
+
+/* 태그와 이름이 같은 포트폴리오 프로젝트로 가는 버튼 */
+.post-projects { display: flex; flex-wrap: wrap; gap: 8px; }
+.post-projects .btn { min-height: 44px; padding: 0 16px; font-size: 14px; gap: 10px; }
+.post-projects-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+.post-projects .btn:hover .post-projects-label { color: inherit; }

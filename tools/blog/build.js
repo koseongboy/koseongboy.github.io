@@ -121,7 +121,29 @@ const FAVICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' vi
 const THEME_TOGGLE = '<button type="button" class="theme-toggle" aria-label="라이트/다크 모드 전환"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>';
 const THEME_INIT = `<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>`;
 
-function postPage(p, prev, next) {
+/* ---------------- 태그 ↔ 포트폴리오 프로젝트 연결 ----------------
+ * portfolio/projects/*.html 의 제목(h1)이나 파일 이름과 같은 태그가 있으면
+ * 글 페이지 해시태그 아래에 해당 프로젝트로 가는 버튼을 만듭니다.
+ * 비교할 때 대소문자·공백·하이픈·밑줄은 무시합니다. (예: "Spell Arena" = "spellarena" = "spell-arena") */
+const PROJECTS_DIR = path.join(ROOT, 'portfolio', 'projects');
+const normKey = (s) => String(s).toLowerCase().replace(/[\s\-_.·]+/g, '');
+function readProjects() {
+  if (!fs.existsSync(PROJECTS_DIR)) return [];
+  return fs.readdirSync(PROJECTS_DIR).filter((f) => f.endsWith('.html')).map((f) => {
+    const html = fs.readFileSync(path.join(PROJECTS_DIR, f), 'utf8');
+    const m = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+    const name = m ? m[1].replace(/<span class="partner-tag">[\s\S]*?<\/span>/g, '').replace(/<[^>]+>/g, '').trim() : f.replace(/\.html$/, '');
+    const slug = f.replace(/\.html$/, '');
+    return { file: f, name, keys: new Set([normKey(name), normKey(slug)]) };
+  });
+}
+function relatedProjects(tags, projects) {
+  const keys = new Set(tags.map(normKey));
+  return projects.filter((pr) => [...pr.keys].some((k) => keys.has(k)));
+}
+
+function postPage(p, prev, next, projects = readProjects()) {
+  const related = relatedProjects(p.tags, projects);
   const url = `${SITE}/posts/${encodeURIComponent(p.slug)}.html`;
   const cover = p.coverPath ? `${SITE}/${p.coverPath}` : '';
   const catHref = p.category ? `../?category=${encodeURIComponent(p.category)}` : '';
@@ -184,6 +206,7 @@ ${THEME_INIT}
         <h1>${esc(p.title)}</h1>
         <div class="post-meta"><time datetime="${esc(p.date)}">${esc(fmtDate(p.date))}</time><span>·</span><span>${p.readMin}분 읽기</span></div>
         ${p.tags.length ? `<ul class="post-tags">${p.tags.map((t) => `<li><a href="../?tag=${esc(encodeURIComponent(t))}">#${esc(t)}</a></li>`).join('')}</ul>` : ''}
+        ${related.length ? `<div class="post-projects">${related.map((pr) => `<a class="btn btn-secondary" href="../portfolio/projects/${esc(pr.file)}"><span class="post-projects-label">Portfolio</span>${esc(pr.name)} →</a>`).join('')}</div>` : ''}
       </header>
       ${p.cover ? `<img class="post-cover" src="../${esc(p.cover)}" alt="${esc(p.title)} 대표 이미지">` : ''}
       <div class="post-body">
@@ -300,8 +323,9 @@ function buildAll(opts = {}) {
   const published = all.filter((p) => !p.draft && p.body != null);
 
   // 글 페이지: 발행 글은 다시 만들고, 임시저장 글의 html 은 지움 (공개되지 않게)
+  const projects = readProjects();
   published.forEach((p, i) => {
-    write(path.join(POSTS_DIR, p.slug + '.html'), postPage(p, published[i + 1], published[i - 1]));
+    write(path.join(POSTS_DIR, p.slug + '.html'), postPage(p, published[i + 1], published[i - 1], projects));
   });
   for (const p of all) {
     const htmlPath = path.join(POSTS_DIR, p.slug + '.html');
