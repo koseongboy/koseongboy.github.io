@@ -4,72 +4,45 @@
 <meta charset="utf-8">
 <title>OG Image (1200x630)</title>
 <!--
-  사이트 공유용 미리보기 이미지 원본.
+  사이트 공유용 미리보기 이미지 원본 (시안 B · 에디토리얼 미니멀).
   다시 만들기:  node tools/og/render.js   → assets/img/og-image.png
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;family=Noto+Sans+KR:wght@500;700&amp;family=Silkscreen:wght@400;700&amp;display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;700;900&amp;family=Space+Grotesk:wght@500;700&amp;display=block" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
-  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #0f1328; }
-  body {
-    position: relative; color: #eef0ff; font-family: 'Noto Sans KR', sans-serif;
-    background:
-      linear-gradient(rgba(42, 49, 102, 0.35) 2px, transparent 2px) 0 0 / 40px 40px,
-      linear-gradient(90deg, rgba(42, 49, 102, 0.35) 2px, transparent 2px) 0 0 / 40px 40px,
-      #0f1328;
-  }
-  .frame {
-    position: absolute; inset: 36px; background: #171c3a;
-    border: 8px solid #2a3166; box-shadow: 16px 16px 0 #070a1a;
-    display: flex; align-items: stretch;
-  }
-  .left { flex: 1; padding: 56px 0 48px 64px; display: flex; flex-direction: column; }
-  .kicker { font-family: 'Silkscreen', monospace; font-size: 24px; color: #f5c451; letter-spacing: 1px; }
-  .name { margin-top: 18px; font-family: 'Do Hyeon', sans-serif; font-size: 132px; line-height: 1; }
-  .role { margin-top: 14px; font-size: 34px; font-weight: 700; color: #c4c9ef; }
-  .slots { margin-top: auto; display: flex; gap: 14px; }
-  .slot {
-    background: #232a55; padding: 12px 20px; font-size: 24px; font-weight: 700;
-    box-shadow: inset -5px -5px 0 rgba(0, 0, 0, 0.35), inset 5px 5px 0 rgba(255, 255, 255, 0.06);
-  }
-  .right { width: 380px; padding: 48px 56px 48px 0; display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; }
-  .domain { font-family: 'Silkscreen', monospace; font-size: 26px; color: #f5c451; }
-  .tabs { display: flex; flex-direction: column; gap: 12px; align-items: flex-end; }
-  .tab { font-family: 'Silkscreen', monospace; font-size: 22px; color: #0f1328; background: #f5c451; padding: 6px 14px; box-shadow: inset -4px -4px 0 rgba(0, 0, 0, 0.25); }
-  .tab.alt { background: #4da3ff; }
-
-  /* 픽셀 엠블럼 (파비콘과 같은 모양을 크게) */
-  .emblem { position: relative; width: 208px; height: 208px; }
-  .emblem i { position: absolute; display: block; }
-  .e1 { inset: 0; background: #f5c451; box-shadow: 12px 12px 0 #070a1a; }
-  .e2 { inset: 52px; background: #171c3a; }
-  .e3 { inset: 80px; background: #f5c451; }
-  .px { width: 26px; height: 26px; background: #f5c451; }
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #ffffff; }
+  body { position: relative; color: #111111; font-family: 'Noto Sans KR', sans-serif; padding: 64px 80px 56px; display: flex; flex-direction: column; }
+  .top { display: flex; justify-content: space-between; align-items: center; padding-bottom: 22px; border-bottom: 3px solid #111111; }
+  .brand { display: flex; align-items: center; gap: 14px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 26px; letter-spacing: 0.02em; }
+  .mark { width: 40px; height: 40px; }
+  .label { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: 0.14em; text-transform: uppercase; color: #1f3fd1; }
+  .main { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 22px; }
+  .name { font-weight: 900; font-size: 168px; line-height: 0.95; letter-spacing: -0.045em; }
+  .lead { font-size: 32px; font-weight: 500; color: #333333; letter-spacing: -0.01em; }
+  .lead b { color: #1f3fd1; font-weight: 700; }
+  .bottom { display: flex; justify-content: space-between; align-items: baseline; padding-top: 20px; border-top: 1px solid #dddddd; font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: #5c5c66; }
+  .bottom span + span::before { content: "·"; margin: 0 14px; }
+  .bar { position: absolute; right: 0; top: 0; width: 24px; height: 100%; background: #1f3fd1; }
 </style>
 </head>
 <body>
-  <div class="frame">
-    <div class="left">
-      <div class="kicker">&gt; PLAYER 1 READY</div>
-      <div class="name">고성현</div>
-      <div class="role">Game Client Engineer</div>
-      <div class="slots">
-        <span class="slot">Unity</span>
-        <span class="slot">C#</span>
-        <span class="slot">C++</span>
-        <span class="slot">Netcode</span>
-      </div>
+  <div class="bar" aria-hidden="true"></div>
+  <div class="top">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 16 16" aria-hidden="true"><rect width="16" height="16" fill="#1f3fd1"/><rect x="3" y="3" width="3" height="10" fill="#fff"/><path d="M7 8L11.5 3H14L9.5 8L14 13H11.5Z" fill="#fff"/></svg>
+      KOSEONGBOY.DEV
     </div>
-    <div class="right">
-      <div class="domain">KOSEONGBOY.DEV</div>
-      <div class="emblem" aria-hidden="true"><i class="e1"></i><i class="e2"></i><i class="e3"></i></div>
-      <div class="tabs">
-        <span class="tab">DEV BLOG</span>
-        <span class="tab alt">PORTFOLIO</span>
-      </div>
-    </div>
+    <div class="label">Game Client Engineer</div>
+  </div>
+  <div class="main">
+    <div class="name">고성현</div>
+    <div class="lead"><b>Dev Blog</b> &amp; <b>Portfolio</b> — Unity · C# 게임 클라이언트 개발 기록</div>
+  </div>
+  <div class="bottom">
+    <div><span>Unity</span><span>C#</span><span>C++</span><span>Netcode</span></div>
+    <div>koseongboy.github.io</div>
   </div>
 </body>
 </html>

@@ -68,7 +68,7 @@
     height: 'max(560px, 70vh)',
     initialEditType: 'wysiwyg',
     previewStyle: 'vertical',
-    theme: 'dark',
+    theme: (document.documentElement.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')) === 'dark' ? 'dark' : 'light',
     language: 'ko-KR',
     usageStatistics: false,
     placeholder: '내용을 입력하세요',

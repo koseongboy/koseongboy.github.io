@@ -6,12 +6,12 @@
 .ed-on body, .ed-mode-view body { padding-bottom: 96px; }
 
 /* 클릭 가능한 대상 표시 */
-.ed-hover-text { outline: 2px dashed #f5c451 !important; outline-offset: 3px; cursor: text !important; }
+.ed-hover-text { outline: 2px dashed #e8590c !important; outline-offset: 3px; cursor: text !important; }
 .ed-hover-link { outline: 2px dashed #ff8ad8 !important; outline-offset: 3px; cursor: pointer !important; }
 .ed-hover-image { outline: 3px dashed #6fd3ff !important; outline-offset: -3px; cursor: copy !important; }
 .ed-hover-image.quest-thumb-placeholder::after,
 .ed-hover-image.detail-cover-placeholder::after { content: ' (클릭해서 이미지 선택)'; }
-.ed-editing { outline: 2px solid #f5c451 !important; outline-offset: 3px; background: rgba(245, 196, 81, 0.08); cursor: text; }
+.ed-editing { outline: 2px solid #e8590c !important; outline-offset: 3px; background: rgba(232, 89, 12, 0.08); cursor: text; }
 .ed-link-active { outline: 2px solid #ff8ad8 !important; outline-offset: 3px; }
 
 /* 편집기 UI */

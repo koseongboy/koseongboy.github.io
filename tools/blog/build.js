@@ -117,7 +117,9 @@ const OG_META = [
   `<meta name="twitter:image" content="${OG_IMAGE}">`,
 ].join('\n');
 
-const FAVICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230f1328'/%3E%3Crect x='3' y='3' width='10' height='10' fill='%23f5c451'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%230f1328'/%3E%3C/svg%3E";
+const FAVICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%231f3fd1'/%3E%3Crect x='3' y='3' width='3' height='10' fill='white'/%3E%3Cpath d='M7 8L11.5 3H14L9.5 8L14 13H11.5Z' fill='white'/%3E%3C/svg%3E";
+const THEME_TOGGLE = '<button type="button" class="theme-toggle" aria-label="라이트/다크 모드 전환"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>';
+const THEME_INIT = `<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>`;
 
 function postPage(p, prev, next) {
   const url = `${SITE}/posts/${encodeURIComponent(p.slug)}.html`;
@@ -146,15 +148,17 @@ function postPage(p, prev, next) {
 <meta property="og:url" content="${esc(url)}">
 ${OG_META}
 <meta property="article:published_time" content="${esc(p.date)}">
-<meta name="theme-color" content="#0f1328">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0f12" media="(prefers-color-scheme: dark)">
+${THEME_INIT}
 <link rel="alternate" type="application/rss+xml" title="${BLOG_NAME}" href="../feed.xml">
 <link rel="icon" href="${FAVICON}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;family=JetBrains+Mono:wght@400;600&amp;family=Noto+Sans+KR:wght@400;500;700&amp;family=Silkscreen:wght@400;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&amp;family=Space+Grotesk:wght@400;500;700&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/style.css">
 <link rel="stylesheet" href="../assets/css/blog.css">
+<script src="../assets/js/theme.js" defer></script>
 <script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>
 </head>
 <body data-page="post" data-slug="${esc(p.slug)}">
@@ -163,16 +167,17 @@ ${OG_META}
   <nav class="container" aria-label="주요 메뉴">
     <a href="../" class="logo">${BLOG_NAME}</a>
     <div class="nav-links">
-      <a href="../" aria-current="page">BLOG</a>
-      <a href="../portfolio/">PORTFOLIO</a>
-      <a href="https://github.com/koseongboy" target="_blank" rel="noopener">GITHUB</a>
+      <a href="../" aria-current="page">Blog</a>
+      <a href="../portfolio/">Portfolio</a>
+      <a href="https://github.com/koseongboy" target="_blank" rel="noopener">GitHub ↗</a>
+      ${THEME_TOGGLE}
     </div>
   </nav>
 </header>
 
 <main class="container">
   <div class="post-wrap">
-    <div class="breadcrumb"><a href="../">◀ BLOG</a></div>
+    <div class="breadcrumb"><a href="../">← 모든 글</a></div>
     <article>
       <header class="post-header">
         ${p.category ? `<div><a class="cat-badge" href="${esc(catHref)}">${esc(p.category)}</a></div>` : ''}
@@ -188,13 +193,13 @@ ${p.body || ''}
       </div>
     </article>
     <nav class="post-nav" aria-label="이전 글 / 다음 글">
-      ${navLink(prev, '◀ PREV', 'prev')}
-      ${navLink(next, 'NEXT ▶', 'next')}
+      ${navLink(prev, '← 이전 글', 'prev')}
+      ${navLink(next, '다음 글 →', 'next')}
     </nav>
   </div>
 </main>
 
-<footer class="site-footer"><p class="copyright">© 2026 KO SEONGHYEON · <a href="../feed.xml">RSS</a></p></footer>
+<footer class="site-footer"><p class="copyright">© 2026 Ko Seonghyeon · <a href="../feed.xml">RSS</a></p></footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>if (window.hljs) document.querySelectorAll('.post-body pre code').forEach(function (el) { hljs.highlightElement(el); });</script>
 </body>
@@ -204,9 +209,9 @@ ${p.body || ''}
 
 function homePosts(posts) {
   if (!posts.length) {
-    return `      <div class="panel empty-state" data-generated>
-        <strong>NO POSTS YET</strong>
-        <span>아직 작성한 글이 없어요.</span>
+    return `      <div class="empty-state" data-generated>
+        <strong>아직 글이 없어요</strong>
+        <span>첫 글이 곧 올라옵니다.</span>
       </div>`;
   }
   const items = posts.map((p) => {

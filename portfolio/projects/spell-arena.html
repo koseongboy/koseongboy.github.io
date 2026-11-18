@@ -17,45 +17,49 @@
 <meta property="og:image:alt" content="KOSEONGBOY.DEV — 고성현 Game Client Engineer 개발 블로그 &amp; 포트폴리오">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://koseongboy.github.io/assets/img/og-image.png">
-<meta name="theme-color" content="#0f1328">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230f1328'/%3E%3Crect x='3' y='3' width='10' height='10' fill='%23f5c451'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%230f1328'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0f12" media="(prefers-color-scheme: dark)">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%231f3fd1'/%3E%3Crect x='3' y='3' width='3' height='10' fill='white'/%3E%3Cpath d='M7 8L11.5 3H14L9.5 8L14 13H11.5Z' fill='white'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;family=Noto+Sans+KR:wght@400;500;700&amp;family=Silkscreen:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&amp;family=Space+Grotesk:wght@400;500;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/style.css">
+<script src="../../assets/js/theme.js" defer></script>
 </head>
 <body>
 
 <header class="site-header">
   <nav class="container" aria-label="주요 메뉴">
-    <a href="../" class="logo">KOSEONGBOY</a>
+    <a href="../" class="logo">KO SEONGHYEON</a>
     <div class="nav-links">
-      <a href="../../">◀ BLOG</a>
-      <a href="../#status">STATUS</a>
-      <a href="../#inventory">INVENTORY</a>
-      <a href="../#quests">QUESTS</a>
-      <a href="../#contact">PARTY UP</a>
+      <a href="../../">Blog</a>
+      <a href="../#work">Work</a>
+      <a href="../#troubleshooting">Troubleshooting</a>
+      <a href="../#skills">Skills</a>
+      <a href="../#contact">Contact</a>
+      <button type="button" class="theme-toggle" aria-label="라이트/다크 모드 전환"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
     </div>
   </nav>
 </header>
 
 <main class="container">
-  <div class="breadcrumb"><a href="../#quests">◀ QUEST LOG</a></div>
+  <div class="breadcrumb"><a href="../#work">← Selected Work</a></div>
 
   <section class="detail-hero">
-    <div class="quest-meta"><span class="badge badge-clear">CLEAR</span><span>QUEST 02</span></div>
+    <div class="quest-meta"><span class="quest-num">02</span><span class="status status-done">완료</span></div>
     <h1>Spell Arena</h1>
     <p class="tagline">제시된 단어들로 창의적인 영창을 만들고, 평가받아 데미지 보너스를 얻는 카드 게임</p>
   </section>
 
   <img class="detail-cover" src="../../assets/img/spell-arena.jpg" alt="Spell Arena 영창 화면: 보라색 마법진 위에 '이 자리에서 선언하노니! 고요한 종말을 목도하라!' 영창 문구" width="1490" height="835">
 
-  <div class="panel spec">
+  <div class="spec">
     <dl>
-      <dt>PERIOD</dt><dd>2026.03 ~ 2026.07</dd>
-      <dt>PARTY</dt><dd>3인 (클라이언트 1인, 기획/PM 1인, 백엔드 1인)</dd>
-      <dt>ROLE</dt><dd>클라이언트 개발</dd>
-      <dt>STACK</dt><dd><ul class="chips"><li>Unity 3D</li><li>C#</li><li>Netcode for GameObjects</li><li>MVP</li><li>Command</li></ul></dd>
+      <dt>Period</dt><dd>2026.03 ~ 2026.07</dd>
+      <dt>Team</dt><dd>3인 (클라이언트 1인, 기획/PM 1인, 백엔드 1인)</dd>
+      <dt>Role</dt><dd>클라이언트 개발</dd>
+      <dt>Stack</dt><dd><ul class="chips"><li>Unity 3D</li><li>C#</li><li>Netcode for GameObjects</li><li>MVP</li><li>Command</li></ul></dd>
     </dl>
   </div>
   <div class="detail-links">
@@ -70,7 +74,7 @@
       <div><strong>28 / 20+ / 7</strong><span>모듈화한 효과 타입 / 상태이상 / 조건절</span></div>
       <div><strong>15분+ → 1분</strong><span>신규 카드 1종 추가 공수</span></div>
     </div>
-    <div class="panel prose-block">
+    <div class="prose-block">
       <div>
         <h3>데이터 주도 카드 효과 엔진 구축</h3>
         <ul>
@@ -94,7 +98,7 @@
 
   <section class="section" aria-labelledby="job">
     <h2 id="job" class="section-title">02 · ARCANE CLASS PERKS</h2>
-    <div class="panel prose-block">
+    <div class="prose-block">
       <div>
         <h3>네트워크 모델</h3>
         <ul>
@@ -117,31 +121,31 @@
     <div class="boss-log">
       <h3>단일 API 의존의 한계 인지와 최적화 방향 도출</h3>
       <dl>
-        <dt class="dt-encounter">ENCOUNTER</dt><dd>음성 원본을 멀티모달 LLM에 한 번에 보내 창의성과 몰입도를 동시에 평가하는 구조였습니다. 경량 모델(Gemini 2.5 Flash)은 음성 인식 정확도가 떨어져 문맥을 온전히 판별하지 못했고, 대형 모델(GPT-4o Audio)은 추론 시간이 길어 실시간성이 훼손됐으며 예산상 도입도 어려웠습니다.</dd>
-        <dt class="dt-action">ACTION</dt><dd>데이터를 목적에 맞게 나누는 2-Track 파이프라인을 도출했습니다. 창의성(문맥)은 클라이언트에서 STT로 텍스트화해 가벼운 페이로드만 LLM에 요청하고, 몰입도(감정)는 주파수·진폭 등 음향 피처를 자체 분석합니다.</dd>
+        <dt class="dt-encounter">ISSUE</dt><dd>음성 원본을 멀티모달 LLM에 한 번에 보내 창의성과 몰입도를 동시에 평가하는 구조였습니다. 경량 모델(Gemini 2.5 Flash)은 음성 인식 정확도가 떨어져 문맥을 온전히 판별하지 못했고, 대형 모델(GPT-4o Audio)은 추론 시간이 길어 실시간성이 훼손됐으며 예산상 도입도 어려웠습니다.</dd>
+        <dt class="dt-action">DECISION</dt><dd>데이터를 목적에 맞게 나누는 2-Track 파이프라인을 도출했습니다. 창의성(문맥)은 클라이언트에서 STT로 텍스트화해 가벼운 페이로드만 LLM에 요청하고, 몰입도(감정)는 주파수·진폭 등 음향 피처를 자체 분석합니다.</dd>
         <dt class="dt-result">RESULT</dt><dd>완성된 외부 API에 통째로 의존할 때 생기는 퍼포먼스 병목을 체감했고, 차기 유지보수 목표로 데이터 특성에 맞춰 파이프라인을 분리하고 지연 시간을 최소화하는 구조를 잡았습니다.</dd>
       </dl>
     </div>
     <div class="boss-log">
       <h3>네트워크 환경의 한계</h3>
       <dl>
-        <dt class="dt-encounter">ENCOUNTER</dt><dd>서버 권위 모델을 설계했지만 비용과 구조적 한계로 호스트가 서버를 겸하는 Listen Server를 채택해, 호스트 PC가 조작되면 서버 전체가 노출되는 보안 한계가 남았습니다. 또한 ParrelSync로 단일 PC에서 다중 클라이언트를 검증해 실제 네트워크 지연을 온전히 체감하지 못했습니다.</dd>
-        <dt class="dt-action">ACTION</dt><dd>보안과 지연 문제의 원인을 개발 환경 구조에서 찾아 정리했습니다.</dd>
+        <dt class="dt-encounter">ISSUE</dt><dd>서버 권위 모델을 설계했지만 비용과 구조적 한계로 호스트가 서버를 겸하는 Listen Server를 채택해, 호스트 PC가 조작되면 서버 전체가 노출되는 보안 한계가 남았습니다. 또한 ParrelSync로 단일 PC에서 다중 클라이언트를 검증해 실제 네트워크 지연을 온전히 체감하지 못했습니다.</dd>
+        <dt class="dt-action">DECISION</dt><dd>보안과 지연 문제의 원인을 개발 환경 구조에서 찾아 정리했습니다.</dd>
         <dt class="dt-result">RESULT</dt><dd>다음 프로젝트에서는 클라이언트와 물리적으로 분리된 전용 서버(Dedicated Server)를 구축하고, 지연 보상 예측(Prediction)과 실제 통신 환경 최적화를 다뤄보고자 합니다.</dd>
       </dl>
     </div>
   </section>
 
   <section class="section" aria-labelledby="more">
-    <h2 id="more" class="section-title">OTHER QUESTS</h2>
+    <h2 id="more" class="section-title">Other Projects</h2>
     <div class="next-quests">
-      <a href="dino-cleaner.html"><small>QUEST 01</small><span>Dino Cleaner</span></a>
-      <a href="module-framework.html"><small>QUEST 03 · PARTNER</small><span>[엘에스웨어 협력] 외부 모듈 검증 프레임워크</span></a>
-      <a href="drill-idle.html"><small>QUEST 04</small><span>Drill Idle</span></a>
+      <a href="dino-cleaner.html"><small>Project 01</small><span>Dino Cleaner</span></a>
+      <a href="module-framework.html"><small>Project 03 · Partner</small><span>[엘에스웨어 협력] 외부 모듈 검증 프레임워크</span></a>
+      <a href="drill-idle.html"><small>Project 04</small><span>Drill Idle</span></a>
     </div>
   </section>
 </main>
 
-<footer class="site-footer"><p class="copyright">© 2026 KO SEONGHYEON</p></footer>
+<footer class="site-footer"><p class="copyright">© 2026 Ko Seonghyeon</p></footer>
 </body>
 </html>

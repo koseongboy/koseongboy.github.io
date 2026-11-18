@@ -1,4 +1,5 @@
-/* 글쓰기 페이지 (로컬 편집기 전용) */
+/* 글쓰기 페이지 (로컬 편집기 전용) — 사이트 테마 토큰을 그대로 따름 */
+:root { --panel: var(--surface); --slot: var(--surface-2); --deep: var(--bg); --border: var(--line); --pixel: var(--font-display); --body: var(--font-body); }
 body { padding-bottom: 48px; }
 
 .w-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -9,20 +10,20 @@ body { padding-bottom: 48px; }
 .w-title { font-size: 16px; }
 .w-select { min-height: 40px; max-width: 280px; font: inherit; font-size: 14px; background: var(--slot); color: var(--text); border: 2px solid var(--border); padding: 0 8px; }
 .w-status { font-size: 13px; color: var(--muted); }
-.w-status.dirty { color: #ff9a9a; font-weight: 700; }
+.w-status.dirty { color: var(--danger); font-weight: 700; }
 .w-spacer { flex: 1 1 auto; }
 
-.w-btn { min-height: 40px; padding: 0 16px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; background: var(--slot); color: var(--text); border: 0; box-shadow: inset -3px -3px 0 rgba(0, 0, 0, 0.35); }
+.w-btn { min-height: 40px; padding: 0 16px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; background: var(--slot); color: var(--text); border: 0; border: 1px solid var(--line); }
 .w-btn:hover { color: var(--accent); }
 .w-btn:disabled { opacity: 0.5; cursor: default; }
-.w-btn-primary { background: var(--accent); color: var(--bg); }
-.w-btn-primary:hover { background: var(--accent-hover); color: var(--bg); }
-.w-btn-danger { background: transparent; color: #ff9a9a; box-shadow: none; text-decoration: underline; }
+.w-btn-primary { background: var(--accent); color: var(--on-accent); }
+.w-btn-primary:hover { background: var(--accent-hover); color: var(--on-accent); }
+.w-btn-danger { background: transparent; color: var(--danger); box-shadow: none; text-decoration: underline; }
 .w-btn:focus-visible, .w-select:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 
 .w-main { max-width: 1100px; margin: 0 auto; padding: 28px 24px 0; display: flex; flex-direction: column; gap: 16px; }
 .w-post-title { width: 100%; box-sizing: border-box; font-family: var(--body); font-size: clamp(26px, 4vw, 36px); font-weight: 700; color: var(--text); background: transparent; border: 0; border-bottom: 4px solid var(--border); padding: 8px 0 12px; }
-.w-post-title::placeholder { color: #6a71a8; }
+.w-post-title::placeholder { color: var(--muted); }
 .w-post-title:focus { outline: none; border-bottom-color: var(--accent); }
 
 .w-fields { display: flex; flex-wrap: wrap; gap: 12px 16px; }
