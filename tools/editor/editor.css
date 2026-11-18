@@ -79,3 +79,24 @@
 }
 .ed-toast-error { background: #b3261e; }
 [hidden].ed-toast, [hidden].ed-help { display: none; }
+
+/* 커밋 & 푸시 */
+.ed-btn-git { font-weight: 700; }
+.ed-publish {
+  position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); z-index: 2147483001;
+  width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 120px); box-sizing: border-box; overflow: auto;
+  display: flex; flex-direction: column; gap: 6px;
+  font-family: system-ui, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif; font-size: 14px; line-height: 1.5; color: #1b1e2e;
+  background: #ffffff; border: 2px solid #1b1e2e; box-shadow: 4px 4px 0 #1b1e2e; padding: 14px 16px;
+}
+.ed-publish-title { font-size: 15px; }
+.ed-git-list { display: flex; flex-direction: column; border: 1px solid #c9cde0; max-height: 280px; overflow: auto; }
+.ed-git-item { display: flex; align-items: flex-start; gap: 8px; padding: 6px 10px; border-top: 1px solid #eceef6; cursor: pointer; }
+.ed-git-item:first-child { border-top: 0; }
+.ed-git-item input { margin-top: 4px; }
+.ed-git-kind { flex: none; font-size: 12px; font-weight: 700; padding: 1px 6px; margin-top: 1px; }
+.ed-git-mod { background: #e8ecfd; color: #1f3fd1; }
+.ed-git-new { background: #e3f5ec; color: #0b7a5a; }
+.ed-git-del { background: #fde8e6; color: #b3261e; }
+.ed-git-path { min-width: 0; overflow-wrap: anywhere; display: flex; flex-direction: column; }
+.ed-git-path small { color: #b3261e; font-size: 12px; }

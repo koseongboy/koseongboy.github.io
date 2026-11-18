@@ -144,11 +144,13 @@
     ? h('a', { class: 'ed-btn ed-btn-link', href: '/__editor/write?slug=' + encodeURIComponent(POST_SLUG) }, '✎ 이 글 수정')
     : h('a', { class: 'ed-btn ed-btn-link', href: '/__editor/write' }, '✍ 새 글 쓰기');
   if (IS_POST) editBtn.hidden = true;
+  const publishBtn = h('button', { type: 'button', class: 'ed-btn ed-btn-git', title: '바뀐 파일을 GitHub에 올려 사이트에 반영', onclick: () => openPublish() }, '⇪ 커밋 & 푸시');
   const toolbar = h('div', { class: 'ed-toolbar', 'data-editor': '', role: 'toolbar', 'aria-label': '편집기' },
     h('div', { class: 'ed-segmented', role: 'group', 'aria-label': '모드' }, viewBtn, editBtn),
     pageSelect,
     liveEl,
     writeLink,
+    publishBtn,
     h('span', { class: 'ed-edit-only' },
       status,
       undoBtn,
@@ -168,6 +170,68 @@
   const fileInput = h('input', { type: 'file', accept: 'image/png,image/jpeg,image/gif,image/webp', 'data-editor': '', hidden: '' });
   document.body.append(toolbar, helpEl, toastEl, fileInput);
   refreshHistory();
+
+  /* ---------------- 커밋 & 푸시 ---------------- */
+  let publishEl = null;
+  function closePublish() { if (publishEl) { publishEl.remove(); publishEl = null; publishBtn.focus(); } }
+  async function openPublish() {
+    if (publishEl) return closePublish();
+    if (dirty) { toast('저장 안 된 수정이 있어요. 먼저 저장(Ctrl+S)해 주세요.', true); return; }
+    let data;
+    try {
+      const res = await fetch('/__editor/git/status');
+      data = await res.json();
+      if (!res.ok) throw new Error(data.error || res.statusText);
+    } catch (err) { toast('Git 상태를 읽지 못했어요: ' + err.message, true); return; }
+
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const stamp = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate()) + ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+    const msgInput = h('input', { class: 'ed-input', type: 'text', id: 'ed-commit-msg', value: '사이트 내용 수정 (' + stamp + ')' });
+    const list = h('div', { class: 'ed-git-list' });
+    const boxes = [];
+    for (const f of data.files) {
+      const cb = h('input', { type: 'checkbox' });
+      cb.checked = f.suggested;
+      cb.dataset.path = f.path;
+      boxes.push(cb);
+      list.append(h('label', { class: 'ed-git-item' }, cb,
+        h('span', { class: 'ed-git-kind ed-git-' + (f.kind === '새 파일' ? 'new' : f.kind === '삭제' ? 'del' : 'mod') }, f.kind),
+        h('span', { class: 'ed-git-path' }, f.path, f.note ? h('small', {}, f.note) : '')));
+    }
+    const goBtn = h('button', { type: 'button', class: 'ed-btn ed-btn-primary' }, '커밋하고 푸시');
+    const actions = h('div', { class: 'ed-actions' }, h('button', { type: 'button', class: 'ed-btn', onclick: closePublish }, '취소'), goBtn);
+    publishEl = h('div', { class: 'ed-publish', 'data-editor': '', role: 'dialog', 'aria-label': '커밋 & 푸시' },
+      h('strong', { class: 'ed-publish-title' }, '커밋 & 푸시 (' + data.branch + ')'));
+    if (!data.files.length) {
+      publishEl.append(h('p', { class: 'ed-note' }, '바뀐 파일이 없어요. 이미 모두 올라가 있어요.'), h('div', { class: 'ed-actions' }, h('button', { type: 'button', class: 'ed-btn', onclick: closePublish }, '닫기')));
+    } else {
+      publishEl.append(
+        h('label', { class: 'ed-label', for: 'ed-commit-msg' }, '커밋 메시지'), msgInput,
+        h('span', { class: 'ed-label' }, '올릴 파일 (' + data.files.length + '개)'), list,
+        h('p', { class: 'ed-note' }, '푸시하면 1~2분 뒤 koseongboy.github.io 에 반영돼요.'), actions);
+    }
+    publishEl.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.stopPropagation(); closePublish(); } });
+    publishEl.style.bottom = (toolbar.offsetHeight + 28) + 'px';   // 툴바가 두 줄이어도 가리지 않게
+    document.body.append(publishEl);
+    (data.files.length ? msgInput : publishEl.querySelector('button')).focus();
+
+    goBtn.addEventListener('click', async () => {
+      const files = boxes.filter((b) => b.checked).map((b) => b.dataset.path);
+      if (!files.length) { toast('올릴 파일을 하나 이상 골라 주세요', true); return; }
+      goBtn.disabled = true; goBtn.textContent = '올리는 중…';
+      try {
+        const res = await fetch('/__editor/git/publish', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ files, message: msgInput.value }) });
+        const out = await res.json();
+        if (!res.ok) throw new Error(out.error || res.statusText);
+        closePublish();
+        toast('푸시 완료 (' + out.commit + ') — 1~2분 뒤 사이트에 반영돼요');
+      } catch (err) {
+        toast(err.message, true);
+        goBtn.disabled = false; goBtn.textContent = '커밋하고 푸시';
+      }
+    });
+  }
 
   /* ---------------- 모드 전환 ---------------- */
   function setMode(next) {
@@ -484,6 +548,7 @@
   function serialize() {
     const clone = ROOT_EL.cloneNode(true);
     clone.querySelectorAll('[data-editor]').forEach((n) => n.remove());
+    clone.removeAttribute('data-theme');   // 다크/라이트 선택은 방문자 브라우저 상태 — 파일에 저장하지 않음
     clone.querySelectorAll('link[rel="stylesheet"][href*="?v="]').forEach((l) => l.setAttribute('href', l.getAttribute('href').replace(/\?v=\d+$/, '')));
     clone.querySelectorAll('[contenteditable], [spellcheck]').forEach((n) => { n.removeAttribute('contenteditable'); n.removeAttribute('spellcheck'); });
     const all = [clone, ...clone.querySelectorAll('[class]')];

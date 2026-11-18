@@ -15,7 +15,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const { exec } = require('child_process');
+const { exec, execFile } = require('child_process');
 const blog = require('../blog/build.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
@@ -156,6 +156,57 @@ function startWatcher() {
   }
 }
 
+/* ---------------- Git (커밋 & 푸시) ---------------- */
+function git(args) {
+  return new Promise((resolve, reject) => {
+    execFile('git', args, { cwd: ROOT, maxBuffer: 10 * 1024 * 1024, windowsHide: true }, (err, stdout, stderr) => {
+      if (err) reject(new Error((stderr || stdout || err.message).trim().split('\n').slice(-3).join(' ')));
+      else resolve(stdout);
+    });
+  });
+}
+
+/** 바뀐 파일 목록. suggested = 기본으로 체크할지 (임시저장 글·관련 없는 새 파일은 기본 해제) */
+async function gitStatus() {
+  const [branchOut, raw] = await Promise.all([
+    git(['rev-parse', '--abbrev-ref', 'HEAD']),
+    git(['status', '--porcelain=v1', '-z', '-uall']),
+  ]);
+  const parts = raw.split('\0');
+  const files = [];
+  for (let i = 0; i < parts.length; i++) {
+    const e = parts[i];
+    if (!e) continue;
+    const code = e.slice(0, 2);
+    const p = e.slice(3);
+    if (code[0] === 'R' || code[0] === 'C') i++;          // 이름 변경: 다음 항목은 옛 경로
+    const untracked = code === '??';
+    let kind = untracked ? '새 파일' : code.includes('D') ? '삭제' : '수정';
+    let suggested = true;
+    let note = '';
+    if (p.startsWith('posts/') && p.endsWith('.md')) {
+      try {
+        const { meta } = blog.parseSource(fs.readFileSync(path.join(ROOT, p), 'utf8'));
+        if (meta.draft) { suggested = false; note = '임시저장 글 (공개 저장소에 올라가요)'; }
+      } catch {}
+    } else if (untracked && !p.startsWith('posts/') && !p.startsWith('assets/img/posts/')) {
+      // 글/글 이미지 말고 새로 생긴 파일은 직접 확인하고 체크하도록
+      suggested = IMAGE_EXT.has(path.extname(p).toLowerCase()) ? isReferenced(p) : false;
+      if (!suggested) note = '어느 페이지에서도 쓰지 않는 새 파일';
+    }
+    files.push({ path: p, code, kind, suggested, note });
+  }
+  return { branch: branchOut.trim(), files };
+}
+
+/** 새 이미지가 사이트 HTML 어딘가에서 쓰이는지 */
+function isReferenced(rel) {
+  const name = path.basename(rel);
+  return listPages().some((page) => {
+    try { return fs.readFileSync(path.join(ROOT, page.path), 'utf8').includes(name); } catch { return false; }
+  });
+}
+
 async function handleApi(req, res, url) {
   if (req.method === 'GET' && url.pathname === '/__editor/events') {
     res.writeHead(200, { 'Content-Type': 'text/event-stream; charset=utf-8', 'Cache-Control': 'no-store', Connection: 'keep-alive' });
@@ -251,6 +302,36 @@ async function handleApi(req, res, url) {
     const rel = 'assets/img/' + (sub ? sub + '/' : '') + name;
     console.log('  이미지  ' + rel);
     return send(res, 200, { path: rel });
+  }
+
+  if (req.method === 'GET' && url.pathname === '/__editor/git/status') {
+    return send(res, 200, await gitStatus());
+  }
+
+  if (req.method === 'POST' && url.pathname === '/__editor/git/publish') {
+    const { files, message } = JSON.parse((await readBody(req, 1024 * 1024)).toString('utf8'));
+    const msg = String(message || '').trim();
+    if (!msg) return send(res, 400, { error: '커밋 메시지를 입력해 주세요' });
+    if (!Array.isArray(files) || !files.length) return send(res, 400, { error: '올릴 파일을 하나 이상 골라 주세요' });
+    // 지금 실제로 바뀐 파일만 허용 (임의 경로 커밋 방지)
+    const changed = new Set((await gitStatus()).files.map((f) => f.path));
+    const bad = files.filter((f) => !changed.has(f));
+    if (bad.length) return send(res, 400, { error: '변경 목록에 없는 파일이에요: ' + bad.join(', ') });
+    try {
+      await git(['add', '-A', '--', ...files]);
+      await git(['commit', '-m', msg, '--', ...files]);
+      const head = (await git(['log', '-1', '--format=%h'])).trim();
+      console.log(`  커밋됨  ${head}  ${msg}`);
+      try {
+        await git(['push', 'origin', 'HEAD']);
+      } catch (err) {
+        return send(res, 500, { error: `커밋(${head})은 됐지만 푸시에 실패했어요: ${err.message}`, committed: head });
+      }
+      console.log('  푸시 완료');
+      return send(res, 200, { ok: true, commit: head });
+    } catch (err) {
+      return send(res, 500, { error: err.message });
+    }
   }
 
   if (req.method === 'GET' && /^\/__editor\/(editor|write)\.(js|css)$/.test(url.pathname)) {
