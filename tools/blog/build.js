@@ -24,7 +24,7 @@ const ROOT = path.resolve(__dirname, '..', '..');
 const POSTS_DIR = path.join(ROOT, 'posts');
 const SITE = 'https://koseongboy.github.io';
 const BLOG_NAME = 'KOSEONGBOY.DEV';
-const AUTHOR = '고성현 (Ko Seonghyeon)';
+const AUTHOR = '고성보이 (koseongboy)';
 
 const SLUG_RE = /^[\p{L}\p{N}][\p{L}\p{N}_-]{0,99}$/u;
 
@@ -112,7 +112,7 @@ const OG_META = [
   `<meta property="og:image" content="${OG_IMAGE}">`,
   '<meta property="og:image:width" content="1200">',
   '<meta property="og:image:height" content="630">',
-  '<meta property="og:image:alt" content="KOSEONGBOY.DEV — 고성현 Game Client Engineer 개발 블로그 &amp; 포트폴리오">',
+  '<meta property="og:image:alt" content="KOSEONGBOY.DEV — 고성보이 Game Client Engineer 개발 블로그 &amp; 포트폴리오">',
   '<meta name="twitter:card" content="summary_large_image">',
   `<meta name="twitter:image" content="${OG_IMAGE}">`,
 ].join('\n');
@@ -127,7 +127,7 @@ function postPage(p, prev, next) {
   const catHref = p.category ? `../?category=${encodeURIComponent(p.category)}` : '';
   const ld = {
     '@context': 'https://schema.org', '@type': 'BlogPosting',
-    headline: p.title, datePublished: p.date, author: { '@type': 'Person', name: '고성현' },
+    headline: p.title, datePublished: p.date, author: { '@type': 'Person', name: '고성보이' },
     description: p.summaryText, mainEntityOfPage: url, ...(cover ? { image: cover } : {}),
   };
   const navLink = (x, label, cls) => x
@@ -199,7 +199,7 @@ ${p.body || ''}
   </div>
 </main>
 
-<footer class="site-footer"><p class="copyright">© 2026 Ko Seonghyeon · <a href="../feed.xml">RSS</a></p></footer>
+<footer class="site-footer"><p class="copyright">© 2026 koseongboy · <a href="../feed.xml">RSS</a></p></footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>if (window.hljs) document.querySelectorAll('.post-body pre code').forEach(function (el) { hljs.highlightElement(el); });</script>
 </body>
@@ -282,7 +282,7 @@ function feed(posts) {
 <channel>
   <title>${BLOG_NAME}</title>
   <link>${SITE}/</link>
-  <description>고성현의 게임 클라이언트 개발 블로그</description>
+  <description>고성보이의 게임 클라이언트 개발 블로그</description>
   <language>ko</language>
 ${items.join('\n')}
 </channel>
