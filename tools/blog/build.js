@@ -105,6 +105,18 @@ function readPosts(overrides = {}) {
 }
 
 /* ---------------- 템플릿 ---------------- */
+// 공유(임베드) 미리보기는 모든 페이지에서 공통 이미지 하나만 사용 (tools/og/og-image.html 로 생성)
+const OG_IMAGE = `${SITE}/assets/img/og-image.png`;
+const OG_META = [
+  `<meta property="og:site_name" content="${BLOG_NAME}">`,
+  `<meta property="og:image" content="${OG_IMAGE}">`,
+  '<meta property="og:image:width" content="1200">',
+  '<meta property="og:image:height" content="630">',
+  '<meta property="og:image:alt" content="KOSEONGBOY.DEV — 고성현 Game Client Engineer 개발 블로그 &amp; 포트폴리오">',
+  '<meta name="twitter:card" content="summary_large_image">',
+  `<meta name="twitter:image" content="${OG_IMAGE}">`,
+].join('\n');
+
 const FAVICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230f1328'/%3E%3Crect x='3' y='3' width='10' height='10' fill='%23f5c451'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%230f1328'/%3E%3C/svg%3E";
 
 function postPage(p, prev, next) {
@@ -132,7 +144,8 @@ function postPage(p, prev, next) {
 <meta property="og:title" content="${esc(p.title)}">
 <meta property="og:description" content="${esc(p.summaryText)}">
 <meta property="og:url" content="${esc(url)}">
-${cover ? `<meta property="og:image" content="${esc(cover)}">\n` : ''}<meta property="article:published_time" content="${esc(p.date)}">
+${OG_META}
+<meta property="article:published_time" content="${esc(p.date)}">
 <meta name="theme-color" content="#0f1328">
 <link rel="alternate" type="application/rss+xml" title="${BLOG_NAME}" href="../feed.xml">
 <link rel="icon" href="${FAVICON}">
