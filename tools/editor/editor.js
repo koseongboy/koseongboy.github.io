@@ -27,7 +27,7 @@
   const CLIENT_ID = Math.random().toString(36).slice(2);
   let mode = 'view';
   try { if (localStorage.getItem(MODE_KEY) === 'edit') mode = 'edit'; } catch {}
-  if (document.body.getAttribute('data-page') === 'post') mode = 'view';   // 글 페이지는 보기 전용
+  if (['post', 'project'].includes(document.body.getAttribute('data-page'))) mode = 'view';   // 글·프로젝트 상세 페이지는 보기 전용 (전용 편집기에서 수정)
   const isEdit = () => mode === 'edit';
 
   /* ---------------- 공통 ---------------- */
@@ -138,9 +138,16 @@
   const editBtn = h('button', { type: 'button', class: 'ed-seg', onclick: () => setMode('edit') }, '✎ 편집');
   const liveEl = h('span', { class: 'ed-live', title: '파일이 바뀌면 화면에 바로 반영돼요' }, '연결 중…');
   // 블로그 글 페이지는 글쓰기 에디터에서만 수정 (원본 .md 와 어긋나지 않게)
-  const IS_POST = document.body.getAttribute('data-page') === 'post';
+  const PAGE_KIND = document.body.getAttribute('data-page');
+  const IS_PROJECT = PAGE_KIND === 'project';
+  const IS_POST = PAGE_KIND === 'post' || IS_PROJECT;   // 보기 전용 페이지
   const POST_SLUG = document.body.getAttribute('data-slug') || '';
-  const writeLink = IS_POST
+  const IN_PORTFOLIO = location.pathname.startsWith('/portfolio/');
+  const writeLink = IS_PROJECT
+    ? h('a', { class: 'ed-btn ed-btn-link', href: '/__editor/project?slug=' + encodeURIComponent(POST_SLUG) }, '✎ 이 프로젝트 수정')
+    : IN_PORTFOLIO
+    ? h('a', { class: 'ed-btn ed-btn-link', href: '/__editor/project' }, '🗂 프로젝트 추가·수정')
+    : IS_POST
     ? h('a', { class: 'ed-btn ed-btn-link', href: '/__editor/write?slug=' + encodeURIComponent(POST_SLUG) }, '✎ 이 글 수정')
     : h('a', { class: 'ed-btn ed-btn-link', href: '/__editor/write' }, '✍ 새 글 쓰기');
   if (IS_POST) editBtn.hidden = true;

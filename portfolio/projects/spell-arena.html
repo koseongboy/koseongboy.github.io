@@ -27,7 +27,7 @@
 <link rel="stylesheet" href="../../assets/css/style.css">
 <script src="../../assets/js/theme.js" defer></script>
 </head>
-<body>
+<body data-page="project" data-slug="spell-arena">
 
 <header class="site-header">
   <nav class="container" aria-label="주요 메뉴">
@@ -47,7 +47,7 @@
   <div class="breadcrumb"><a href="../#work">← Selected Work</a></div>
 
   <section class="detail-hero">
-    <div class="quest-meta"><span class="quest-num">02</span><span class="status status-done">완료</span></div>
+    <div class="quest-meta"><span class="quest-num">03</span><span class="status status-done">완료</span></div>
     <h1>Spell Arena</h1>
     <p class="tagline">제시된 단어들로 창의적인 영창을 만들고, 평가받아 데미지 보너스를 얻는 카드 게임</p>
   </section>
@@ -62,13 +62,14 @@
       <dt>Stack</dt><dd><ul class="chips"><li>Unity 3D</li><li>C#</li><li>Netcode for GameObjects</li><li>MVP</li><li>Command</li></ul></dd>
     </dl>
   </div>
+
   <div class="detail-links">
     <a href="https://github.com/koseongboy/Spell_Battle" class="btn btn-primary" target="_blank" rel="noopener">GITHUB ↗</a>
     <a href="https://www.youtube.com/watch?v=-QaFugYqSeE" class="btn btn-secondary" target="_blank" rel="noopener">TEASER ↗</a>
   </div>
 
-  <section class="section" aria-labelledby="impl">
-    <h2 id="impl" class="section-title">01 · SPELLBOOK ENGINEERING</h2>
+  <section class="section" aria-labelledby="s1">
+    <h2 id="s1" class="section-title">01 · SPELLBOOK ENGINEERING</h2>
     <div class="highlight-stat">
       <div><strong>130종</strong><span>구현한 카드</span></div>
       <div><strong>28 / 20+ / 7</strong><span>모듈화한 효과 타입 / 상태이상 / 조건절</span></div>
@@ -91,13 +92,15 @@
       </div>
       <div>
         <h3>음성 녹음 및 사운드 파이프라인</h3>
-        <ul><li>Unity Microphone System으로 플레이어의 음성 영창을 녹음해 웹 서버로 패킷을 제출하는 파이프라인을 구축하고, 인게임 사운드(BGM/SFX) 제어 매니저를 구현했습니다.</li></ul>
+        <ul>
+          <li>Unity Microphone System으로 플레이어의 음성 영창을 녹음해 웹 서버로 패킷을 제출하는 파이프라인을 구축하고, 인게임 사운드(BGM/SFX) 제어 매니저를 구현했습니다.</li>
+        </ul>
       </div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="job">
-    <h2 id="job" class="section-title">02 · ARCANE CLASS PERKS</h2>
+  <section class="section" aria-labelledby="s2">
+    <h2 id="s2" class="section-title">02 · ARCANE CLASS PERKS</h2>
     <div class="prose-block">
       <div>
         <h3>네트워크 모델</h3>
@@ -116,8 +119,8 @@
     </div>
   </section>
 
-  <section class="section" aria-labelledby="boss">
-    <h2 id="boss" class="section-title">03 · BOSS FIGHTS: LATENCY &amp; NETCODE</h2>
+  <section class="section" aria-labelledby="troubleshooting">
+    <h2 id="troubleshooting" class="section-title">03 · BOSS FIGHTS: LATENCY &amp; NETCODE</h2>
     <div class="boss-log">
       <h3>단일 API 의존의 한계 인지와 최적화 방향 도출</h3>
       <dl>
@@ -140,7 +143,7 @@
     <h2 id="more" class="section-title">Other Projects</h2>
     <div class="next-quests">
       <a href="dino-cleaner.html"><small>Project 01</small><span>Dino Cleaner</span></a>
-      <a href="module-framework.html"><small>Project 03 · Partner</small><span>[엘에스웨어 협력] 외부 모듈 검증 프레임워크</span></a>
+      <a href="module-framework.html"><small>Project 02 · Partner</small><span>[엘에스웨어 협력] 외부 모듈 검증 프레임워크</span></a>
       <a href="drill-idle.html"><small>Project 04</small><span>Drill Idle</span></a>
     </div>
   </section>

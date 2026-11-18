@@ -27,7 +27,7 @@
 <link rel="stylesheet" href="../../assets/css/style.css">
 <script src="../../assets/js/theme.js" defer></script>
 </head>
-<body>
+<body data-page="project" data-slug="dino-cleaner">
 
 <header class="site-header">
   <nav class="container" aria-label="주요 메뉴">
@@ -62,20 +62,25 @@
       <dt>Stack</dt><dd><ul class="chips"><li>Unity 3D</li><li>C#</li><li>Input System</li><li>ASMDEF</li><li>Animation Rigging</li></ul></dd>
     </dl>
   </div>
+
   <div class="detail-links">
     <a href="https://github.com/Crocobob911/DinoCleaner" class="btn btn-primary" target="_blank" rel="noopener">GITHUB ↗</a>
   </div>
 
-  <section class="section" aria-labelledby="impl">
-    <h2 id="impl" class="section-title">01 · WASH BAY MECHANICS</h2>
+  <section class="section" aria-labelledby="s1">
+    <h2 id="s1" class="section-title">01 · WASH BAY MECHANICS</h2>
     <div class="prose-block">
       <div>
         <h3>디자인 패턴을 실제 프로젝트에 적용</h3>
-        <ul><li>플레이어의 좌클릭 액션이 장착 중인 장비에 따라 유연하게 변하도록 Strategy 패턴을 적용하여, 복잡한 조건문 없이 장비를 무한히 확장할 수 있는 기반을 마련했습니다.</li></ul>
+        <ul>
+          <li>플레이어의 좌클릭 액션이 장착 중인 장비에 따라 유연하게 변하도록 Strategy 패턴을 적용하여, 복잡한 조건문 없이 장비를 무한히 확장할 수 있는 기반을 마련했습니다.</li>
+        </ul>
       </div>
       <div>
         <h3>상태 머신 기반 애니메이션 설계</h3>
-        <ul><li>개발 전 애니메이션 상태 머신 다이어그램을 직접 명세하고, 이를 바탕으로 필요한 애니메이션 리스트를 도출해 Unity Animator Controller에 1:1로 연동하여 동작 제어를 구현했습니다.</li></ul>
+        <ul>
+          <li>개발 전 애니메이션 상태 머신 다이어그램을 직접 명세하고, 이를 바탕으로 필요한 애니메이션 리스트를 도출해 Unity Animator Controller에 1:1로 연동하여 동작 제어를 구현했습니다.</li>
+        </ul>
       </div>
       <div>
         <h3>ASMDEF를 활용한 시스템 모듈화</h3>
@@ -87,22 +92,26 @@
     </div>
   </section>
 
-  <section class="section" aria-labelledby="job">
-    <h2 id="job" class="section-title">02 · TEAM BUFFS ACQUIRED</h2>
+  <section class="section" aria-labelledby="s2">
+    <h2 id="s2" class="section-title">02 · TEAM BUFFS ACQUIRED</h2>
     <div class="prose-block">
       <div>
         <h3>객체지향 기반의 아키텍처 설계</h3>
-        <ul><li>디자인 패턴을 도입하여 하드코딩을 줄이고, 무기 확장과 조작 체계가 유연하게 동작하는 아키텍처를 구축했습니다. 개방-폐쇄 원칙(OCP)을 준수해 유지보수 비용을 줄였습니다.</li></ul>
+        <ul>
+          <li>디자인 패턴을 도입하여 하드코딩을 줄이고, 무기 확장과 조작 체계가 유연하게 동작하는 아키텍처를 구축했습니다. 개방-폐쇄 원칙(OCP)을 준수해 유지보수 비용을 줄였습니다.</li>
+        </ul>
       </div>
       <div>
         <h3>로직 시각화를 통한 에셋 플래닝</h3>
-        <ul><li>코드 작성 전 애니메이션 상태 머신 다이어그램을 설계해 필요 애니메이션 리스트를 도출했습니다. 이 과정에서 다른 팀원과 협업 명세로 활용할 수 있는 문서 작성 경험을 쌓았습니다.</li></ul>
+        <ul>
+          <li>코드 작성 전 애니메이션 상태 머신 다이어그램을 설계해 필요 애니메이션 리스트를 도출했습니다. 이 과정에서 다른 팀원과 협업 명세로 활용할 수 있는 문서 작성 경험을 쌓았습니다.</li>
+        </ul>
       </div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="boss">
-    <h2 id="boss" class="section-title">03 · BOSS FIGHTS: DEPENDENCY &amp; IK</h2>
+  <section class="section" aria-labelledby="troubleshooting">
+    <h2 id="troubleshooting" class="section-title">03 · BOSS FIGHTS: DEPENDENCY &amp; IK</h2>
     <div class="boss-log">
       <h3>패키지 간 순환 참조 방어와 구조적 딜레마</h3>
       <dl>
@@ -124,8 +133,8 @@
   <section class="section" aria-labelledby="more">
     <h2 id="more" class="section-title">Other Projects</h2>
     <div class="next-quests">
-      <a href="spell-arena.html"><small>Project 02</small><span>Spell Arena</span></a>
-      <a href="module-framework.html"><small>Project 03 · Partner</small><span>[엘에스웨어 협력] 외부 모듈 검증 프레임워크</span></a>
+      <a href="module-framework.html"><small>Project 02 · Partner</small><span>[엘에스웨어 협력] 외부 모듈 검증 프레임워크</span></a>
+      <a href="spell-arena.html"><small>Project 03</small><span>Spell Arena</span></a>
       <a href="drill-idle.html"><small>Project 04</small><span>Drill Idle</span></a>
     </div>
   </section>

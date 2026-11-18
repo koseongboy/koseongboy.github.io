@@ -27,7 +27,7 @@
 <link rel="stylesheet" href="../../assets/css/style.css">
 <script src="../../assets/js/theme.js" defer></script>
 </head>
-<body>
+<body data-page="project" data-slug="module-framework">
 
 <header class="site-header">
   <nav class="container" aria-label="주요 메뉴">
@@ -47,7 +47,7 @@
   <div class="breadcrumb"><a href="../#work">← Selected Work</a></div>
 
   <section class="detail-hero">
-    <div class="quest-meta"><span class="quest-num">03</span><span class="status status-done">완료</span><span>기업 협력 프로젝트</span></div>
+    <div class="quest-meta"><span class="quest-num">02</span><span class="status status-done">완료</span><span>기업 협력 프로젝트</span></div>
     <h1><span class="partner-tag">[엘에스웨어 협력]</span> 외부 모듈 검증 프레임워크</h1>
     <p class="tagline">외부 모듈 통합 테스트 환경 구축 및 실무진 건의를 통한 인스펙터(Inspector) 사용성 개선</p>
   </section>
@@ -64,8 +64,8 @@
     </dl>
   </div>
 
-  <section class="section" aria-labelledby="impl">
-    <h2 id="impl" class="section-title">01 · DUNGEON GENERATOR</h2>
+  <section class="section" aria-labelledby="s1">
+    <h2 id="s1" class="section-title">01 · DUNGEON GENERATOR</h2>
     <div class="prose-block">
       <div>
         <h3>동적 던전 생성(PCG) 로직 구축</h3>
@@ -76,17 +76,21 @@
       </div>
       <div>
         <h3>Unity Input System 기반 조작계 구현</h3>
-        <ul><li>물리적 키 입력과 캐릭터의 논리적 행동을 Action Map으로 분리하고 이벤트 주도(Event-driven) 방식으로 처리해, 인게임 로직과 입력 시스템 간의 결합도를 낮췄습니다.</li></ul>
+        <ul>
+          <li>물리적 키 입력과 캐릭터의 논리적 행동을 Action Map으로 분리하고 이벤트 주도(Event-driven) 방식으로 처리해, 인게임 로직과 입력 시스템 간의 결합도를 낮췄습니다.</li>
+        </ul>
       </div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="pipeline">
-    <h2 id="pipeline" class="section-title">02 · REPORTER PROTOCOL</h2>
+  <section class="section" aria-labelledby="s2">
+    <h2 id="s2" class="section-title">02 · REPORTER PROTOCOL</h2>
     <div class="prose-block">
       <div>
         <h3>게임 상태 스키마 설계 및 프로토콜 합의</h3>
-        <ul><li>범용 SDK 특성에 맞춰 지속 상태(<code>Scene</code>, <code>RoomID</code>)와 단발성 이벤트(<code>Event</code>: 보스 조우, 상호작용)를 구분해 정의하고, 각 키의 허용값을 Enum으로 규격화해 외부 차단 규칙 작성자와 프로토콜을 합의했습니다.</li></ul>
+        <ul>
+          <li>범용 SDK 특성에 맞춰 지속 상태(<code>Scene</code>, <code>RoomID</code>)와 단발성 이벤트(<code>Event</code>: 보스 조우, 상호작용)를 구분해 정의하고, 각 키의 허용값을 Enum으로 규격화해 외부 차단 규칙 작성자와 프로토콜을 합의했습니다.</li>
+        </ul>
       </div>
       <div>
         <h3>Mediator / Facade 패턴 기반 Reporter 싱글톤 및 스냅샷 관리</h3>
@@ -99,8 +103,8 @@
     </div>
   </section>
 
-  <section class="section" aria-labelledby="job">
-    <h2 id="job" class="section-title">03 · CO-OP WITH THE GUILD</h2>
+  <section class="section" aria-labelledby="s3">
+    <h2 id="s3" class="section-title">03 · CO-OP WITH THE GUILD</h2>
     <div class="prose-block">
       <div>
         <h3>타 부서 모듈 통합 및 기술 커뮤니케이션</h3>
@@ -112,8 +116,8 @@
     </div>
   </section>
 
-  <section class="section" aria-labelledby="boss">
-    <h2 id="boss" class="section-title">04 · BOSS FIGHT: THE MISSING INSPECTOR</h2>
+  <section class="section" aria-labelledby="troubleshooting">
+    <h2 id="troubleshooting" class="section-title">04 · BOSS FIGHT: THE MISSING INSPECTOR</h2>
     <div class="boss-log">
       <h3>플러그인 사용성 개선을 위한 에디터 커스터마이징 제안</h3>
       <dl>
@@ -128,7 +132,7 @@
     <h2 id="more" class="section-title">Other Projects</h2>
     <div class="next-quests">
       <a href="dino-cleaner.html"><small>Project 01</small><span>Dino Cleaner</span></a>
-      <a href="spell-arena.html"><small>Project 02</small><span>Spell Arena</span></a>
+      <a href="spell-arena.html"><small>Project 03</small><span>Spell Arena</span></a>
       <a href="drill-idle.html"><small>Project 04</small><span>Drill Idle</span></a>
     </div>
   </section>

@@ -29,6 +29,8 @@ jobs:
           mkdir _site
           cp index.html robots.txt sitemap.xml feed.xml google6e14470019bbcacc.html _site/
           cp -r assets portfolio _site/
+          # 포트폴리오 원본 데이터(.json)는 공개하지 않음 (완성된 .html 만)
+          find _site/portfolio -name '*.json' -delete
           # 블로그 글은 완성된 .html 만 공개 (원본 .md 는 제외)
           if [ -d posts ]; then
             mkdir -p _site/posts

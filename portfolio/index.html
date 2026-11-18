@@ -75,10 +75,13 @@
   <section id="work" class="section" aria-labelledby="work-title">
     <div class="section-head">
       <h2 id="work-title" class="section-title">Selected Work</h2>
-      <span>2025 — 2026</span>
+<!-- PORTFOLIO:YEARS -->
+      <span data-generated>2025 — 2026</span>
+<!-- /PORTFOLIO:YEARS -->
     </div>
 
-    <div class="work-list">
+<!-- PORTFOLIO:WORK -->
+    <div class="work-list" data-generated>
       <article class="quest">
         <div class="quest-body">
           <div class="quest-meta"><span class="quest-num">01</span><span class="status status-progress">진행 중</span><span>2026.09 — · 4인 (클라이언트 3, 기획/PM 1)</span></div>
@@ -92,28 +95,24 @@
 
       <article class="quest">
         <div class="quest-body">
-          <div class="quest-meta"><span class="quest-num">02</span><span class="status status-done">완료</span><span>2026.03 — 2026.07 · 3인 (클라이언트 1, 기획/PM 1, 백엔드 1)</span></div>
-          <h3><a href="projects/spell-arena.html" class="quest-link">Spell Arena</a></h3>
-          <p>제시된 단어로 영창을 만들어 평가받는 대전 카드 게임. NGO 기반 서버 권한 아키텍처와 MVP/Command 패턴, 28종 효과·20종 상태이상을 모듈화한 데이터 주도 엔진으로 130종 카드를 구현했습니다. 신규 카드 추가 공수 15분+ → 1분 내외.</p>
-          <div class="stack-line">NGO · MVP · Command · 130 Cards</div>
-          <div class="quest-links">
-            <span class="quest-more">자세히 보기 →</span>
-            <a href="https://github.com/koseongboy/Spell_Battle" target="_blank" rel="noopener">GitHub ↗</a>
-            <a href="https://www.youtube.com/watch?v=-QaFugYqSeE" target="_blank" rel="noopener">Teaser ↗</a>
-          </div>
-        </div>
-        <img class="quest-thumb" src="../assets/img/spell-arena.jpg" alt="Spell Arena 영창 화면: 보라색 마법진 위에 플레이어의 영창 문구가 표시됨" loading="lazy" width="1490" height="835">
-      </article>
-
-      <article class="quest">
-        <div class="quest-body">
-          <div class="quest-meta"><span class="quest-num">03</span><span class="status status-done">완료</span><span>2026.05 — 2026.08 · 1인 · 기업 협력 프로젝트</span></div>
+          <div class="quest-meta"><span class="quest-num">02</span><span class="status status-done">완료</span><span>2026.05 — 2026.08 · 1인 · 기업 협력 프로젝트</span></div>
           <h3><a href="projects/module-framework.html" class="quest-link"><span class="partner-tag">[엘에스웨어 협력]</span> 외부 모듈 검증 프레임워크</a></h3>
           <p>고정 스키마가 없는 외부 SDK에 맞춰 게임 상태 스키마와 Reporter 파이프라인을 역설계하고, PCG 동적 맵과 커스텀 에디터 툴로 통합 검증을 마쳤습니다.</p>
           <div class="stack-line">Editor Scripting · Mediator · PCG</div>
           <div class="quest-links"><span class="quest-more">자세히 보기 →</span></div>
         </div>
-        <img class="quest-thumb" src="../assets/img/module-framework.png" alt="외부 모듈 검증 프레임워크: 절차적으로 생성된 던전 지도 UI" loading="lazy" width="1920" height="1080">
+        <img class="quest-thumb" src="../assets/img/module-framework.png" alt="Random Walk로 생성된 던전 지도 UI: 시작 방, 전투 방, 상점 방, 보스 방이 격자에 배치됨" loading="lazy" width="1920" height="1080">
+      </article>
+
+      <article class="quest">
+        <div class="quest-body">
+          <div class="quest-meta"><span class="quest-num">03</span><span class="status status-done">완료</span><span>2026.03 — 2026.07 · 3인 (클라이언트 1, 기획/PM 1, 백엔드 1)</span></div>
+          <h3><a href="projects/spell-arena.html" class="quest-link">Spell Arena</a></h3>
+          <p>제시된 단어로 영창을 만들어 평가받는 대전 카드 게임. NGO 기반 서버 권한 아키텍처와 MVP/Command 패턴, 28종 효과·20종 상태이상을 모듈화한 데이터 주도 엔진으로 130종 카드를 구현했습니다. 신규 카드 추가 공수 15분+ → 1분 내외.</p>
+          <div class="stack-line">NGO · MVP · Command · 130 Cards</div>
+          <div class="quest-links"><span class="quest-more">자세히 보기 →</span><a href="https://github.com/koseongboy/Spell_Battle" target="_blank" rel="noopener">GitHub ↗</a><a href="https://www.youtube.com/watch?v=-QaFugYqSeE" target="_blank" rel="noopener">Teaser ↗</a></div>
+        </div>
+        <img class="quest-thumb" src="../assets/img/spell-arena.jpg" alt="Spell Arena 영창 화면: 보라색 마법진 위에 '이 자리에서 선언하노니! 고요한 종말을 목도하라!' 영창 문구" loading="lazy" width="1490" height="835">
       </article>
 
       <article class="quest">
@@ -124,14 +123,16 @@
           <div class="stack-line">Windows API · Addressables · O(1) Lookup · Streak Calendar</div>
           <div class="quest-links"><span class="quest-more">자세히 보기 →</span><a href="https://github.com/koseongboy/Drill_Game" target="_blank" rel="noopener">GitHub ↗</a></div>
         </div>
-        <img class="quest-thumb top" src="../assets/img/drill-idle-calendar.png" alt="Drill Idle 출석 달력: 날짜별 플레이 시간과 키 입력량이 초록색 농도로 표시됨" loading="lazy" width="1080" height="608">
+        <img class="quest-thumb top" src="../assets/img/drill-idle-calendar.png" alt="Drill Idle 출석 달력: 2025년 12월, 날짜별 플레이 시간과 키 입력량이 초록색 농도로 표시됨" loading="lazy" width="1080" height="608">
       </article>
     </div>
+<!-- /PORTFOLIO:WORK -->
   </section>
 
   <section id="troubleshooting" class="section" aria-labelledby="ts-title">
     <h2 id="ts-title" class="section-title">Troubleshooting</h2>
-
+<!-- PORTFOLIO:TROUBLESHOOTING -->
+    <div class="case-list" data-generated>
     <article class="case">
       <h3>Dino Cleaner — 패키지 간 순환 참조</h3>
       <div class="case-grid">
@@ -147,6 +148,15 @@
         <div class="case-col issue"><span>ISSUE</span><p>실사 비율 애니메이션(Mixamo)을 카툰풍 캐릭터에 적용하자 손이 허공에 뜨거나 몸통을 관통</p></div>
         <div class="case-col"><span>DECISION</span><p>Animation Rigging 도입. 청소기 위치를 먼저 고정하고 양손이 Two Bone IK로 그립을 역추적</p></div>
         <div class="case-col"><span>RESULT</span><p>체형·장비가 바뀌어도 정확한 파지 폼을 동적으로 보장</p></div>
+      </div>
+    </article>
+
+    <article class="case">
+      <h3>외부 모듈 검증 — GUI 없는 플러그인</h3>
+      <div class="case-grid">
+        <div class="case-col issue"><span>ISSUE</span><p>초기 모듈에 GUI가 없어 사용자가 직접 코드를 열어 세팅해야 하는 불편함</p></div>
+        <div class="case-col"><span>DECISION</span><p>Editor Scripting으로 인스펙터에서 매개변수 제어·상태 보고 강제 실행이 가능한 커스텀 에디터를 만들어 실무진에 건의</p></div>
+        <div class="case-col"><span>RESULT</span><p>릴리즈 빌드에 디버그 UI가 노출되는 휴먼 에러 차단, SDK 사용성 개선</p></div>
       </div>
     </article>
 
@@ -167,15 +177,8 @@
         <div class="case-col"><span>RESULT</span><p>유출 리스크 원천 차단. RIDEV_INPUTSINK 마이그레이션은 다음 과제로</p></div>
       </div>
     </article>
-
-    <article class="case">
-      <h3>외부 모듈 검증 — GUI 없는 플러그인</h3>
-      <div class="case-grid">
-        <div class="case-col issue"><span>ISSUE</span><p>초기 모듈에 GUI가 없어 사용자가 직접 코드를 열어 세팅해야 하는 불편함</p></div>
-        <div class="case-col"><span>DECISION</span><p>Editor Scripting으로 인스펙터에서 매개변수 제어·상태 보고 강제 실행이 가능한 커스텀 에디터를 만들어 실무진에 건의</p></div>
-        <div class="case-col"><span>RESULT</span><p>릴리즈 빌드에 디버그 UI가 노출되는 휴먼 에러 차단, SDK 사용성 개선</p></div>
-      </div>
-    </article>
+    </div>
+<!-- /PORTFOLIO:TROUBLESHOOTING -->
   </section>
 
   <section id="skills" class="section" aria-labelledby="skills-title">

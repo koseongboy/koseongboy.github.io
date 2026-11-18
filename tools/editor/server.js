@@ -17,6 +17,7 @@ const fs = require('fs');
 const path = require('path');
 const { exec, execFile } = require('child_process');
 const blog = require('../blog/build.js');
+const portfolio = require('../portfolio/build.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const EDITOR_DIR = __dirname;
@@ -304,6 +305,46 @@ async function handleApi(req, res, url) {
     return send(res, 200, { path: rel });
   }
 
+  /* ---------- 포트폴리오 프로젝트 ---------- */
+  if (req.method === 'GET' && (url.pathname === '/__editor/project' || url.pathname === '/__editor/project/')) {
+    return send(res, 200, fs.readFileSync(path.join(EDITOR_DIR, 'project.html')), MIME['.html']);
+  }
+
+  if (req.method === 'GET' && url.pathname === '/__editor/projects') {
+    return send(res, 200, portfolio.readProjects().map((p) => ({ slug: p.slug, title: p.title, subtitle: p.subtitle, num: p.num, status: p.status })));
+  }
+
+  if (req.method === 'GET' && url.pathname === '/__editor/project-data') {
+    const slug = url.searchParams.get('slug') || '';
+    const data = portfolio.readProject(slug);
+    if (!data) return send(res, 404, { error: '프로젝트를 찾을 수 없어요: ' + slug });
+    return send(res, 200, { slug, data });
+  }
+
+  if (req.method === 'POST' && url.pathname === '/__editor/project') {
+    const { originalSlug, slug, data } = JSON.parse((await readBody(req, 2 * 1024 * 1024)).toString('utf8'));
+    if (!portfolio.SLUG_RE.test(String(slug || ''))) return send(res, 400, { error: '페이지 주소는 영문 소문자·숫자·하이픈(-)만 쓸 수 있어요' });
+    if (!data || !String(data.title || '').trim()) return send(res, 400, { error: '게임 이름을 입력해 주세요' });
+    const exists = fs.existsSync(path.join(portfolio.PROJECTS_DIR, slug + '.json'));
+    if (exists && slug !== originalSlug) return send(res, 409, { error: '같은 주소의 프로젝트가 이미 있어요: ' + slug });
+    portfolio.saveProject(slug, data);
+    if (originalSlug && originalSlug !== slug && portfolio.SLUG_RE.test(originalSlug)) portfolio.deleteProject(originalSlug);
+    portfolio.buildAll();
+    blog.buildAll();   // 사이트맵, 글 태그 ↔ 프로젝트 버튼 갱신
+    console.log('  프로젝트 저장  portfolio/projects/' + slug);
+    return send(res, 200, { ok: true, slug, url: '/portfolio/projects/' + slug + '.html' });
+  }
+
+  if (req.method === 'POST' && url.pathname === '/__editor/project/delete') {
+    const { slug } = JSON.parse((await readBody(req, 1024 * 1024)).toString('utf8'));
+    if (!portfolio.SLUG_RE.test(String(slug || ''))) return send(res, 400, { error: '잘못된 주소' });
+    portfolio.deleteProject(slug);
+    portfolio.buildAll();
+    blog.buildAll();
+    console.log('  프로젝트 삭제  portfolio/projects/' + slug);
+    return send(res, 200, { ok: true });
+  }
+
   if (req.method === 'GET' && url.pathname === '/__editor/git/status') {
     return send(res, 200, await gitStatus());
   }
@@ -334,7 +375,7 @@ async function handleApi(req, res, url) {
     }
   }
 
-  if (req.method === 'GET' && /^\/__editor\/(editor|write)\.(js|css)$/.test(url.pathname)) {
+  if (req.method === 'GET' && /^\/__editor\/(editor|write|project)\.(js|css)$/.test(url.pathname)) {
     const file = path.join(EDITOR_DIR, path.basename(url.pathname));
     return send(res, 200, fs.readFileSync(file), MIME[path.extname(file)]);
   }

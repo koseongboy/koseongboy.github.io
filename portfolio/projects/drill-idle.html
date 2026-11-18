@@ -27,7 +27,7 @@
 <link rel="stylesheet" href="../../assets/css/style.css">
 <script src="../../assets/js/theme.js" defer></script>
 </head>
-<body>
+<body data-page="project" data-slug="drill-idle">
 
 <header class="site-header">
   <nav class="container" aria-label="주요 메뉴">
@@ -62,12 +62,13 @@
       <dt>Stack</dt><dd><ul class="chips"><li>Unity 2D</li><li>C#</li><li>Windows API</li><li>Addressables</li><li>DOTween</li></ul></dd>
     </dl>
   </div>
+
   <div class="detail-links">
     <a href="https://github.com/koseongboy/Drill_Game" class="btn btn-primary" target="_blank" rel="noopener">GITHUB ↗</a>
   </div>
 
-  <section class="section" aria-labelledby="impl">
-    <h2 id="impl" class="section-title">01 · FACTORY ENGINE ROOM</h2>
+  <section class="section" aria-labelledby="s1">
+    <h2 id="s1" class="section-title">01 · FACTORY ENGINE ROOM</h2>
     <div class="highlight-stat">
       <div><strong>7종 260개+</strong><span>자동 파싱하는 기획 CSV 데이터</span></div>
       <div><strong>O(1)</strong><span>인메모리 룩업 테이블 조회</span></div>
@@ -82,11 +83,15 @@
       </div>
       <div>
         <h3>OS 레벨 백그라운드 키 입력 감지</h3>
-        <ul><li>Windows API의 <code>Keyboard HookCallback</code>을 활용해, 게임 클라이언트가 포커스를 잃은 상태에서도 OS 레벨 키보드 입력을 감지해 인게임 동력 자원으로 변환하는 시스템을 개발했습니다.</li></ul>
+        <ul>
+          <li>Windows API의 <code>Keyboard HookCallback</code>을 활용해, 게임 클라이언트가 포커스를 잃은 상태에서도 OS 레벨 키보드 입력을 감지해 인게임 동력 자원으로 변환하는 시스템을 개발했습니다.</li>
+        </ul>
       </div>
       <div>
         <h3>GitHub 잔디 스타일 출석 달력</h3>
-        <ul><li>하루의 접속 시간과 키 입력량을 달력에 기록하고, GitHub 잔디 심기처럼 활동량에 따라 날짜 칸의 초록색 농도를 다르게 표시해 플레이 기록을 한눈에 볼 수 있게 했습니다.</li></ul>
+        <ul>
+          <li>하루의 접속 시간과 키 입력량을 달력에 기록하고, GitHub 잔디 심기처럼 활동량에 따라 날짜 칸의 초록색 농도를 다르게 표시해 플레이 기록을 한눈에 볼 수 있게 했습니다.</li>
+        </ul>
       </div>
       <div>
         <h3>게임 루프 기획</h3>
@@ -98,8 +103,8 @@
     </div>
   </section>
 
-  <section class="section" aria-labelledby="job">
-    <h2 id="job" class="section-title">02 · DATA-DRIVEN PERKS</h2>
+  <section class="section" aria-labelledby="s2">
+    <h2 id="s2" class="section-title">02 · DATA-DRIVEN PERKS</h2>
     <div class="prose-block">
       <div>
         <h3>데이터 구조화 및 자동화 역량</h3>
@@ -111,8 +116,8 @@
     </div>
   </section>
 
-  <section class="section" aria-labelledby="boss">
-    <h2 id="boss" class="section-title">03 · BOSS FIGHT: GLOBAL HOOK</h2>
+  <section class="section" aria-labelledby="troubleshooting">
+    <h2 id="troubleshooting" class="section-title">03 · BOSS FIGHT: GLOBAL HOOK</h2>
     <div class="boss-log">
       <h3>OS 레벨 전역 후킹의 보안 취약점 진단과 구조적 타협</h3>
       <dl>
@@ -127,8 +132,8 @@
     <h2 id="more" class="section-title">Other Projects</h2>
     <div class="next-quests">
       <a href="dino-cleaner.html"><small>Project 01</small><span>Dino Cleaner</span></a>
-      <a href="spell-arena.html"><small>Project 02</small><span>Spell Arena</span></a>
-      <a href="module-framework.html"><small>Project 03 · Partner</small><span>[엘에스웨어 협력] 외부 모듈 검증 프레임워크</span></a>
+      <a href="module-framework.html"><small>Project 02 · Partner</small><span>[엘에스웨어 협력] 외부 모듈 검증 프레임워크</span></a>
+      <a href="spell-arena.html"><small>Project 03</small><span>Spell Arena</span></a>
     </div>
   </section>
 </main>
