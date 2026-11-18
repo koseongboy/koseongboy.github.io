@@ -3,8 +3,15 @@
 <channel>
   <title>KOSEONGBOY.DEV</title>
   <link>https://koseongboy.github.io/</link>
-  <description>고성보이의 게임 클라이언트 개발 블로그</description>
+  <description>고성현의 게임 클라이언트 개발 블로그</description>
   <language>ko</language>
-
+  <item>
+    <title>유니티 애니메이터 공부</title>
+    <link>https://koseongboy.github.io/posts/2026-11-14-2101-%EC%9C%A0%EB%8B%88%ED%8B%B0-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%ED%84%B0.html</link>
+    <guid>https://koseongboy.github.io/posts/2026-11-14-2101-%EC%9C%A0%EB%8B%88%ED%8B%B0-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%ED%84%B0.html</guid>
+    <pubDate>Sat, 14 Nov 2026 00:00:00 GMT</pubDate>
+    <category>Unity</category>
+    <description>1. 블랜드 트리 하나의 노드에 여러 상태가 따로 존재할 때 특정 변수 값에 따라 애니메이션을 부드럽게 섞어줌 서기-서서 걷기 / 앉기-앉아서 걷기 / 엎드리기-기어가기 를 묶음으로 묶어서 처리했음. Speed = 0 : 대기 (Idle) Speed …</description>
+  </item>
 </channel>
 </rss>

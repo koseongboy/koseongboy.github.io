@@ -59,10 +59,17 @@
         <p class="list-filter" id="list-filter" hidden=""></p>
       </div>
 <!-- BLOG:POSTS -->
-      <div class="empty-state" data-generated>
-        <strong>아직 글이 없어요</strong>
-        <span>첫 글이 곧 올라옵니다.</span>
-      </div>
+      <ul class="post-list" data-generated>
+        <li class="post-card" data-category="Unity" data-tags="기능공부|Dino Cleaner">
+          <div class="post-card-thumb"><img src="assets/img/posts/image-20261118124144.png" alt="" loading="lazy"></div>
+          <div class="post-card-body">
+            <div class="post-meta"><a class="cat-badge cat-link" href="?category=Unity">Unity</a><time datetime="2026-11-14">2026.11.14</time><span>· 3분</span></div>
+            <h3><a href="posts/2026-11-14-2101-%EC%9C%A0%EB%8B%88%ED%8B%B0-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%ED%84%B0.html">유니티 애니메이터 공부</a></h3>
+            <p>1. 블랜드 트리 하나의 노드에 여러 상태가 따로 존재할 때 특정 변수 값에 따라 애니메이션을 부드럽게 섞어줌 서기-서서 걷기 / 앉기-앉아서 걷기 / 엎드리기-기어가기 를 묶음으로 묶어서 처리했음. Speed = 0 : 대기 (Idle) Speed …</p>
+            <div class="post-meta"><a class="tag-link" href="?tag=%EA%B8%B0%EB%8A%A5%EA%B3%B5%EB%B6%80">#기능공부</a><a class="tag-link" href="?tag=Dino%20Cleaner">#Dino Cleaner</a></div>
+          </div>
+        </li>
+      </ul>
 <!-- /BLOG:POSTS -->
     </section>
 
@@ -81,14 +88,20 @@
       <section class="side-box" aria-labelledby="cat-title">
         <h2 id="cat-title">Categories</h2>
 <!-- BLOG:CATEGORIES -->
-        <p class="side-empty" data-generated>카테고리가 없어요.</p>
+        <ul class="cat-list" data-generated>
+          <li><a href="./">전체<span>1</span></a></li>
+          <li><a href="?category=Unity" data-filter-category="Unity">Unity<span>1</span></a></li>
+        </ul>
 <!-- /BLOG:CATEGORIES -->
       </section>
 
       <section class="side-box" aria-labelledby="tag-title">
         <h2 id="tag-title">Tags</h2>
 <!-- BLOG:TAGS -->
-        <p class="side-empty" data-generated>태그가 없어요.</p>
+        <ul class="tag-cloud" data-generated>
+          <li><a href="?tag=%EA%B8%B0%EB%8A%A5%EA%B3%B5%EB%B6%80" data-filter-tag="기능공부">#기능공부</a></li>
+          <li><a href="?tag=Dino%20Cleaner" data-filter-tag="Dino Cleaner">#Dino Cleaner</a></li>
+        </ul>
 <!-- /BLOG:TAGS -->
       </section>
     </aside>
