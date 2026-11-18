@@ -1,27 +1,6 @@
-# Bundler cache
-.bundle
-vendor
-Gemfile.lock
+# 포트폴리오 원본 자료 (전화번호 등 개인정보 포함) — 저장소에 올리지 않음
+references/
 
-# Jekyll cache
-.jekyll-cache
-.jekyll-metadata
-_site
-
-# RubyGems
-*.gem
-
-# NPM dependencies
-node_modules
-package-lock.json
-
-# IDE configurations
-.idea
-.vscode/*
-!.vscode/settings.json
-!.vscode/extensions.json
-!.vscode/tasks.json
-
-# Misc
-_sass/vendors
-assets/js/dist
+_site/
+.DS_Store
+Thumbs.db

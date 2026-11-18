@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spell Arena | 고성현 포트폴리오</title>
+<meta name="description" content="영창 대전 카드 게임 Spell Arena — 데이터 주도 카드 효과 엔진, NGO 서버 권한 모델, 음성 영창 파이프라인.">
+<link rel="canonical" href="https://koseongboy.github.io/projects/spell-arena.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spell Arena | 고성현 포트폴리오">
+<meta property="og:url" content="https://koseongboy.github.io/projects/spell-arena.html">
+<meta property="og:image" content="https://koseongboy.github.io/assets/img/spell-arena.jpg">
+<meta name="theme-color" content="#0f1328">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230f1328'/%3E%3Crect x='3' y='3' width='10' height='10' fill='%23f5c451'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%230f1328'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;family=Noto+Sans+KR:wght@400;500;700&amp;family=Silkscreen:wght@400;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="container" aria-label="주요 메뉴">
+    <a href="../" class="logo">KOSEONGBOY</a>
+    <div class="nav-links">
+      <a href="../#status">STATUS</a>
+      <a href="../#inventory">INVENTORY</a>
+      <a href="../#quests">QUESTS</a>
+      <a href="../#contact">PARTY UP</a>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+  <div class="breadcrumb"><a href="../#quests">◀ QUEST LOG</a></div>
+
+  <section class="detail-hero">
+    <div class="quest-meta"><span class="badge badge-clear">CLEAR</span><span>QUEST 02</span></div>
+    <h1>Spell Arena</h1>
+    <p class="tagline">제시된 단어들로 창의적인 영창을 만들고, 평가받아 데미지 보너스를 얻는 카드 게임</p>
+  </section>
+
+  <img class="detail-cover" src="../assets/img/spell-arena.jpg" alt="Spell Arena 영창 화면: 보라색 마법진 위에 '이 자리에서 선언하노니! 고요한 종말을 목도하라!' 영창 문구" width="1490" height="835">
+
+  <div class="panel spec">
+    <dl>
+      <dt>PERIOD</dt><dd>2026.03 ~ 2026.07</dd>
+      <dt>PARTY</dt><dd>3인 (클라이언트 1인, 기획/PM 1인, 백엔드 1인)</dd>
+      <dt>ROLE</dt><dd>클라이언트 개발</dd>
+      <dt>STACK</dt><dd><ul class="chips"><li>Unity 3D</li><li>C#</li><li>Netcode for GameObjects</li><li>MVP</li><li>Command</li></ul></dd>
+    </dl>
+  </div>
+  <div class="detail-links">
+    <a href="https://github.com/koseongboy/Spell_Battle" class="btn btn-primary" target="_blank" rel="noopener">GITHUB ↗</a>
+    <a href="https://www.youtube.com/watch?v=-QaFugYqSeE" class="btn btn-secondary" target="_blank" rel="noopener">TEASER ↗</a>
+  </div>
+
+  <section class="section" aria-labelledby="impl">
+    <h2 id="impl" class="section-title">01 · SPELLBOOK ENGINEERING</h2>
+    <div class="highlight-stat">
+      <div><strong>130종</strong><span>구현한 카드</span></div>
+      <div><strong>28 / 20+ / 7</strong><span>모듈화한 효과 타입 / 상태이상 / 조건절</span></div>
+      <div><strong>15분+ → 1분</strong><span>신규 카드 1종 추가 공수</span></div>
+    </div>
+    <div class="panel prose-block">
+      <div>
+        <h3>데이터 주도 카드 효과 엔진 구축</h3>
+        <ul>
+          <li>130종의 카드마다 스크립트를 개별 작성하는 대신, 28종의 효과 타입과 20종 이상의 상태이상, 7종의 조건절을 모듈화한 공통 연산 엔진을 구축했습니다.</li>
+          <li>[C# 스크립트 작성 → 컴파일 → 씬 연결]의 과정을 [CSV 데이터 1행 추가] 한 단계로 단축했습니다.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>네트워크 동기화 및 아키텍처 설계</h3>
+        <ul>
+          <li>Unity NGO 모듈로 로비 생성과 실시간 인게임 흐름을 제어하고, 클라이언트 변조를 막기 위해 서버 권위 모델을 구현했습니다.</li>
+          <li>'클라이언트(플레이어) – 게임 서버 – 웹 서버'로 이어지는 3계층 통신 아키텍처를 설계하고 구현했습니다.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>음성 녹음 및 사운드 파이프라인</h3>
+        <ul><li>Unity Microphone System으로 플레이어의 음성 영창을 녹음해 웹 서버로 패킷을 제출하는 파이프라인을 구축하고, 인게임 사운드(BGM/SFX) 제어 매니저를 구현했습니다.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="job">
+    <h2 id="job" class="section-title">02 · ARCANE CLASS PERKS</h2>
+    <div class="panel prose-block">
+      <div>
+        <h3>네트워크 모델</h3>
+        <ul>
+          <li>서버 권위 모델을 이해하고, 이를 지향하여 구조를 구축했습니다.</li>
+          <li>Netcode for GameObjects 도입을 통해 RPC 통신 규격과 파라미터 최적화 기법을 실무에 적용할 수 있습니다.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>디자인 패턴 적용 역량</h3>
+        <ul>
+          <li>시스템 전반의 오브젝트에 엄격한 MVP 패턴을 적용하고, 카드 효과 발동 로직에 Command 패턴을 도입했습니다.</li>
+          <li>단순 하드코딩의 한계를 체감하고, 유지보수와 확장이 유연한 객체지향적 아키텍처를 추구합니다.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="boss">
+    <h2 id="boss" class="section-title">03 · BOSS FIGHTS: LATENCY &amp; NETCODE</h2>
+    <div class="boss-log">
+      <h3>단일 API 의존의 한계 인지와 최적화 방향 도출</h3>
+      <dl>
+        <dt class="dt-encounter">ENCOUNTER</dt><dd>음성 원본을 멀티모달 LLM에 한 번에 보내 창의성과 몰입도를 동시에 평가하는 구조였습니다. 경량 모델(Gemini 2.5 Flash)은 음성 인식 정확도가 떨어져 문맥을 온전히 판별하지 못했고, 대형 모델(GPT-4o Audio)은 추론 시간이 길어 실시간성이 훼손됐으며 예산상 도입도 어려웠습니다.</dd>
+        <dt class="dt-action">ACTION</dt><dd>데이터를 목적에 맞게 나누는 2-Track 파이프라인을 도출했습니다. 창의성(문맥)은 클라이언트에서 STT로 텍스트화해 가벼운 페이로드만 LLM에 요청하고, 몰입도(감정)는 주파수·진폭 등 음향 피처를 자체 분석합니다.</dd>
+        <dt class="dt-result">RESULT</dt><dd>완성된 외부 API에 통째로 의존할 때 생기는 퍼포먼스 병목을 체감했고, 차기 유지보수 목표로 데이터 특성에 맞춰 파이프라인을 분리하고 지연 시간을 최소화하는 구조를 잡았습니다.</dd>
+      </dl>
+    </div>
+    <div class="boss-log">
+      <h3>네트워크 환경의 한계</h3>
+      <dl>
+        <dt class="dt-encounter">ENCOUNTER</dt><dd>서버 권위 모델을 설계했지만 비용과 구조적 한계로 호스트가 서버를 겸하는 Listen Server를 채택해, 호스트 PC가 조작되면 서버 전체가 노출되는 보안 한계가 남았습니다. 또한 ParrelSync로 단일 PC에서 다중 클라이언트를 검증해 실제 네트워크 지연을 온전히 체감하지 못했습니다.</dd>
+        <dt class="dt-action">ACTION</dt><dd>보안과 지연 문제의 원인을 개발 환경 구조에서 찾아 정리했습니다.</dd>
+        <dt class="dt-result">RESULT</dt><dd>다음 프로젝트에서는 클라이언트와 물리적으로 분리된 전용 서버(Dedicated Server)를 구축하고, 지연 보상 예측(Prediction)과 실제 통신 환경 최적화를 다뤄보고자 합니다.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="more">
+    <h2 id="more" class="section-title">OTHER QUESTS</h2>
+    <div class="next-quests">
+      <a href="dino-cleaner.html"><small>QUEST 01</small><span>Dino Cleaner</span></a>
+      <a href="module-framework.html"><small>QUEST 03 · PARTNER</small><span>[엘에스웨어 협력] 외부 모듈 검증 프레임워크</span></a>
+      <a href="drill-idle.html"><small>QUEST 04</small><span>Drill Idle</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer"><p class="copyright">© 2026 KO SEONGHYEON</p></footer>
+</body>
+</html>

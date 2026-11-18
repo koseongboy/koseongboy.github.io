@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drill Idle | 고성현 포트폴리오</title>
+<meta name="description" content="키 입력이 공장의 성장으로 이어지는 데스크탑 방치형 게임 Drill Idle — OS 레벨 키 후킹, O(1) 데이터 캐싱, 출석 달력.">
+<link rel="canonical" href="https://koseongboy.github.io/projects/drill-idle.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Drill Idle | 고성현 포트폴리오">
+<meta property="og:url" content="https://koseongboy.github.io/projects/drill-idle.html">
+<meta property="og:image" content="https://koseongboy.github.io/assets/img/drill-idle-calendar.png">
+<meta name="theme-color" content="#0f1328">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230f1328'/%3E%3Crect x='3' y='3' width='10' height='10' fill='%23f5c451'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%230f1328'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;family=Noto+Sans+KR:wght@400;500;700&amp;family=Silkscreen:wght@400;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="container" aria-label="주요 메뉴">
+    <a href="../" class="logo">KOSEONGBOY</a>
+    <div class="nav-links">
+      <a href="../#status">STATUS</a>
+      <a href="../#inventory">INVENTORY</a>
+      <a href="../#quests">QUESTS</a>
+      <a href="../#contact">PARTY UP</a>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+  <div class="breadcrumb"><a href="../#quests">◀ QUEST LOG</a></div>
+
+  <section class="detail-hero">
+    <div class="quest-meta"><span class="badge badge-clear">CLEAR</span><span>QUEST 04</span></div>
+    <h1>Drill Idle</h1>
+    <p class="tagline">나의 작업(키 입력)이 공장의 성장으로 연결되는 데스크탑 방치형 게임</p>
+  </section>
+
+  <img class="detail-cover top" src="../assets/img/drill-idle-calendar.png" alt="Drill Idle 출석 달력: 2025년 12월, 날짜별 플레이 시간과 키 입력량이 초록색 농도로 표시됨" width="1080" height="608">
+
+  <div class="panel spec">
+    <dl>
+      <dt>PERIOD</dt><dd>2025.09 ~ 2025.12</dd>
+      <dt>PARTY</dt><dd>3인 (클라이언트/기획 3인)</dd>
+      <dt>ROLE</dt><dd>클라이언트 개발 및 기획</dd>
+      <dt>STACK</dt><dd><ul class="chips"><li>Unity 2D</li><li>C#</li><li>Windows API</li><li>Addressables</li><li>DOTween</li></ul></dd>
+    </dl>
+  </div>
+  <div class="detail-links">
+    <a href="https://github.com/koseongboy/Drill_Game" class="btn btn-primary" target="_blank" rel="noopener">GITHUB ↗</a>
+  </div>
+
+  <section class="section" aria-labelledby="impl">
+    <h2 id="impl" class="section-title">01 · FACTORY ENGINE ROOM</h2>
+    <div class="highlight-stat">
+      <div><strong>7종 260개+</strong><span>자동 파싱하는 기획 CSV 데이터</span></div>
+      <div><strong>O(1)</strong><span>인메모리 룩업 테이블 조회</span></div>
+    </div>
+    <div class="panel prose-block">
+      <div>
+        <h3>기획 데이터 자동 파싱 및 O(1) 인메모리 캐싱 파이프라인</h3>
+        <ul>
+          <li>기획자가 작성한 7종 260개 이상의 외부 CSV 데이터를 게임 실행 시 1회 파싱해 In-Memory Dictionary 및 Scriptable Object 형태의 룩업 테이블로 전환했습니다.</li>
+          <li>기획 데이터가 수천 개 이상 늘어나도 코드 수정 없이 테이블 추가만으로 동작하는 확장성을 확보했습니다.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>OS 레벨 백그라운드 키 입력 감지</h3>
+        <ul><li>Windows API의 <code>Keyboard HookCallback</code>을 활용해, 게임 클라이언트가 포커스를 잃은 상태에서도 OS 레벨 키보드 입력을 감지해 인게임 동력 자원으로 변환하는 시스템을 개발했습니다.</li></ul>
+      </div>
+      <div>
+        <h3>GitHub 잔디 스타일 출석 달력</h3>
+        <ul><li>하루의 접속 시간과 키 입력량을 달력에 기록하고, GitHub 잔디 심기처럼 활동량에 따라 날짜 칸의 초록색 농도를 다르게 표시해 플레이 기록을 한눈에 볼 수 있게 했습니다.</li></ul>
+      </div>
+      <div>
+        <h3>게임 루프 기획</h3>
+        <ul>
+          <li>키보드 입력 횟수가 공장의 동력을 가속시키는 메커니즘을 기획했습니다.</li>
+          <li>동력 장치와 생산 장치를 분리하는 시스템을 기획했습니다.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="job">
+    <h2 id="job" class="section-title">02 · DATA-DRIVEN PERKS</h2>
+    <div class="panel prose-block">
+      <div>
+        <h3>데이터 구조화 및 자동화 역량</h3>
+        <ul>
+          <li>대규모 게임(MMORPG 등) 개발 환경에서 필수적인 방대한 테이블 데이터(CSV)를 객체화하고 관리할 수 있습니다.</li>
+          <li>문서화된 기획 가이드라인을 클라이언트에 시스템적으로 적용하고 자동화할 수 있습니다.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="boss">
+    <h2 id="boss" class="section-title">03 · BOSS FIGHT: GLOBAL HOOK</h2>
+    <div class="boss-log">
+      <h3>OS 레벨 전역 후킹의 보안 취약점 진단과 구조적 타협</h3>
+      <dl>
+        <dt class="dt-encounter">ENCOUNTER</dt><dd>백그라운드 입력 감지를 위해 <code>SetWindowsHookEx</code> 전역 후킹을 구현했으나, 수집된 키 코드가 메모리에 적재되면 클라이언트 변조로 키로거로 악용될 수 있고, 백신 프로그램에 악성 코드로 오탐지될 위험도 컸습니다.</dd>
+        <dt class="dt-action">ACTION</dt><dd>근본 해결책인 MS 권장 규격 Raw Input API로의 전면 교체를 계획했지만, 기한 내 아키텍처 재구축은 리스크가 크다고 판단했습니다. 대신 어떤 키가 눌렸는지 식별하는 로직을 완전히 삭제하고, 이벤트 발생 시 의미 없는 더미 데이터만 큐잉하도록 마스킹했습니다.</dd>
+        <dt class="dt-result">RESULT</dt><dd>기한 내에 정보 유출 리스크를 원천 차단했습니다. 근본적인 API 교체는 기술 부채로 남았고, 향후 Raw Input API(<code>RIDEV_INPUTSINK</code>)로 마이그레이션해 백신 오탐지까지 해결하는 것이 다음 목표입니다.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="more">
+    <h2 id="more" class="section-title">OTHER QUESTS</h2>
+    <div class="next-quests">
+      <a href="dino-cleaner.html"><small>QUEST 01</small><span>Dino Cleaner</span></a>
+      <a href="spell-arena.html"><small>QUEST 02</small><span>Spell Arena</span></a>
+      <a href="module-framework.html"><small>QUEST 03 · PARTNER</small><span>[엘에스웨어 협력] 외부 모듈 검증 프레임워크</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer"><p class="copyright">© 2026 KO SEONGHYEON</p></footer>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[엘에스웨어 협력] 외부 모듈 검증 프레임워크 | 고성현 포트폴리오</title>
+<meta name="description" content="엘에스웨어 협력 — 외부 Unity 모듈 통합 테스트 환경 구축, Reporter 파이프라인, PCG 던전, 커스텀 에디터.">
+<link rel="canonical" href="https://koseongboy.github.io/projects/module-framework.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[엘에스웨어 협력] 외부 모듈 검증 프레임워크 | 고성현 포트폴리오">
+<meta property="og:url" content="https://koseongboy.github.io/projects/module-framework.html">
+<meta property="og:image" content="https://koseongboy.github.io/assets/img/module-framework.png">
+<meta name="theme-color" content="#0f1328">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230f1328'/%3E%3Crect x='3' y='3' width='10' height='10' fill='%23f5c451'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%230f1328'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;family=Noto+Sans+KR:wght@400;500;700&amp;family=Silkscreen:wght@400;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="container" aria-label="주요 메뉴">
+    <a href="../" class="logo">KOSEONGBOY</a>
+    <div class="nav-links">
+      <a href="../#status">STATUS</a>
+      <a href="../#inventory">INVENTORY</a>
+      <a href="../#quests">QUESTS</a>
+      <a href="../#contact">PARTY UP</a>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+  <div class="breadcrumb"><a href="../#quests">◀ QUEST LOG</a></div>
+
+  <section class="detail-hero">
+    <div class="quest-meta"><span class="badge badge-clear">CLEAR</span><span>QUEST 03 · 기업 협력 프로젝트</span></div>
+    <h1><span class="partner-tag">[엘에스웨어 협력]</span> 외부 모듈 검증 프레임워크</h1>
+    <p class="tagline">외부 모듈 통합 테스트 환경 구축 및 실무진 건의를 통한 인스펙터(Inspector) 사용성 개선</p>
+  </section>
+
+  <img class="detail-cover" src="../assets/img/module-framework.png" alt="Random Walk로 생성된 던전 지도 UI: 시작 방, 전투 방, 상점 방, 보스 방이 격자에 배치됨" width="1920" height="1080">
+
+  <div class="panel spec">
+    <dl>
+      <dt>PARTNER</dt><dd><strong>엘에스웨어</strong> — 외부 모듈 통합 검증 및 실무진 협업</dd>
+      <dt>PERIOD</dt><dd>2026.05 ~ 2026.08</dd>
+      <dt>PARTY</dt><dd>1인 (클라이언트/모듈 검증)</dd>
+      <dt>ROLE</dt><dd>기반 프레임워크 개발 및 모듈 통합</dd>
+      <dt>STACK</dt><dd><ul class="chips"><li>Unity 2D</li><li>C#</li><li>Unity Editor Scripting</li><li>Unity Input System</li></ul></dd>
+    </dl>
+  </div>
+
+  <section class="section" aria-labelledby="impl">
+    <h2 id="impl" class="section-title">01 · DUNGEON GENERATOR</h2>
+    <div class="panel prose-block">
+      <div>
+        <h3>동적 던전 생성(PCG) 로직 구축</h3>
+        <ul>
+          <li>Random Walk 알고리즘을 적용해 맵 구조를 절차적으로 생성했습니다.</li>
+          <li>시작점과의 거리를 기준으로 방의 종류를 정하고, 사전 제작된 방 프리팹을 랜덤하게 배치해 매번 다른 테스트 환경이 구성되도록 했습니다.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Unity Input System 기반 조작계 구현</h3>
+        <ul><li>물리적 키 입력과 캐릭터의 논리적 행동을 Action Map으로 분리하고 이벤트 주도(Event-driven) 방식으로 처리해, 인게임 로직과 입력 시스템 간의 결합도를 낮췄습니다.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="pipeline">
+    <h2 id="pipeline" class="section-title">02 · REPORTER PROTOCOL</h2>
+    <div class="panel prose-block">
+      <div>
+        <h3>게임 상태 스키마 설계 및 프로토콜 합의</h3>
+        <ul><li>범용 SDK 특성에 맞춰 지속 상태(<code>Scene</code>, <code>RoomID</code>)와 단발성 이벤트(<code>Event</code>: 보스 조우, 상호작용)를 구분해 정의하고, 각 키의 허용값을 Enum으로 규격화해 외부 차단 규칙 작성자와 프로토콜을 합의했습니다.</li></ul>
+      </div>
+      <div>
+        <h3>Mediator / Facade 패턴 기반 Reporter 싱글톤 및 스냅샷 관리</h3>
+        <ul>
+          <li>이전 상태를 기억하지 않는(Stateless) 범용 SDK를 보완하기 위해, 클라이언트의 현재 상태를 캐싱하고 모듈과의 통신을 전담하는 Reporter 싱글톤을 구축했습니다.</li>
+          <li>상태 변화를 일으키는 인게임 오브젝트는 SDK API를 직접 호출하지 않고 Reporter의 상태만 갱신하는 경량 트리거 컴포넌트를 부착했습니다.</li>
+          <li>인게임 로직과 외부 모듈 간 의존성을 분리하고, 트리거 컴포넌트만 조립해 재사용할 수 있게 했습니다.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="job">
+    <h2 id="job" class="section-title">03 · CO-OP WITH THE GUILD</h2>
+    <div class="panel prose-block">
+      <div>
+        <h3>타 부서 모듈 통합 및 기술 커뮤니케이션</h3>
+        <ul>
+          <li>외부 솔루션 제공업체의 API 가이드 문서를 이해하고, 이를 실제 클라이언트 구조에 엮어 유효성 테스트를 수행했습니다.</li>
+          <li>모듈 부착 과정에서 Reporter 싱글톤 방식과 커스텀 GUI를 역제안하며, 단순 연동을 넘어 SDK 사용자 입장의 편의성을 고려하는 시각을 길렀습니다.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="boss">
+    <h2 id="boss" class="section-title">04 · BOSS FIGHT: THE MISSING INSPECTOR</h2>
+    <div class="boss-log">
+      <h3>플러그인 사용성 개선을 위한 에디터 커스터마이징 제안</h3>
+      <dl>
+        <dt class="dt-encounter">ENCOUNTER</dt><dd>전달받은 초기 모듈에는 GUI가 없어, 사용자가 직접 코드를 열어 세팅해야 하는 불편함이 있었습니다.</dd>
+        <dt class="dt-action">ACTION</dt><dd>Unity Editor Scripting으로 인스펙터 창에서 주요 매개변수를 제어하고 테스트용 상태 보고를 강제로 실행할 수 있는 커스텀 에디터 레퍼런스 코드를 작성해 실무진에게 건의했습니다.</dd>
+        <dt class="dt-result">RESULT</dt><dd>인게임 디버그 UI 대신 인스펙터 커스텀 버튼을 쓰는 방식을 체득했고, 릴리즈 빌드에 개발자 UI가 노출되는 휴먼 에러를 원천 차단했습니다.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="more">
+    <h2 id="more" class="section-title">OTHER QUESTS</h2>
+    <div class="next-quests">
+      <a href="dino-cleaner.html"><small>QUEST 01</small><span>Dino Cleaner</span></a>
+      <a href="spell-arena.html"><small>QUEST 02</small><span>Spell Arena</span></a>
+      <a href="drill-idle.html"><small>QUEST 04</small><span>Drill Idle</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer"><p class="copyright">© 2026 KO SEONGHYEON</p></footer>
+</body>
+</html>
