@@ -1,0 +1,81 @@
+/* 로컬 편집기 전용 스타일 — 배포 사이트에는 포함되지 않음 */
+
+/* 편집 중에는 카드 전체를 덮는 링크 레이어를 끔 (카드 안 글자를 클릭할 수 있게) */
+.ed-on .quest-link::after { display: none; }
+.ed-on .quest:hover { transform: none; }
+.ed-on body, .ed-mode-view body { padding-bottom: 96px; }
+
+/* 클릭 가능한 대상 표시 */
+.ed-hover-text { outline: 2px dashed #f5c451 !important; outline-offset: 3px; cursor: text !important; }
+.ed-hover-link { outline: 2px dashed #ff8ad8 !important; outline-offset: 3px; cursor: pointer !important; }
+.ed-hover-image { outline: 3px dashed #6fd3ff !important; outline-offset: -3px; cursor: copy !important; }
+.ed-hover-image.quest-thumb-placeholder::after,
+.ed-hover-image.detail-cover-placeholder::after { content: ' (클릭해서 이미지 선택)'; }
+.ed-editing { outline: 2px solid #f5c451 !important; outline-offset: 3px; background: rgba(245, 196, 81, 0.08); cursor: text; }
+.ed-link-active { outline: 2px solid #ff8ad8 !important; outline-offset: 3px; }
+
+/* 편집기 UI */
+.ed-toolbar, .ed-popover, .ed-help, .ed-toast {
+  font-family: system-ui, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif;
+  font-size: 14px; line-height: 1.5; color: #1b1e2e; letter-spacing: 0;
+}
+.ed-toolbar {
+  position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 2147483000;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
+  max-width: calc(100vw - 32px);
+  background: #ffffff; border: 2px solid #1b1e2e; box-shadow: 4px 4px 0 #1b1e2e;
+  padding: 8px 10px 8px 14px;
+}
+.ed-title { font-size: 14px; white-space: nowrap; }
+
+/* 보기 / 편집 모드 전환 */
+.ed-segmented { display: inline-flex; border: 2px solid #1b1e2e; }
+.ed-seg { min-height: 36px; padding: 0 14px; font: inherit; font-weight: 700; cursor: pointer; background: #ffffff; color: #1b1e2e; border: 0; }
+.ed-seg + .ed-seg { border-left: 2px solid #1b1e2e; }
+.ed-seg[aria-pressed="true"] { background: #1b1e2e; color: #ffffff; }
+.ed-seg:focus-visible { outline: 3px solid #4d7cff; outline-offset: 1px; }
+.ed-edit-only { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.ed-mode-view .ed-edit-only { display: none; }
+.ed-live { font-size: 13px; color: #6b7088; white-space: nowrap; }
+.ed-live-on { color: #137a3f; font-weight: 700; }
+.ed-status { font-size: 13px; color: #555a70; white-space: nowrap; }
+.ed-status-dirty { color: #b3261e; font-weight: 700; }
+.ed-select { min-height: 36px; max-width: 260px; font: inherit; border: 1px solid #9097b5; padding: 0 6px; background: #fff; color: #1b1e2e; }
+.ed-btn {
+  min-height: 36px; padding: 0 14px; font: inherit; font-weight: 600; cursor: pointer;
+  background: #eef0f7; color: #1b1e2e; border: 1px solid #9097b5;
+}
+.ed-btn:hover { background: #e0e4f2; }
+.ed-btn-link { display: inline-flex; align-items: center; text-decoration: none; box-sizing: border-box; }
+.ed-btn-link:hover { color: #1b1e2e; }
+.ed-on [data-generated] { cursor: not-allowed; }
+.ed-btn:disabled { opacity: 0.45; cursor: default; }
+.ed-btn-primary { background: #1b1e2e; color: #ffffff; border-color: #1b1e2e; }
+.ed-btn-primary:hover { background: #33384f; }
+.ed-btn:focus-visible, .ed-input:focus-visible, .ed-select:focus-visible { outline: 3px solid #4d7cff; outline-offset: 1px; }
+
+.ed-popover {
+  position: absolute; z-index: 2147483001; width: min(380px, calc(100vw - 16px));
+  background: #ffffff; border: 2px solid #1b1e2e; box-shadow: 4px 4px 0 #1b1e2e;
+  padding: 14px; display: flex; flex-direction: column; gap: 6px;
+}
+.ed-label { font-weight: 700; font-size: 13px; margin-top: 4px; }
+.ed-input { width: 100%; box-sizing: border-box; min-height: 38px; font: inherit; padding: 0 10px; border: 1px solid #9097b5; color: #1b1e2e; background: #fff; }
+.ed-check { display: flex; align-items: center; gap: 6px; font-size: 13px; margin-top: 4px; }
+.ed-note { margin: 0; font-size: 13px; color: #555a70; }
+.ed-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+
+.ed-help {
+  position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); z-index: 2147483000;
+  width: min(460px, calc(100vw - 32px)); box-sizing: border-box;
+  background: #ffffff; border: 2px solid #1b1e2e; box-shadow: 4px 4px 0 #1b1e2e; padding: 12px 16px;
+}
+.ed-help p { margin: 4px 0; }
+.ed-help b { display: inline-block; min-width: 72px; }
+
+.ed-toast {
+  position: fixed; left: 50%; top: 16px; transform: translateX(-50%); z-index: 2147483002;
+  background: #1b1e2e; color: #ffffff; padding: 10px 16px; max-width: calc(100vw - 32px);
+}
+.ed-toast-error { background: #b3261e; }
+[hidden].ed-toast, [hidden].ed-help { display: none; }

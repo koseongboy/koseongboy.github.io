@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>글쓰기 | KOSEONGBOY.DEV 편집기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&amp;family=Noto+Sans+KR:wght@400;500;700&amp;family=Silkscreen:wght@400;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/3.2.2/toastui-editor.min.css">
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/3.2.2/theme/toastui-editor-dark.min.css">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/__editor/write.css">
+</head>
+<body>
+
+<header class="w-bar">
+  <div class="w-bar-inner">
+    <a href="/" class="w-back">◀ 블로그</a>
+    <strong class="w-title">✍ 글쓰기</strong>
+    <label class="w-sr" for="w-load">글 불러오기</label>
+    <select id="w-load" class="w-select">
+      <option value="">+ 새 글</option>
+    </select>
+    <span id="w-status" class="w-status">새 글</span>
+    <span class="w-spacer"></span>
+    <button type="button" id="w-delete" class="w-btn w-btn-danger" hidden>삭제</button>
+    <button type="button" id="w-draft" class="w-btn">임시저장</button>
+    <button type="button" id="w-publish" class="w-btn w-btn-primary">발행</button>
+  </div>
+</header>
+
+<main class="w-main">
+  <label class="w-sr" for="w-post-title">제목</label>
+  <input id="w-post-title" class="w-post-title" type="text" placeholder="제목을 입력하세요" autocomplete="off">
+
+  <div class="w-fields">
+    <div class="w-field">
+      <label for="w-category">카테고리</label>
+      <input id="w-category" type="text" list="w-category-list" placeholder="예: Unity" autocomplete="off">
+      <datalist id="w-category-list"></datalist>
+    </div>
+    <div class="w-field w-field-wide">
+      <label for="w-tags">태그 <small>쉼표(,)로 구분</small></label>
+      <input id="w-tags" type="text" placeholder="예: C#, 디자인패턴, 트러블슈팅" autocomplete="off">
+    </div>
+    <div class="w-field">
+      <label for="w-date">날짜</label>
+      <input id="w-date" type="date">
+    </div>
+  </div>
+
+  <details class="w-more" id="w-more">
+    <summary>추가 설정 · 대표 이미지 · 요약 · 글 주소</summary>
+    <div class="w-more-body">
+      <div class="w-field">
+        <span class="w-label">대표 이미지 <small>비워두면 본문의 첫 이미지를 써요</small></span>
+        <div class="w-cover">
+          <div id="w-cover-preview" class="w-cover-preview">대표 이미지 없음</div>
+          <div class="w-cover-actions">
+            <button type="button" id="w-cover-pick" class="w-btn">이미지 선택</button>
+            <button type="button" id="w-cover-clear" class="w-btn" hidden>지우기</button>
+          </div>
+        </div>
+        <input id="w-cover-file" type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden>
+      </div>
+      <div class="w-field">
+        <label for="w-summary">요약 <small>목록에 보이는 소개글. 비워두면 본문 앞부분을 써요</small></label>
+        <textarea id="w-summary" rows="2"></textarea>
+      </div>
+      <div class="w-field">
+        <label for="w-slug">글 주소 <small>한글·영문·숫자·-·_ (공백 없이)</small></label>
+        <input id="w-slug" type="text" autocomplete="off" spellcheck="false">
+        <p class="w-url">koseongboy.github.io/posts/<span id="w-slug-preview"></span>.html</p>
+      </div>
+    </div>
+  </details>
+
+  <div id="w-editor"></div>
+  <p class="w-hint">이미지는 툴바의 이미지 버튼, 드래그 앤 드롭, 붙여넣기(Ctrl+V)로 넣을 수 있어요 · Ctrl+S 저장</p>
+</main>
+
+<div id="w-toast" class="w-toast" role="status" hidden></div>
+
+<script src="https://uicdn.toast.com/editor/3.2.2/toastui-editor-all.min.js"></script>
+<script src="https://uicdn.toast.com/editor/3.2.2/i18n/ko-kr.min.js"></script>
+<script src="/__editor/write.js"></script>
+</body>
+</html>

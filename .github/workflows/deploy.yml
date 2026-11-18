@@ -27,8 +27,13 @@ jobs:
       - name: Collect site files
         run: |
           mkdir _site
-          cp index.html robots.txt sitemap.xml google6e14470019bbcacc.html _site/
-          cp -r assets projects _site/
+          cp index.html robots.txt sitemap.xml feed.xml google6e14470019bbcacc.html _site/
+          cp -r assets portfolio _site/
+          # 블로그 글은 완성된 .html 만 공개 (원본 .md 는 제외)
+          if [ -d posts ]; then
+            mkdir -p _site/posts
+            find posts -maxdepth 1 -name '*.html' -exec cp {} _site/posts/ \;
+          fi
           touch _site/.nojekyll
 
       - uses: actions/configure-pages@v5
