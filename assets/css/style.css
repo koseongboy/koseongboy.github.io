@@ -226,6 +226,8 @@ code { font-family: var(--font-mono); font-size: 0.88em; background: var(--surfa
 .boss-log dd { margin: 0; color: var(--text-2); }
 .dt-encounter { color: var(--accent); }
 .dt-action, .dt-result { color: var(--text); }
+.dt-learned { color: var(--muted); }
+.boss-log .dt-learned + dd { color: var(--muted); }
 .next-quests { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 0 32px; }
 .next-quests a { display: flex; flex-direction: column; gap: 2px; padding: 18px 0; border-top: 1px solid var(--line); color: var(--text); text-decoration: none; }
 .next-quests a:hover span { color: var(--accent); }
@@ -273,3 +275,5 @@ code { font-family: var(--font-mono); font-size: 0.88em; background: var(--surfa
   :root[data-resume="closed"] .resume-body { display: grid; }
   .resume-toggle { display: none; }
 }
+.skill-proj { color: var(--text); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 4px; text-decoration-thickness: 2px; }
+.skill-proj:hover { color: var(--accent); text-decoration-color: var(--accent); }

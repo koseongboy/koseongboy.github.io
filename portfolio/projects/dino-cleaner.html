@@ -68,12 +68,12 @@
   </div>
 
   <section class="section" aria-labelledby="s1">
-    <h2 id="s1" class="section-title">01 · WASH BAY MECHANICS</h2>
+    <h2 id="s1" class="section-title">01 · CORE SYSTEMS</h2>
     <div class="prose-block">
       <div>
         <h3>디자인 패턴을 실제 프로젝트에 적용</h3>
         <ul>
-          <li>플레이어의 좌클릭 액션이 장착 중인 장비에 따라 유연하게 변하도록 Strategy 패턴을 적용하여, 복잡한 조건문 없이 장비를 무한히 확장할 수 있는 기반을 마련했습니다.</li>
+          <li>플레이어의 좌클릭 액션이 장착 중인 장비에 따라 바뀌도록 Strategy 패턴을 적용해, 새 장비를 조건문 수정 없이 장비 클래스 추가로 붙일 수 있게 했습니다.</li>
         </ul>
       </div>
       <div>
@@ -86,19 +86,19 @@
         <h3>ASMDEF를 활용한 시스템 모듈화</h3>
         <ul>
           <li>프로젝트 전반에 Assembly Definitions(ASMDEF)를 도입하여 로직을 Core, Data, UI 등 물리적인 패키지 단위로 분리했습니다.</li>
-          <li>수정 사항이 생길 때마다 발생하는 컴파일 타임을 단축하고, 순환 참조를 컴파일 단계에서 원천 차단하여 객체지향 원칙을 엄격하게 구체화했습니다.</li>
+          <li>패키지 사이에 순환 참조가 생기면 컴파일 단계에서 바로 오류로 드러나게 해, 의존성 방향을 구조로 강제했습니다.</li>
         </ul>
       </div>
     </div>
   </section>
 
   <section class="section" aria-labelledby="s2">
-    <h2 id="s2" class="section-title">02 · TEAM BUFFS ACQUIRED</h2>
+    <h2 id="s2" class="section-title">02 · OUTCOMES</h2>
     <div class="prose-block">
       <div>
         <h3>객체지향 기반의 아키텍처 설계</h3>
         <ul>
-          <li>디자인 패턴을 도입하여 하드코딩을 줄이고, 무기 확장과 조작 체계가 유연하게 동작하는 아키텍처를 구축했습니다. 개방-폐쇄 원칙(OCP)을 준수해 유지보수 비용을 줄였습니다.</li>
+          <li>디자인 패턴을 도입해 장비별 분기 하드코딩을 줄이고, 장비 추가와 조작 체계 변경이 서로에게 미치는 영향을 줄인 구조를 만들었습니다.</li>
         </ul>
       </div>
       <div>
@@ -111,13 +111,14 @@
   </section>
 
   <section class="section" aria-labelledby="troubleshooting">
-    <h2 id="troubleshooting" class="section-title">03 · BOSS FIGHTS: DEPENDENCY &amp; IK</h2>
+    <h2 id="troubleshooting" class="section-title">03 · TROUBLESHOOTING</h2>
     <div class="boss-log">
       <h3>패키지 간 순환 참조 방어와 구조적 딜레마</h3>
       <dl>
         <dt class="dt-encounter">ISSUE</dt><dd>장착 청소 도구 변경 이벤트를 UI 시스템으로 전달하는 과정에서, 플레이어 장비 패키지와 <code>IEvent</code>가 선언된 <code>Core</code> 패키지 사이에 순환 참조가 발생했습니다.</dd>
         <dt class="dt-action">DECISION</dt><dd>로직과 데이터를 분리하기 위해 참조 계층 최하단에 메소드 없이 열거형·구조체 등 순수 데이터만 존재하는 <code>Data</code> 패키지를 신설하고, 의존성 방향을 단방향으로 재정렬했습니다.</dd>
-        <dt class="dt-result">RESULT</dt><dd>컴파일 타임에 순환 참조를 막는 ASMDEF 덕분에 문제가 생기기 전에 인식할 수 있었고, OCP 원칙을 준수하는 확장성 높은 구조를 완성했습니다.</dd>
+        <dt class="dt-result">RESULT</dt><dd>ASMDEF가 순환 참조를 컴파일 단계에서 오류로 잡아내 실행 전에 발견했고, <code>Data</code> 패키지를 최하단에 둔 단방향 의존성으로 정리해 순환 참조를 해소했습니다.</dd>
+        <dt class="dt-learned">LEARNED</dt><dd>패키지 경계를 컴파일러가 검사하게 두면 설계 실수를 일찍 발견할 수 있다는 것을 배웠습니다. 다만 장비 종류를 열거형으로 모아 둔 탓에 새 장비를 추가할 때 <code>Data</code> 패키지도 함께 고쳐야 해서, 확장성 측면은 과제로 남아 있습니다.</dd>
       </dl>
     </div>
     <div class="boss-log">
@@ -125,7 +126,8 @@
       <dl>
         <dt class="dt-encounter">ISSUE</dt><dd>실사 비율의 범용 애니메이션 에셋(Mixamo)을 카툰풍 캐릭터에 적용하자, 뼈대 비율 차이로 청소기 장착 시 손이 허공에 뜨거나 몸통을 관통하는 클리핑 현상이 발생했습니다.</dd>
         <dt class="dt-action">DECISION</dt><dd>애니메이션 키프레임에 의존하는 대신 Unity Animation Rigging을 도입해 제어의 기준점을 역전시켰습니다. 청소기의 최종 위치를 먼저 씬에 고정하고, 양손이 해당 그립 위치를 Two Bone IK로 역추적하도록 재설계했습니다.</dd>
-        <dt class="dt-result">RESULT</dt><dd>캐릭터 체형이나 무기 형태에 구애받지 않고 정확한 파지 폼을 동적으로 보장하는 시스템을 구축했고, 엔진 레벨에서 뼈대 움직임을 프로그래밍으로 제어하는 IK 기술을 체득했습니다.</dd>
+        <dt class="dt-result">RESULT</dt><dd>애니메이션이 바뀌어도 양손이 청소기 그립 위치를 따라가게 되어, 손이 허공에 뜨거나 몸통을 관통하던 클리핑이 사라졌습니다.</dd>
+        <dt class="dt-learned">LEARNED</dt><dd>키프레임을 고치는 대신 목표 위치를 기준으로 뼈대를 계산하는 IK 방식과, 이를 스크립트로 제어하는 방법을 익혔습니다.</dd>
       </dl>
     </div>
   </section>

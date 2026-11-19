@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Drill Idle | 고성현 포트폴리오</title>
-<meta name="description" content="키 입력이 공장의 성장으로 이어지는 데스크탑 방치형 게임 Drill Idle — OS 레벨 키 후킹, O(1) 데이터 캐싱, 출석 달력.">
+<meta name="description" content="키 입력이 공장의 성장으로 이어지는 데스크탑 방치형 게임 Drill Idle — OS 레벨 키 후킹, CSV 데이터 파이프라인, 출석 달력.">
 <link rel="canonical" href="https://koseongboy.github.io/portfolio/projects/drill-idle.html">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Drill Idle | 고성현 포트폴리오">
-<meta property="og:description" content="키 입력이 공장의 성장으로 이어지는 데스크탑 방치형 게임 Drill Idle — OS 레벨 키 후킹, O(1) 데이터 캐싱, 출석 달력.">
+<meta property="og:description" content="키 입력이 공장의 성장으로 이어지는 데스크탑 방치형 게임 Drill Idle — OS 레벨 키 후킹, CSV 데이터 파이프라인, 출석 달력.">
 <meta property="og:url" content="https://koseongboy.github.io/portfolio/projects/drill-idle.html">
 <meta property="og:site_name" content="KOSEONGBOY.DEV">
 <meta property="og:image" content="https://koseongboy.github.io/assets/img/og-image.png">
@@ -68,23 +68,22 @@
   </div>
 
   <section class="section" aria-labelledby="s1">
-    <h2 id="s1" class="section-title">01 · FACTORY ENGINE ROOM</h2>
+    <h2 id="s1" class="section-title">01 · CORE SYSTEMS</h2>
     <div class="highlight-stat">
       <div><strong>7종 260개+</strong><span>자동 파싱하는 기획 CSV 데이터</span></div>
-      <div><strong>O(1)</strong><span>인메모리 룩업 테이블 조회</span></div>
     </div>
     <div class="prose-block">
       <div>
-        <h3>기획 데이터 자동 파싱 및 O(1) 인메모리 캐싱 파이프라인</h3>
+        <h3>기획 데이터 자동 파싱 및 인메모리 캐싱 파이프라인</h3>
         <ul>
-          <li>기획자가 작성한 7종 260개 이상의 외부 CSV 데이터를 게임 실행 시 1회 파싱해 In-Memory Dictionary 및 Scriptable Object 형태의 룩업 테이블로 전환했습니다.</li>
-          <li>기획 데이터가 수천 개 이상 늘어나도 코드 수정 없이 테이블 추가만으로 동작하는 확장성을 확보했습니다.</li>
+          <li>기획자가 작성한 7종 260개 이상의 외부 CSV 데이터를 게임 실행 시 1회 파싱해 Dictionary와 ScriptableObject 형태의 룩업 테이블로 변환했습니다.</li>
+          <li>같은 형식의 데이터는 코드 수정 없이 CSV 행 추가만으로 게임에 반영됩니다.</li>
         </ul>
       </div>
       <div>
         <h3>OS 레벨 백그라운드 키 입력 감지</h3>
         <ul>
-          <li>Windows API의 <code>Keyboard HookCallback</code>을 활용해, 게임 클라이언트가 포커스를 잃은 상태에서도 OS 레벨 키보드 입력을 감지해 인게임 동력 자원으로 변환하는 시스템을 개발했습니다.</li>
+          <li>Windows API의 저수준 키보드 훅(<code>SetWindowsHookEx(WH_KEYBOARD_LL)</code>, <code>LowLevelKeyboardProc</code>)으로, 게임 창이 포커스를 잃은 상태에서도 키 입력을 감지해 인게임 동력 자원으로 변환하는 시스템을 개발했습니다.</li>
         </ul>
       </div>
       <div>
@@ -104,26 +103,27 @@
   </section>
 
   <section class="section" aria-labelledby="s2">
-    <h2 id="s2" class="section-title">02 · DATA-DRIVEN PERKS</h2>
+    <h2 id="s2" class="section-title">02 · OUTCOMES</h2>
     <div class="prose-block">
       <div>
         <h3>데이터 구조화 및 자동화 역량</h3>
         <ul>
-          <li>대규모 게임(MMORPG 등) 개발 환경에서 필수적인 방대한 테이블 데이터(CSV)를 객체화하고 관리할 수 있습니다.</li>
-          <li>문서화된 기획 가이드라인을 클라이언트에 시스템적으로 적용하고 자동화할 수 있습니다.</li>
+          <li>기획자가 관리하는 CSV 테이블을 게임 객체로 변환하는 파이프라인을 만들어, 기획 데이터 변경이 코드 수정 없이 반영되는 흐름을 구축했습니다.</li>
+          <li>문서화된 기획 가이드라인을 클라이언트 시스템으로 옮기는 작업을 맡았습니다.</li>
         </ul>
       </div>
     </div>
   </section>
 
   <section class="section" aria-labelledby="troubleshooting">
-    <h2 id="troubleshooting" class="section-title">03 · BOSS FIGHT: GLOBAL HOOK</h2>
+    <h2 id="troubleshooting" class="section-title">03 · TROUBLESHOOTING</h2>
     <div class="boss-log">
       <h3>OS 레벨 전역 후킹의 보안 취약점 진단과 구조적 타협</h3>
       <dl>
         <dt class="dt-encounter">ISSUE</dt><dd>백그라운드 입력 감지를 위해 <code>SetWindowsHookEx</code> 전역 후킹을 구현했으나, 수집된 키 코드가 메모리에 적재되면 클라이언트 변조로 키로거로 악용될 수 있고, 백신 프로그램에 악성 코드로 오탐지될 위험도 컸습니다.</dd>
-        <dt class="dt-action">DECISION</dt><dd>근본 해결책인 MS 권장 규격 Raw Input API로의 전면 교체를 계획했지만, 기한 내 아키텍처 재구축은 리스크가 크다고 판단했습니다. 대신 어떤 키가 눌렸는지 식별하는 로직을 완전히 삭제하고, 이벤트 발생 시 의미 없는 더미 데이터만 큐잉하도록 마스킹했습니다.</dd>
-        <dt class="dt-result">RESULT</dt><dd>기한 내에 정보 유출 리스크를 원천 차단했습니다. 근본적인 API 교체는 기술 부채로 남았고, 향후 Raw Input API(<code>RIDEV_INPUTSINK</code>)로 마이그레이션해 백신 오탐지까지 해결하는 것이 다음 목표입니다.</dd>
+        <dt class="dt-action">DECISION</dt><dd>Raw Input API로의 전환도 검토했지만, 기한 내 입력 구조 재구축은 리스크가 크다고 판단했습니다. 대신 어떤 키가 눌렸는지 식별하는 로직을 완전히 삭제하고, 이벤트 발생 시 의미 없는 더미 데이터만 큐잉하도록 마스킹했습니다.</dd>
+        <dt class="dt-result">RESULT</dt><dd><strong>막은 것</strong> — 키 식별 로직을 삭제해, 어떤 키가 눌렸는지가 게임 메모리에 남지 않습니다. <strong>못 막은 것</strong> — 저수준 전역 훅 자체는 계속 동작하므로 백신 오탐지 위험은 그대로 남아 있습니다.</dd>
+        <dt class="dt-learned">LEARNED</dt><dd>Raw Input(<code>RIDEV_INPUTSINK</code>)도 백그라운드 키 입력을 받는다는 점은 같아서, API 교체만으로는 이 문제가 해결되지 않는다는 것을 확인했습니다. 수집하는 정보를 최소화하는 것이 핵심이라는 점을 배웠습니다.</dd>
       </dl>
     </div>
   </section>

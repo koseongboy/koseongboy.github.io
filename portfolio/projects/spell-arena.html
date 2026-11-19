@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Spell Arena | 고성현 포트폴리오</title>
-<meta name="description" content="영창 대전 카드 게임 Spell Arena — 데이터 주도 카드 효과 엔진, NGO 서버 권한 모델, 음성 영창 파이프라인.">
+<meta name="description" content="영창 대전 카드 게임 Spell Arena — 데이터 주도 카드 효과 엔진, NGO 호스트 권한 구조, 음성 영창 파이프라인.">
 <link rel="canonical" href="https://koseongboy.github.io/portfolio/projects/spell-arena.html">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spell Arena | 고성현 포트폴리오">
-<meta property="og:description" content="영창 대전 카드 게임 Spell Arena — 데이터 주도 카드 효과 엔진, NGO 서버 권한 모델, 음성 영창 파이프라인.">
+<meta property="og:description" content="영창 대전 카드 게임 Spell Arena — 데이터 주도 카드 효과 엔진, NGO 호스트 권한 구조, 음성 영창 파이프라인.">
 <meta property="og:url" content="https://koseongboy.github.io/portfolio/projects/spell-arena.html">
 <meta property="og:site_name" content="KOSEONGBOY.DEV">
 <meta property="og:image" content="https://koseongboy.github.io/assets/img/og-image.png">
@@ -69,7 +69,7 @@
   </div>
 
   <section class="section" aria-labelledby="s1">
-    <h2 id="s1" class="section-title">01 · SPELLBOOK ENGINEERING</h2>
+    <h2 id="s1" class="section-title">01 · CORE SYSTEMS</h2>
     <div class="highlight-stat">
       <div><strong>130종</strong><span>구현한 카드</span></div>
       <div><strong>28 / 20+ / 7</strong><span>모듈화한 효과 타입 / 상태이상 / 조건절</span></div>
@@ -86,7 +86,7 @@
       <div>
         <h3>네트워크 동기화 및 아키텍처 설계</h3>
         <ul>
-          <li>Unity NGO 모듈로 로비 생성과 실시간 인게임 흐름을 제어하고, 클라이언트 변조를 막기 위해 서버 권위 모델을 구현했습니다.</li>
+          <li>Unity NGO 모듈로 로비 생성과 실시간 인게임 흐름을 제어했습니다. 호스트가 서버를 겸하는 Listen Server 구조에서 게임 판정을 호스트가 처리하도록 해 일반 클라이언트의 변조를 막았습니다. 호스트 자체의 변조는 막지 못하는 한계가 있습니다.</li>
           <li>'클라이언트(플레이어) – 게임 서버 – 웹 서버'로 이어지는 3계층 통신 아키텍처를 설계하고 구현했습니다.</li>
         </ul>
       </div>
@@ -100,19 +100,19 @@
   </section>
 
   <section class="section" aria-labelledby="s2">
-    <h2 id="s2" class="section-title">02 · ARCANE CLASS PERKS</h2>
+    <h2 id="s2" class="section-title">02 · OUTCOMES</h2>
     <div class="prose-block">
       <div>
         <h3>네트워크 모델</h3>
         <ul>
-          <li>서버 권위 모델을 이해하고, 이를 지향하여 구조를 구축했습니다.</li>
-          <li>Netcode for GameObjects 도입을 통해 RPC 통신 규격과 파라미터 최적화 기법을 실무에 적용할 수 있습니다.</li>
+          <li>호스트 권한(Listen Server) 구조로 구현하며 서버 권위 모델의 장점과 한계를 직접 확인했습니다.</li>
+          <li>Netcode for GameObjects의 RPC로 통신 규격을 정의하고, 전송하는 파라미터를 최소화했습니다.</li>
         </ul>
       </div>
       <div>
         <h3>디자인 패턴 적용 역량</h3>
         <ul>
-          <li>시스템 전반의 오브젝트에 엄격한 MVP 패턴을 적용하고, 카드 효과 발동 로직에 Command 패턴을 도입했습니다.</li>
+          <li>시스템 전반의 오브젝트에 MVP 패턴을 적용하고, 카드 효과 발동 로직에 Command 패턴을 도입했습니다.</li>
           <li>단순 하드코딩의 한계를 체감하고, 유지보수와 확장이 유연한 객체지향적 아키텍처를 추구합니다.</li>
         </ul>
       </div>
@@ -120,21 +120,23 @@
   </section>
 
   <section class="section" aria-labelledby="troubleshooting">
-    <h2 id="troubleshooting" class="section-title">03 · BOSS FIGHTS: LATENCY &amp; NETCODE</h2>
+    <h2 id="troubleshooting" class="section-title">03 · TROUBLESHOOTING</h2>
     <div class="boss-log">
-      <h3>단일 API 의존의 한계 인지와 최적화 방향 도출</h3>
+      <h3>단일 외부 API 의존의 한계와 2-Track 파이프라인 설계</h3>
       <dl>
         <dt class="dt-encounter">ISSUE</dt><dd>음성 원본을 멀티모달 LLM에 한 번에 보내 창의성과 몰입도를 동시에 평가하는 구조였습니다. 경량 모델(Gemini 2.5 Flash)은 음성 인식 정확도가 떨어져 문맥을 온전히 판별하지 못했고, 대형 모델(GPT-4o Audio)은 추론 시간이 길어 실시간성이 훼손됐으며 예산상 도입도 어려웠습니다.</dd>
         <dt class="dt-action">DECISION</dt><dd>데이터를 목적에 맞게 나누는 2-Track 파이프라인을 도출했습니다. 창의성(문맥)은 클라이언트에서 STT로 텍스트화해 가벼운 페이로드만 LLM에 요청하고, 몰입도(감정)는 주파수·진폭 등 음향 피처를 자체 분석합니다.</dd>
-        <dt class="dt-result">RESULT</dt><dd>완성된 외부 API에 통째로 의존할 때 생기는 퍼포먼스 병목을 체감했고, 차기 유지보수 목표로 데이터 특성에 맞춰 파이프라인을 분리하고 지연 시간을 최소화하는 구조를 잡았습니다.</dd>
+        <dt class="dt-result">RESULT</dt><dd>음성 원본 대신 STT 텍스트만 LLM에 보내고 감정은 음향 피처로 따로 분석하는 2-Track 구조를 설계해, 차기 유지보수 과제로 정리했습니다.</dd>
+        <dt class="dt-learned">LEARNED</dt><dd>완성된 외부 API에 통째로 의존하면 모델 선택이 곧 지연·비용·정확도의 병목이 된다는 것을 체감했고, 데이터 목적에 맞춰 처리 단계를 나눠야 한다는 것을 배웠습니다.</dd>
       </dl>
     </div>
     <div class="boss-log">
       <h3>네트워크 환경의 한계</h3>
       <dl>
         <dt class="dt-encounter">ISSUE</dt><dd>서버 권위 모델을 설계했지만 비용과 구조적 한계로 호스트가 서버를 겸하는 Listen Server를 채택해, 호스트 PC가 조작되면 서버 전체가 노출되는 보안 한계가 남았습니다. 또한 ParrelSync로 단일 PC에서 다중 클라이언트를 검증해 실제 네트워크 지연을 온전히 체감하지 못했습니다.</dd>
-        <dt class="dt-action">DECISION</dt><dd>보안과 지연 문제의 원인을 개발 환경 구조에서 찾아 정리했습니다.</dd>
-        <dt class="dt-result">RESULT</dt><dd>다음 프로젝트에서는 클라이언트와 물리적으로 분리된 전용 서버(Dedicated Server)를 구축하고, 지연 보상 예측(Prediction)과 실제 통신 환경 최적화를 다뤄보고자 합니다.</dd>
+        <dt class="dt-action">DECISION</dt><dd>기한과 비용 안에서는 Listen Server를 유지하기로 하고, 남은 위험(호스트 변조, 실제 네트워크 지연 미검증)을 프로젝트의 한계로 명시했습니다.</dd>
+        <dt class="dt-result">RESULT</dt><dd>일반 클라이언트의 판정 변조는 막았지만, 호스트 변조와 실제 네트워크 환경의 지연은 검증하지 못한 상태로 남았습니다.</dd>
+        <dt class="dt-learned">LEARNED</dt><dd>다음 프로젝트에서는 클라이언트와 물리적으로 분리된 전용 서버(Dedicated Server)를 구축하고, 지연 보상 예측(Prediction)과 실제 통신 환경 테스트를 다뤄보고자 합니다.</dd>
       </dl>
     </div>
   </section>
