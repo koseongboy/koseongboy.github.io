@@ -74,7 +74,7 @@
       <div class="resume-group">
         <h3 class="resume-label">학력</h3>
         <ul class="resume-list">
-          <li><span class="resume-date">2021.03 — 2028.08</span><div class="resume-main"><strong>중앙대학교 소프트웨어학부</strong><span>졸업 예정 · 학점 3.5 / 4.5</span></div></li>
+          <li><span class="resume-date">2021.03 — 2027.08</span><div class="resume-main"><strong>중앙대학교 소프트웨어학부</strong><span>졸업 예정 · 학점 3.5 / 4.5</span></div></li>
         </ul>
       </div>
       <div class="resume-group">
@@ -87,7 +87,7 @@
       <div class="resume-group">
         <h3 class="resume-label">IT 활용능력</h3>
         <ul class="resume-list">
-          <li><span class="resume-date">C# · Unity</span><div class="resume-main"><strong>Unity 게임 클라이언트 4개</strong><span>3D(시뮬레이션, LCG 장르) · 2D(플랫포머, Idle 장르) — Spell Arena 카드 효과 엔진, Drill Idle CSV 데이터 파이프라인, Dino Cleaner 장비·애니메이션 구조, 외부 SDK 연동 검증 프레임워크</span></div></li>
+          <li><span class="resume-date">C# · Unity</span><div class="resume-main"><strong>Unity 게임 클라이언트 4개</strong><span>3D(시뮬레이션, LCG 장르) · 2D(플랫포머, Idle 장르) — Spell Arena 카드 효과 엔진, Drill Idle 전역 입력 후킹 · 시설 시스템, Dino Cleaner 장비·애니메이션 구조, 외부 SDK 연동 검증 프레임워크</span></div></li>
           <li><span class="resume-date">Git</span><div class="resume-main"><strong>팀 프로젝트 3개</strong><span>기능 단위 브랜치를 나눠 작업하고 병합하며 소스 코드를 관리</span></div></li>
           <li><span class="resume-date">Python</span><div class="resume-main"><strong>알고리즘 문제 풀이</strong><span>코딩 테스트와 알고리즘 문제 해결에 사용</span></div></li>
           <li><span class="resume-date">C++</span><div class="resume-main"><strong>학습 중</strong><span>C#으로 설계하던 객체지향 게임 로직을 C++로 옮겨 구현하는 연습</span></div></li>
@@ -126,7 +126,7 @@
         <div class="quest-body">
           <div class="quest-meta"><span class="quest-num">01</span><span class="status status-progress">진행 중</span><span>2026.09 — · 4인 (클라이언트 3, 기획/PM 1)</span></div>
           <h3><a href="projects/dino-cleaner.html" class="quest-link">Dino Cleaner</a></h3>
-          <p>공룡이 이동 수단인 세계에서 공룡을 세차하는 게임. Strategy 패턴과 FSM으로 장비·자세 전환을 설계하고, ASMDEF로 컴파일 타임 순환 참조를 차단한 3D 클라이언트 아키텍처를 맡고 있습니다.</p>
+          <p>공룡이 이동 수단인 세계에서 공룡을 세차하는 게임. 플레이어 애니메이션 · IK와 청소기 · 사다리 · 비행용 공룡 등 장비 시스템을 맡고 있습니다.</p>
           <div class="stack-line">Unity 3D · Input System · ASMDEF · IK</div>
           <div class="quest-links"><span class="quest-more">자세히 보기 →</span><a href="https://github.com/Crocobob911/DinoCleaner" target="_blank" rel="noopener">GitHub ↗</a></div>
         </div>
@@ -135,21 +135,21 @@
 
       <article class="quest">
         <div class="quest-body">
-          <div class="quest-meta"><span class="quest-num">02</span><span class="status status-done">완료</span><span>2026.05 — 2026.08 · 1인 · 기업 협력 프로젝트</span></div>
+          <div class="quest-meta"><span class="quest-num">02</span><span class="status status-done">완료</span><span>2026.05 — 2026.07 · 1인 · 기업 협력 프로젝트</span></div>
           <h3><a href="projects/module-framework.html" class="quest-link"><span class="partner-tag">[엘에스웨어 협력]</span> 외부 모듈 검증 프레임워크</a></h3>
-          <p>고정 스키마가 없는 외부 SDK에 맞춰 게임 상태 스키마와 Reporter 파이프라인을 역설계하고, PCG 동적 맵과 커스텀 에디터 툴로 통합 검증을 마쳤습니다.</p>
-          <div class="stack-line">Editor Scripting · Mediator · PCG</div>
+          <p>외부 SDK 연동 데모용 2D 로그라이크를 만들어 납품하고, 실무진에게 SDK 사용성 개선안을 제안했습니다. 룰북 코드 제너레이터 제안이 다음 날 SDK에 채택됐고, Reporter 일괄 업데이트 예제가 연동 가이드에 반영됐습니다.</p>
+          <div class="stack-line">Editor Scripting · SDK 연동 · PCG</div>
           <div class="quest-links"><span class="quest-more">자세히 보기 →</span></div>
         </div>
-        <img class="quest-thumb" src="../assets/img/module-framework.png" alt="Random Walk로 생성된 던전 지도 UI: 시작 방, 전투 방, 상점 방, 보스 방이 격자에 배치됨" loading="lazy" width="1920" height="1080">
+        <div class="blackout-thumb"><img class="quest-thumb" src="../assets/img/module-framework-play.jpg" alt="SDK 연동 데모 게임 플레이 화면: 플레이어가 상자 앞에 서 있음. 마우스를 올리면 상자를 열었을 때처럼 방송 화면이 까맣게 가려지는 효과가 나타남" loading="lazy" width="1280" height="720"><span class="blackout-hint" aria-hidden="true"><span class="hint-hover">마우스를 올려 보세요</span><span class="hint-touch">길게 눌러 보세요</span></span><span class="blackout-cover" aria-hidden="true"><span>상자를 열자 룰북 조건에 맞아 방송 화면이 차단됨</span></span></div>
       </article>
 
       <article class="quest">
         <div class="quest-body">
           <div class="quest-meta"><span class="quest-num">03</span><span class="status status-done">완료</span><span>2026.03 — 2026.07 · 3인 (클라이언트 1, 기획/PM 1, 백엔드 1)</span></div>
           <h3><a href="projects/spell-arena.html" class="quest-link">Spell Arena</a></h3>
-          <p>제시된 단어로 영창을 만들어 평가받는 대전 카드 게임. NGO 기반 호스트 권한(Listen Server) 구조와 MVP/Command 패턴, 28종 효과·20종 상태이상을 모듈화한 데이터 주도 엔진으로 130종 카드를 구현했습니다. 신규 카드 추가 공수 15분+ → 1분 내외.</p>
-          <div class="stack-line">NGO · MVP · Command</div>
+          <p>제시된 단어로 영창을 만들어 평가받는 대전 카드 게임. NGO 기반 호스트 권한(Listen Server) 구조와 MVC/Command 패턴, 28종 효과·20종 상태이상을 모듈화한 데이터 주도 엔진으로 130종 카드를 구현했습니다. 신규 카드 추가 공수 15분+ → 1분 내외.</p>
+          <div class="stack-line">NGO · MVC · Command</div>
           <div class="quest-links"><span class="quest-more">자세히 보기 →</span><a href="https://github.com/koseongboy/Spell_Battle" target="_blank" rel="noopener">GitHub ↗</a><a href="https://www.youtube.com/watch?v=-QaFugYqSeE" target="_blank" rel="noopener">Teaser ↗</a></div>
         </div>
         <img class="quest-thumb" src="../assets/img/spell-arena.jpg" alt="Spell Arena 영창 화면: 보라색 마법진 위에 '이 자리에서 선언하노니! 고요한 종말을 목도하라!' 영창 문구" loading="lazy" width="1490" height="835">
@@ -159,11 +159,11 @@
         <div class="quest-body">
           <div class="quest-meta"><span class="quest-num">04</span><span class="status status-done">완료</span><span>2025.09 — 2025.12 · 3인 (클라이언트/기획)</span></div>
           <h3><a href="projects/drill-idle.html" class="quest-link">Drill Idle</a></h3>
-          <p>Windows API 후킹으로 백그라운드 키 입력을 공장 동력으로 바꾸는 데스크탑 방치형 시뮬레이션. 하루의 접속 시간과 키 입력량을 GitHub 잔디처럼 달력에 농도로 기록하는 출석 시스템을 구현했습니다.</p>
-          <div class="stack-line">Windows API · Addressables · DOTween</div>
+          <p>키보드 · 마우스 입력이 공장의 동력이 되는 데스크탑 방치형 게임. Windows API 저수준 훅으로 게임 창 밖의 입력을 받는 기능과 시설 · 엔진 시스템을 구현하고, 엔진이 레벨업마다 모양과 색이 바뀌는 성장 방식을 기획했습니다.</p>
+          <div class="stack-line">Windows API · Addressables</div>
           <div class="quest-links"><span class="quest-more">자세히 보기 →</span><a href="https://github.com/koseongboy/Drill_Game" target="_blank" rel="noopener">GitHub ↗</a></div>
         </div>
-        <img class="quest-thumb top" src="../assets/img/drill-idle-calendar.png" alt="Drill Idle 출석 달력: 2025년 12월, 날짜별 플레이 시간과 키 입력량이 초록색 농도로 표시됨" loading="lazy" width="1080" height="608">
+        <img class="quest-thumb" src="../assets/img/drill-idle-desktop.jpg" alt="Drill Idle 플레이 화면: 코드 편집기를 띄워 둔 바탕화면 오른쪽에 세로로 긴 Drill Idle 창이 떠 있고, 그리드 위에 테트리스 블록 모양의 색깔별 엔진과 시설이 배치되어 있음" loading="lazy" width="1600" height="901">
       </article>
     </div>
 <!-- /PORTFOLIO:WORK -->
@@ -174,11 +174,11 @@
 <!-- PORTFOLIO:TROUBLESHOOTING -->
     <div class="case-list" data-generated>
     <article class="case">
-      <h3><a class="skill-proj" href="projects/dino-cleaner.html#troubleshooting">Dino Cleaner</a> — 패키지 간 순환 참조</h3>
+      <h3><a class="skill-proj" href="projects/dino-cleaner.html#troubleshooting">Dino Cleaner</a> — 패키지 간 순환 참조와 공용 Data 패키지</h3>
       <div class="case-grid">
-        <div class="case-col issue"><span>ISSUE</span><p>청소 도구 변경 이벤트를 UI에 전달할 때 Core 패키지와 장비 패키지 사이에 순환 참조 발생</p></div>
-        <div class="case-col"><span>DECISION</span><p>참조 트리 최하단에 순수 데이터(Enum, Struct)만 담은 Data 패키지를 신설해 의존성을 단방향으로 정렬</p></div>
-        <div class="case-col"><span>RESULT</span><p>순환 참조를 컴파일 단계에서 잡아내고, Data를 최하단에 둔 단방향 의존성으로 해소</p></div>
+        <div class="case-col issue"><span>ISSUE</span><p>팀 EventBus 규격대로 장비 이벤트를 Core에 선언하자 장비 패키지와 Core 사이에 순환 참조 발생</p></div>
+        <div class="case-col"><span>DECISION</span><p>순수 데이터(Enum, Struct)만 담은 공용 Data 패키지를 팀에 건의해 협의 후 도입, 의존성을 단방향으로 정렬</p></div>
+        <div class="case-col"><span>RESULT</span><p>팀 규격을 바꾸지 않고 장비 이벤트 발행, Data를 최하단에 둔 단방향 의존성으로 정리</p></div>
       </div>
     </article>
 
@@ -186,35 +186,26 @@
       <h3><a class="skill-proj" href="projects/dino-cleaner.html#troubleshooting">Dino Cleaner</a> — 체형 불일치로 인한 파지 클리핑</h3>
       <div class="case-grid">
         <div class="case-col issue"><span>ISSUE</span><p>실사 비율 애니메이션(Mixamo)을 카툰풍 캐릭터에 적용하자 손이 허공에 뜨거나 몸통을 관통</p></div>
-        <div class="case-col"><span>DECISION</span><p>Animation Rigging 도입. 청소기 위치를 먼저 고정하고 양손이 Two Bone IK로 그립을 역추적</p></div>
+        <div class="case-col"><span>DECISION</span><p>Animation Rigging 도입, 양손이 Two Bone IK로 청소기 그립을 따라가게 함</p></div>
         <div class="case-col"><span>RESULT</span><p>애니메이션이 바뀌어도 양손이 청소기 그립을 따라가 클리핑 해소</p></div>
       </div>
     </article>
 
     <article class="case">
-      <h3><a class="skill-proj" href="projects/module-framework.html#troubleshooting">외부 모듈 검증</a> — GUI 없는 플러그인</h3>
+      <h3><a class="skill-proj" href="projects/module-framework.html#troubleshooting">외부 SDK</a> — 툴 제안 채택</h3>
       <div class="case-grid">
-        <div class="case-col issue"><span>ISSUE</span><p>초기 모듈에 GUI가 없어 사용자가 직접 코드를 열어 세팅해야 하는 불편함</p></div>
-        <div class="case-col"><span>DECISION</span><p>Editor Scripting으로 인스펙터에서 매개변수 제어·상태 보고 강제 실행이 가능한 커스텀 에디터를 만들어 실무진에 건의</p></div>
-        <div class="case-col"><span>RESULT</span><p>디버그 조작을 인스펙터로 옮겨 빌드에 디버그 UI가 필요 없어짐, SDK 사용성 개선</p></div>
+        <div class="case-col issue"><span>ISSUE</span><p>상태 키를 문자열로 쓰면 오타가 나도 에러 없이 스포일러 차단이 빠짐</p></div>
+        <div class="case-col"><span>DECISION</span><p>인스펙터 상태 관리자(1안)와 룰북 → C# 코드 자동 생성(2안)을 장단점과 함께 제안</p></div>
+        <div class="case-col"><span>RESULT</span><p>2안이 다음 날 SDK 0.0.5에 채택, 우리 게임 스키마가 공식 샘플로 포함</p></div>
       </div>
     </article>
 
     <article class="case">
-      <h3><a class="skill-proj" href="projects/spell-arena.html#troubleshooting">Spell Arena</a> — 단일 외부 API 의존의 한계</h3>
+      <h3><a class="skill-proj" href="projects/spell-arena.html#troubleshooting">Spell Arena</a> — 기획 팀원과 병렬로 진행한 카드 효과 데이터화</h3>
       <div class="case-grid">
-        <div class="case-col issue"><span>ISSUE</span><p>대형 멀티모달 모델은 지연·비용 문제, 경량 모델은 음성 인식률 저하로 실시간성 훼손</p></div>
-        <div class="case-col"><span>DECISION</span><p>'문맥'은 STT로 텍스트화해 가벼운 페이로드만 LLM에, '감정'은 음향 피처로 자체 분석하는 2-Track 파이프라인 설계</p></div>
-        <div class="case-col"><span>RESULT</span><p>2-Track 구조를 설계해 차기 유지보수 과제로 정리</p></div>
-      </div>
-    </article>
-
-    <article class="case">
-      <h3><a class="skill-proj" href="projects/drill-idle.html#troubleshooting">Drill Idle</a> — 전역 후킹 보안 취약점</h3>
-      <div class="case-grid">
-        <div class="case-col issue"><span>ISSUE</span><p>키 코드가 메모리에 적재되면 키로거로 악용될 위험 + 백신 오탐지 리스크</p></div>
-        <div class="case-col"><span>DECISION</span><p>기한 내 입력 구조 재구축은 무리 → 키 식별 로직 삭제, 더미 데이터만 큐잉하도록 마스킹</p></div>
-        <div class="case-col"><span>RESULT</span><p>키 정보가 메모리에 남지 않게 막음. 전역 훅 자체로 인한 백신 오탐 위험은 남음</p></div>
+        <div class="case-col issue"><span>ISSUE</span><p>카드 이름 · 텍스트만 CSV로 읽고 효과는 카드마다 코드로 구현 → 카드를 고칠 때마다 코드 작업 필요</p></div>
+        <div class="case-col"><span>DECISION</span><p>기획 팀원 제안으로 효과 이름 컬럼부터 합의 → 기획은 카드 행 채우기, 나는 컬럼별 커맨드 정의를 병렬 진행</p></div>
+        <div class="case-col"><span>RESULT</span><p>카드 130종 구현, 신규 카드 추가 공수 15분+ → 1분 내외, 기존 효과 조합 카드는 기획 팀원이 직접 추가</p></div>
       </div>
     </article>
     </div>
@@ -232,17 +223,16 @@
     <div class="resume-group" data-generated>
       <h3 class="resume-label">설계 패턴 — 어디에, 왜 썼는지</h3>
       <ul class="resume-list">
-          <li><span class="resume-date">Strategy</span><div class="resume-main"><strong><a class="skill-proj" href="projects/dino-cleaner.html">Dino Cleaner</a> · 장비별 좌클릭 액션</strong><span>장비마다 다른 동작을 조건문 대신 장비 클래스로 나눠, 새 장비를 클래스 추가로 붙일 수 있게</span></div></li>
-          <li><span class="resume-date">Mediator</span><div class="resume-main"><strong><a class="skill-proj" href="projects/module-framework.html">외부 모듈 검증 프레임워크</a> · Reporter</strong><span>게임 오브젝트가 SDK를 직접 부르지 않고 Reporter를 거치게 해 외부 모듈과의 의존을 한곳으로 모음</span></div></li>
-          <li><span class="resume-date">MVP</span><div class="resume-main"><strong><a class="skill-proj" href="projects/spell-arena.html">Spell Arena</a> · 게임 로직과 UI 분리</strong><span>카드·플레이어 상태와 게임 규칙(Model)을 화면(View)과 분리하고 Presenter가 둘 사이의 소통을 맡도록 — UI를 바꿔도 로직은, 로직을 고쳐도 화면은 그대로 둘 수 있어 수정 범위가 좁아지고 유지보수가 쉬워짐</span></div></li>
-          <li><span class="resume-date">Command</span><div class="resume-main"><strong><a class="skill-proj" href="projects/spell-arena.html">Spell Arena</a> · 카드 효과 발동</strong><span>28종 효과를 실행 단위 객체로 만들어 CSV 데이터 조합만으로 카드 효과를 구성</span></div></li>
+          <li><span class="resume-date">Strategy</span><div class="resume-main"><strong><a class="skill-proj" href="projects/dino-cleaner.html">Dino Cleaner</a> · 손 도구 · 이동 장비</strong><span>플레이어는 현재 장비의 추상 메서드만 호출하고 구체 장비를 몰라, 한 장비를 고칠 때 플레이어 코드나 다른 장비 코드를 건드리지 않게</span></div></li>
+          <li><span class="resume-date">Facade</span><div class="resume-main"><strong><a class="skill-proj" href="projects/module-framework.html">외부 모듈 검증 프레임워크</a> · SpoilerReporter</strong><span>게임 오브젝트가 외부 SDK API를 직접 부르지 않고 Reporter의 상태만 바꾸게 해, SDK가 바뀌어도 고칠 곳을 한 클래스로 모음</span></div></li>
+          <li><span class="resume-date">MVC</span><div class="resume-main"><strong><a class="skill-proj" href="projects/spell-arena.html">Spell Arena</a> · 게임 로직과 UI 분리</strong><span>카드 · 플레이어 상태(Model)와 화면(View)을 나누고, View는 Model의 <code>NetworkVariable</code> 변경을 구독해 스스로 갱신, 카드 선택 같은 입력은 Controller가 처리 — UI를 고쳐도 게임 규칙 코드는 그대로 둘 수 있게</span></div></li>
+          <li><span class="resume-date">Command</span><div class="resume-main"><strong><a class="skill-proj" href="projects/spell-arena.html">Spell Arena</a> · 카드 효과 발동</strong><span>효과 컬럼마다 동작을 커맨드로 정의하고, 카드는 커맨드를 묶은 매크로 커맨드로 만들어 커맨드 큐에서 순서대로 실행</span></div></li>
       </ul>
     </div>
     <div class="resume-group" data-generated>
       <h3 class="resume-label">구조 설계</h3>
       <ul class="resume-list">
-          <li><span class="resume-date">상태 머신</span><div class="resume-main"><strong><a class="skill-proj" href="projects/dino-cleaner.html">Dino Cleaner</a> · 캐릭터 애니메이션</strong><span>구현 전에 상태 전이 다이어그램을 먼저 그려 필요한 애니메이션 목록을 뽑고, Animator Controller의 상태와 1:1로 연결</span></div></li>
-          <li><span class="resume-date">ASMDEF</span><div class="resume-main"><strong><a class="skill-proj" href="projects/dino-cleaner.html">Dino Cleaner</a> · 패키지 분리</strong><span>Core · Data · UI 등을 어셈블리 단위로 나눠, 패키지 사이에 순환 참조가 생기면 컴파일 단계에서 바로 드러나게</span></div></li>
+          <li><span class="resume-date">ASMDEF</span><div class="resume-main"><strong><a class="skill-proj" href="projects/dino-cleaner.html">Dino Cleaner</a> · 패키지 분리</strong><span>팀이 영역별로 어셈블리를 나눠 순환 참조가 컴파일 오류로 드러나게 하고, 공용 Data 패키지는 제가 건의해 도입</span></div></li>
       </ul>
     </div>
 <!-- /PORTFOLIO:SKILLS -->

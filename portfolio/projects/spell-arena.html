@@ -26,6 +26,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&amp;family=Space+Grotesk:wght@400;500;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/style.css">
 <script src="../../assets/js/theme.js" defer></script>
+<script src="../../assets/js/diagram.js" type="module"></script>
 </head>
 <body data-page="project" data-slug="spell-arena">
 
@@ -59,7 +60,7 @@
       <dt>Period</dt><dd>2026.03 ~ 2026.07</dd>
       <dt>Team</dt><dd>3인 (클라이언트 1인, 기획/PM 1인, 백엔드 1인)</dd>
       <dt>Role</dt><dd>클라이언트 개발</dd>
-      <dt>Stack</dt><dd><ul class="chips"><li>Unity 3D</li><li>C#</li><li>Netcode for GameObjects</li><li>MVP</li><li>Command</li></ul></dd>
+      <dt>Stack</dt><dd><ul class="chips"><li>Unity 3D</li><li>C#</li><li>Netcode for GameObjects</li><li>MVC</li><li>Command</li></ul></dd>
     </dl>
   </div>
 
@@ -67,6 +68,36 @@
     <a href="https://github.com/koseongboy/Spell_Battle" class="btn btn-primary" target="_blank" rel="noopener">GITHUB ↗</a>
     <a href="https://www.youtube.com/watch?v=-QaFugYqSeE" class="btn btn-secondary" target="_blank" rel="noopener">TEASER ↗</a>
   </div>
+
+  <section class="section" aria-labelledby="scope">
+    <h2 id="scope" class="section-title">Scope · 작업 범위</h2>
+    <div class="scope-grid">
+      <div class="scope-col mine">
+        <h3>내가 한 것</h3>
+        <ul>
+          <li>카드 효과 연산 엔진</li>
+          <li>Unity NGO 기반 로비·인게임 흐름</li>
+          <li>MVC 구조의 게임 UI, Command 패턴 기반 카드 효과 발동</li>
+          <li>음성 영창 녹음 → 웹 서버 전송 → 판정 결과 폴링</li>
+          <li>인게임 사운드(BGM/SFX) 매니저</li>
+        </ul>
+      </div>
+      <div class="scope-col">
+        <h3>팀이 한 것</h3>
+        <ul>
+          <li>기획 팀원 — 카드 기획, 효과 컬럼 구조 설계</li>
+          <li>백엔드 팀원 — 웹 서버, AI 판정 파이프라인, 클라이언트–서버 API 규격</li>
+        </ul>
+      </div>
+      <div class="scope-col">
+        <h3>함께 정한 것</h3>
+        <ul>
+          <li>카드 효과 데이터 규격</li>
+          <li>카드 발동 시 서버 간 호출 흐름</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
   <section class="section" aria-labelledby="s1">
     <h2 id="s1" class="section-title">01 · CORE SYSTEMS</h2>
@@ -80,63 +111,170 @@
         <h3>데이터 주도 카드 효과 엔진 구축</h3>
         <ul>
           <li>130종의 카드마다 스크립트를 개별 작성하는 대신, 28종의 효과 타입과 20종 이상의 상태이상, 7종의 조건절을 모듈화한 공통 연산 엔진을 구축했습니다.</li>
-          <li>[C# 스크립트 작성 → 컴파일 → 씬 연결]의 과정을 [CSV 데이터 1행 추가] 한 단계로 단축했습니다.</li>
+          <li>이미 있는 효과 타입을 조합한 카드는 [C# 스크립트 작성 → 컴파일 → 씬 연결] 과정 없이 [CSV 데이터 1행 추가]만으로 추가됩니다. 새로운 효과 타입이 필요할 때만 커맨드 코드를 작성합니다.</li>
+          <li>효과 컬럼은 기획 팀원과 함께 정하고, 저는 컬럼마다 실행할 동작을 커맨드로 정의해 카드를 커맨드 묶음(매크로 커맨드)으로 실행하는 엔진을 만들었습니다.</li>
         </ul>
       </div>
       <div>
         <h3>네트워크 동기화 및 아키텍처 설계</h3>
         <ul>
-          <li>Unity NGO 모듈로 로비 생성과 실시간 인게임 흐름을 제어했습니다. 호스트가 서버를 겸하는 Listen Server 구조에서 게임 판정을 호스트가 처리하도록 해 일반 클라이언트의 변조를 막았습니다. 호스트 자체의 변조는 막지 못하는 한계가 있습니다.</li>
-          <li>'클라이언트(플레이어) – 게임 서버 – 웹 서버'로 이어지는 3계층 통신 아키텍처를 설계하고 구현했습니다.</li>
+          <li>Unity NGO로 로비 생성과 인게임 흐름을 구현했습니다. 호스트가 서버를 겸하는 Listen Server 구조라, 주문 발동은 호스트(서버)가 처리합니다.</li>
+          <li>클라이언트는 카드 ID와 대기표(Task ID)만 보내고, 서버가 마나를 자기 상태로 확인 · 차감하고, 효과를 카드 ID로 다시 조립하고, 점수를 평가 서버에서 직접 조회합니다.</li>
+          <li>한계: 호스트 자체의 변조는 막지 못하고, 마나 비용은 클라이언트가 보낸 값(<code>declaredCost</code>)을 그대로 씁니다. 자세한 내용은 아래 회고에 정리했습니다.</li>
+          <li>'클라이언트 – 게임 서버 – 웹 서버' 3계층 통신 구조 중 클라이언트와 게임 서버 구간을 구현했습니다. 웹 서버는 백엔드 팀원이 담당했습니다.</li>
         </ul>
+        <figure class="code-figure"><figcaption><code>SpellController.ExecuteSpellVerificationAndBattleAsync()</code> · 일부 생략 · <a href="https://github.com/koseongboy/Spell_Battle/blob/8eb45fa9b05f3c6dbec2b223afeca66334e1d8df/Assets/Scripts/Controllers/SpellController.cs#L492-L530" target="_blank" rel="noopener">전체 코드 ↗</a></figcaption><pre class="code-block"><code><span class="tok-c">// [서버] 클라이언트가 보낸 카드 ID와 대기표로 다시 검증한 뒤 발동</span>
+<span class="tok-k">private</span> <span class="tok-k">async</span> Task ExecuteSpellVerificationAndBattleAsync(
+    <span class="tok-k">int</span>[] cardIds, <span class="tok-k">int</span> declaredCost, <span class="tok-k">string</span> taskId, <span class="tok-k">ulong</span> senderId, <span class="tok-k">float</span> audioLength)
+{
+    PlayerModel caster = MatchManager.Instance.GetPlayerById(senderId);
+    PlayerModel target = /* 상대 플레이어 */;
+
+    <span class="tok-c">// 1. 마나는 서버의 플레이어 상태로 확인 · 차감</span>
+    <span class="tok-k">if</span> (caster == <span class="tok-k">null</span> || !caster.TryUseMana(declaredCost)) <span class="tok-k">return</span>;
+
+    <span class="tok-c">// 2. 효과는 카드 ID로 서버에서 다시 조립하고 커맨드 정렬</span>
+    SpellPayload serverPayload = <span class="tok-k">new</span> SpellPayload();
+    <span class="tok-k">foreach</span> (<span class="tok-k">int</span> id <span class="tok-k">in</span> cardIds)
+    {
+        <span class="tok-k">var</span> card = CardDatabase.Instance.GetCardById(id);
+        <span class="tok-k">if</span> (card != <span class="tok-k">null</span>) serverPayload.EnqueuePendingCard(card);
+    }
+    serverPayload.CompileSpell(caster, target);
+
+    <span class="tok-c">// 3. 점수는 대기표(Task ID)로 평가 서버에서 직접 조회</span>
+    TaskStatusResponse evalResult = <span class="tok-k">await</span> WebServerModel.Instance.GetEvaluationResultAsync(taskId);
+    <span class="tok-k">float</span> verifiedScore = evalResult != <span class="tok-k">null</span> ? evalResult.score : 0f;
+
+    <span class="tok-c">// 4. 발동 연출 후 커맨드를 순서대로 실행</span>
+    PhaseManager.Instance.ServerSetPhase(GamePhase.Battle);
+    ShowIncantationPopupClientRpc(/* 인식 문장, 속성, 영창자, 음성 길이 */);
+    StartCoroutine(ExecuteBattleRoutine(serverPayload, caster, verifiedScore, audioLength));
+}</code></pre></figure>
+      </div>
+      <div>
+        <h3>카드 발동 흐름 설계</h3>
+        <ul>
+          <li>카드를 발동했을 때 클라이언트 · 게임 서버 · 웹 서버가 주고받는 순서를 설계해 시퀀스 다이어그램(Mermaid)으로 정리하고, 이 다이어그램을 기준으로 백엔드 팀원과 소통했습니다.</li>
+          <li>백엔드 팀원이 이 다이어그램에 맞춰 대기표(Task ID) 발급과 판정 결과 조회 API를 추가했습니다. <a href="https://github.com/koseongboy/Spell_Battle/commit/8e200079b4ef84ce19eba4640b69bd59e588e357" target="_blank" rel="noopener">커밋 ↗</a> · <a href="https://github.com/koseongboy/Spell_Battle/blob/8e200079b4ef84ce19eba4640b69bd59e588e357/Assets/Server/index.js#L129-L198" target="_blank" rel="noopener">웹 서버 코드 ↗</a></li>
+          <li>구현에서는 결과 화면에 점수를 보여 주기 위해 클라이언트가 폴링하고, 주문이 확정되면 게임 서버가 대기표로 점수를 한 번 더 조회해 검증합니다.</li>
+        </ul>
+        <figure class="diagram"><pre class="mermaid">sequenceDiagram
+    participant C1 as 시전자 (Client)
+    participant WS as 평가용 웹 서버 (Web Server)
+    participant GS as 게임 서버 (Turn Controller)
+    participant C2 as 상대방 (Client)
+
+    C1-&gt;&gt;WS: [POST] 음성 파일 &amp; JSON 제출
+    WS--&gt;&gt;C1: 즉시 응답: URL &amp; Task ID (대기표) 반환
+
+    C1-&gt;&gt;GS: SubmitSpellServerRpc(카드ID, JSON, URL, Task ID)
+
+    GS-&gt;&gt;C2: PlayOpponentAudioClientRpc(URL)
+    Note over C2: 상대방 목소리 재생
+
+    Note over GS,WS: [보안 구역] 서버 간 직접 통신
+    loop 점수 확인 (Polling)
+        GS-&gt;&gt;WS: [GET] Task ID로 점수 조회 요청
+        WS--&gt;&gt;GS: &quot;아직 평가 중&quot; or &quot;평가 완료: 95점&quot;
+    end
+
+    Note over GS: 데미지 계산 및 배틀 진행</pre></figure>
       </div>
       <div>
         <h3>음성 녹음 및 사운드 파이프라인</h3>
         <ul>
-          <li>Unity Microphone System으로 플레이어의 음성 영창을 녹음해 웹 서버로 패킷을 제출하는 파이프라인을 구축하고, 인게임 사운드(BGM/SFX) 제어 매니저를 구현했습니다.</li>
+          <li>Unity Microphone으로 플레이어의 음성 영창을 녹음해 웹 서버로 전송하고, 판정 결과를 1초 간격으로 최대 20회 조회(폴링)해 응답이 없으면 기본 점수로 넘어가도록 구현했습니다.</li>
+          <li>판정 점수는 점수에 비례한 효과 배율로 데미지에 반영했습니다. 지금은 평가 서버를 닫아 둔 상태라, 서버 없이도 게임이 실행되도록 배율을 1로 고정해 두었습니다.</li>
+          <li>녹음에 소리가 전혀 없으면 서버로 보내지 않고 재녹음을 안내합니다.</li>
+          <li>업로드가 끝나면 상대 클라이언트가 음성을 미리 내려받게 해, 주문이 확정되는 순간 바로 재생되도록 했습니다. 다운로드에 실패해도 무음 클립으로 대신해 진행이 멈추지 않습니다.</li>
+          <li>인게임 사운드(BGM/SFX) 제어 매니저를 구현했습니다.</li>
         </ul>
-      </div>
-    </div>
-  </section>
+        <figure class="code-figure"><figcaption><code>SpellController.EndRecording()</code> · 일부 생략 · <a href="https://github.com/koseongboy/Spell_Battle/blob/8eb45fa9b05f3c6dbec2b223afeca66334e1d8df/Assets/Scripts/Controllers/SpellController.cs#L192-L260" target="_blank" rel="noopener">전체 코드 ↗</a></figcaption><pre class="code-block"><code><span class="tok-c">// [클라이언트] 녹음 종료 → 평가 서버 업로드 → 결과 폴링</span>
+<span class="tok-k">public</span> <span class="tok-k">async</span> Task EndRecording()
+{
+    CommonUIController.Instance.ShowLoading();
+    <span class="tok-k">byte</span>[] myWavData = SoundManager.Instance.StopRecording();
+    LastRecordedClip = CreateClipFromWavBytes(myWavData);
 
-  <section class="section" aria-labelledby="s2">
-    <h2 id="s2" class="section-title">02 · OUTCOMES</h2>
-    <div class="prose-block">
-      <div>
-        <h3>네트워크 모델</h3>
-        <ul>
-          <li>호스트 권한(Listen Server) 구조로 구현하며 서버 권위 모델의 장점과 한계를 직접 확인했습니다.</li>
-          <li>Netcode for GameObjects의 RPC로 통신 규격을 정의하고, 전송하는 파라미터를 최소화했습니다.</li>
-        </ul>
-      </div>
-      <div>
-        <h3>디자인 패턴 적용 역량</h3>
-        <ul>
-          <li>시스템 전반의 오브젝트에 MVP 패턴을 적용하고, 카드 효과 발동 로직에 Command 패턴을 도입했습니다.</li>
-          <li>단순 하드코딩의 한계를 체감하고, 유지보수와 확장이 유연한 객체지향적 아키텍처를 추구합니다.</li>
-        </ul>
+    <span class="tok-c">// 무음이면 AI 평가 요청을 보내지 않고 재녹음 유도</span>
+    <span class="tok-k">if</span> (SoundManager.Instance.IsAudioSilent(LastRecordedClip, 0.04f))
+    {
+        <span class="tok-k">await</span> Task.Delay(2000);
+        CommonUIController.Instance.DoneLoading();
+        CommonUIController.Instance.ShowRedAlert(<span class="tok-s">&quot;목소리가 작습니다. 다시 녹음해주세요&quot;</span>);
+        <span class="tok-k">return</span>;
+    }
+
+    <span class="tok-k">var</span> uploadResult = <span class="tok-k">await</span> WebServerModel.Instance.UploadVoiceAsync(myWavData, /* 생략 */);
+    <span class="tok-k">if</span> (uploadResult == <span class="tok-k">null</span>) <span class="tok-k">return</span>;
+
+    currentAudioUrl = uploadResult.audioUrl;
+    currentTaskId = uploadResult.taskId;
+    <span class="tok-c">// 상대가 발동 시점에 바로 재생할 수 있도록 음성을 미리 내려받게 한다</span>
+    ShareAudioUrlServerRpc(currentAudioUrl);
+
+    <span class="tok-c">// AI 평가는 비동기 작업이므로 1초 간격으로 최대 maxAttempts(20)회 폴링</span>
+    TaskStatusResponse evalResult = <span class="tok-k">null</span>;
+    <span class="tok-k">int</span> attempt = 0;
+    <span class="tok-k">while</span> (evalResult == <span class="tok-k">null</span> &amp;&amp; attempt &lt; maxAttempts)
+    {
+        <span class="tok-k">await</span> Task.Delay(1000);
+        evalResult = <span class="tok-k">await</span> WebServerModel.Instance.GetEvaluationResultAsync(currentTaskId);
+        attempt++;
+    }
+    PhaseManager.Instance.DoneEval(evalResult);
+}</code></pre></figure>
       </div>
     </div>
   </section>
 
   <section class="section" aria-labelledby="troubleshooting">
-    <h2 id="troubleshooting" class="section-title">03 · TROUBLESHOOTING</h2>
+    <h2 id="troubleshooting" class="section-title">02 · TROUBLESHOOTING</h2>
     <div class="boss-log">
-      <h3>단일 외부 API 의존의 한계와 2-Track 파이프라인 설계</h3>
+      <h3>기획 팀원과 병렬로 진행한 카드 효과 데이터화</h3>
       <dl>
-        <dt class="dt-encounter">ISSUE</dt><dd>음성 원본을 멀티모달 LLM에 한 번에 보내 창의성과 몰입도를 동시에 평가하는 구조였습니다. 경량 모델(Gemini 2.5 Flash)은 음성 인식 정확도가 떨어져 문맥을 온전히 판별하지 못했고, 대형 모델(GPT-4o Audio)은 추론 시간이 길어 실시간성이 훼손됐으며 예산상 도입도 어려웠습니다.</dd>
-        <dt class="dt-action">DECISION</dt><dd>데이터를 목적에 맞게 나누는 2-Track 파이프라인을 도출했습니다. 창의성(문맥)은 클라이언트에서 STT로 텍스트화해 가벼운 페이로드만 LLM에 요청하고, 몰입도(감정)는 주파수·진폭 등 음향 피처를 자체 분석합니다.</dd>
-        <dt class="dt-result">RESULT</dt><dd>음성 원본 대신 STT 텍스트만 LLM에 보내고 감정은 음향 피처로 따로 분석하는 2-Track 구조를 설계해, 차기 유지보수 과제로 정리했습니다.</dd>
-        <dt class="dt-learned">LEARNED</dt><dd>완성된 외부 API에 통째로 의존하면 모델 선택이 곧 지연·비용·정확도의 병목이 된다는 것을 체감했고, 데이터 목적에 맞춰 처리 단계를 나눠야 한다는 것을 배웠습니다.</dd>
+        <dt class="dt-encounter">ISSUE</dt><dd>처음에는 CSV에서 카드 이름 · 설명 텍스트 같은 기본 정보만 읽고, 효과는 카드마다 코드로 따로 구현했습니다. 카드를 추가하거나 효과를 고칠 때마다 코드 작업이 필요해, 기획이 바뀌면 구현이 따라가야만 하는 구조였습니다.</dd>
+        <dt class="dt-action">DECISION</dt><dd>기획 팀원이 효과를 컬럼으로 정리하자고 제안했고, 저는 이를 실행할 구조를 맡았습니다. 먼저 기존 CSV 테이블에 효과 이름 컬럼만 추가해 둘이 함께 볼 규격을 정한 뒤, 그 컬럼을 기준으로 작업을 나눠 병렬로 진행했습니다. 기획 팀원은 카드 행의 빈칸을 채우고, 저는 각 컬럼이 수행할 동작을 커맨드로 정의했습니다. 카드는 효과 커맨드들을 묶은 매크로 커맨드가 되고, 선택한 카드들은 커맨드 큐에서 순서대로 실행됩니다.</dd>
+        <dt class="dt-result">RESULT</dt><dd>카드별 효과 코드 없이 130종을 구현했고, 신규 카드 1종 추가 공수가 15분 이상에서 1분 내외로 줄었습니다. 이후 이미 있는 효과를 조합한 카드는 기획 팀원이 CSV에 행을 넣는 것만으로 추가할 수 있게 됐습니다.</dd>
+        <dt class="dt-learned">LEARNED</dt><dd>컬럼 이름이라는 작은 규격을 먼저 합의하니, 서로의 작업이 끝나기를 기다리지 않고 동시에 진행할 수 있었습니다. 팀원의 제안을 실제로 동작하는 구조로 구체화하는 것도 개발자의 역할이라는 것을 배웠습니다.</dd>
       </dl>
     </div>
     <div class="boss-log">
-      <h3>네트워크 환경의 한계</h3>
+      <h3>카드 조합에 따라 바뀌는 동적 효과 처리</h3>
       <dl>
-        <dt class="dt-encounter">ISSUE</dt><dd>서버 권위 모델을 설계했지만 비용과 구조적 한계로 호스트가 서버를 겸하는 Listen Server를 채택해, 호스트 PC가 조작되면 서버 전체가 노출되는 보안 한계가 남았습니다. 또한 ParrelSync로 단일 PC에서 다중 클라이언트를 검증해 실제 네트워크 지연을 온전히 체감하지 못했습니다.</dd>
-        <dt class="dt-action">DECISION</dt><dd>기한과 비용 안에서는 Listen Server를 유지하기로 하고, 남은 위험(호스트 변조, 실제 네트워크 지연 미검증)을 프로젝트의 한계로 명시했습니다.</dd>
-        <dt class="dt-result">RESULT</dt><dd>일반 클라이언트의 판정 변조는 막았지만, 호스트 변조와 실제 네트워크 환경의 지연은 검증하지 못한 상태로 남았습니다.</dd>
-        <dt class="dt-learned">LEARNED</dt><dd>다음 프로젝트에서는 클라이언트와 물리적으로 분리된 전용 서버(Dedicated Server)를 구축하고, 지연 보상 예측(Prediction)과 실제 통신 환경 테스트를 다뤄보고자 합니다.</dd>
+        <dt class="dt-encounter">ISSUE</dt><dd>'강굽이'처럼 선택한 카드들 중 물 속성이 가장 많을 때 발동하는 효과는, 카드 한 장의 데이터만으로는 값을 정할 수 없었습니다. 커맨드 큐에서 선택한 카드들의 속성을 파악해 각 커맨드에 넣어 주는 방식이라, 이런 효과가 하나 늘 때마다 큐와 여러 커맨드를 함께 고쳐야 할 만큼 변경 범위가 컸습니다.</dd>
+        <dt class="dt-action">DECISION</dt><dd>데미지처럼 상황에 따라 값이 바뀌는 효과를 동적 효과 커맨드로 따로 정의해 일반 커맨드와 분리하고, 속성별 동적 효과는 이 커맨드에 추가하도록 정리했습니다.</dd>
+        <dt class="dt-result">RESULT</dt><dd>변경 범위를 동적 효과 커맨드 안으로 좁혔습니다. 다만 속성 판별을 분기문으로 처리해, 속성이나 조건이 늘수록 분기가 길어지는 유지보수 문제가 남았습니다.</dd>
+        <dt class="dt-learned">LEARNED</dt><dd>변경 하나가 커맨드 큐와 여러 커맨드로 번지는 것을 한 번 겪은 뒤로, 새 기능을 넣기 전에 영향 범위를 먼저 예상하고 바뀔 부분을 한곳에 모아 두게 됐습니다.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="retrospective">
+    <h2 id="retrospective" class="section-title">03 · RETROSPECTIVE</h2>
+    <div class="boss-log">
+      <h3>음성 판정 대기와 전송 구조의 한계</h3>
+      <dl>
+        <dt class="dt-encounter">CONTEXT</dt><dd>영창 판정은 클라이언트가 녹음한 음성 원본을 웹 서버로 올린 뒤, 서버가 멀티모달 LLM으로 평가를 마칠 때까지 결과를 기다리는 구조였습니다. 판정 중에는 로딩 화면이 떠 있어, 모델의 추론 시간이 곧 플레이어가 기다리는 시간이었습니다. 게다가 사용한 모델(Gemini 2.5 Flash)은 음성 인식이 부정확해, 기다린 만큼 정확한 판정을 얻지도 못했습니다. 외부의 무단 접근 트래픽으로 서버가 불안정해, 판정 기능을 충분히 테스트하지 못한 것도 한계였습니다. 저는 결과를 1초 간격으로 최대 20회 조회(폴링)하고, 끝내 결과가 오지 않으면 기본 점수로 넘어가게 해 서버가 응답하지 않아도 게임이 이어지도록 했습니다.</dd>
+        <dt class="dt-action">IDEA</dt><dd>1초 간격의 고정 폴링은 결과가 늦을수록 불필요한 요청만 늘어나므로, 조회 간격을 점점 늘려 가는 방식(지수 백오프)으로 바꾸는 것을 구상했습니다. 또 클라이언트가 더 많은 처리를 맡아 서버로 보내는 데이터를 줄이는 2-Track 구조를 정리했습니다. 문맥(창의성)은 클라이언트에서 STT로 텍스트화해 텍스트만 보내고, 몰입도(감정)는 음량 · 음높이 같은 음향 피처를 클라이언트에서 계산해 수치만 보내는 방식입니다. 프로젝트가 끝난 뒤 정리한 개인 구상으로, 팀에 공유하거나 적용하지는 않았습니다.</dd>
+        <dt class="dt-learned">LEARNED</dt><dd>판정의 품질과 응답 속도는 서버 모델만의 문제가 아니라, 클라이언트가 무엇을 얼마나 보내느냐에도 달려 있다는 것을 배웠습니다.</dd>
+      </dl>
+    </div>
+    <div class="boss-log">
+      <h3>무음 · 잡음 입력으로 인한 LLM 환각</h3>
+      <dl>
+        <dt class="dt-encounter">CONTEXT</dt><dd>녹음에 소리가 전혀 없으면 진폭이 고정 기준(0.04)을 한 번도 넘지 않는지 확인해 전송하지 않도록 막았습니다. 하지만 화이트 노이즈나 숨소리는 이 기준을 넘어 그대로 판정 서버로 넘어갔고, 모델이 특정 단어를 끝없이 반복하는 환각 현상이 발생했습니다. 고정된 기준 하나로는 거르기 어렵습니다. 마이크마다 감도와 입력 게인이 달라 같은 목소리도 기기마다 측정값(dBFS)이 다르고, 마이크 가까이에서 쉰 숨소리는 작은 목소리만큼 커질 수 있기 때문입니다.</dd>
+        <dt class="dt-action">IDEA</dt><dd>녹음 단계에서 잡음만 있는 음성은 전송하지 않는 방법을 고안했습니다. 녹음 시작 전 3 · 2 · 1 카운트다운 동안 주변 소음을 측정해 기기별 소음 기준(noise floor)을 잡고, 녹음된 음성에 소음 기준보다 12dB 이상 큰 구간이 있을 때만 말소리로 보고 서버로 전송하는 방식입니다. 그 구간이 합쳐서 300ms보다 짧으면 전송하지 않습니다. 마감 일정 때문에 구현과 검증은 하지 못했고, 환각 현상은 해결되지 않은 채 프로젝트가 끝났습니다.</dd>
+        <dt class="dt-learned">LEARNED</dt><dd>서버 · 모델 쪽 문제처럼 보여도, 클라이언트가 보내는 입력의 품질을 먼저 거르면 막을 수 있는 지점이 있다는 것을 배웠습니다. 아이디어는 바로 문서로 남겨야 다음 작업으로 이어질 수 있다는 점도 느꼈습니다.</dd>
+      </dl>
+    </div>
+    <div class="boss-log">
+      <h3>호스트 권한 구조의 한계</h3>
+      <dl>
+        <dt class="dt-encounter">CONTEXT</dt><dd>비용 문제로 별도 서버 없이 호스트가 서버를 겸하는 Listen Server를 택했습니다. 호스트 PC가 조작되면 판정 전체가 노출되는 구조입니다. 또 프로젝트가 끝난 뒤 포트폴리오를 정리하며 코드를 다시 읽다가, 서버가 마나를 차감할 때 클라이언트가 보낸 비용(<code>declaredCost</code>)을 그대로 쓰고 카드 ID로 다시 계산하지 않는다는 것을 발견했습니다. 게스트 클라이언트도 비용을 조작할 수 있는 빈틈입니다. 테스트는 ParrelSync로 한 PC에서 여러 클라이언트를 띄워 진행해, 실제 네트워크 지연은 확인하지 못했습니다.</dd>
+        <dt class="dt-action">IDEA</dt><dd>비용은 서버가 받은 카드 ID로 <code>CardDatabase</code>에서 직접 합산해 차감하고, 클라이언트에서는 카드 ID와 대기표만 받도록 바꿉니다. 호스트 변조까지 막으려면 클라이언트와 분리된 전용 서버(Dedicated Server)가 필요하고, 실제 네트워크 환경에서 지연을 측정하는 테스트도 함께 진행해야 합니다.</dd>
+        <dt class="dt-learned">LEARNED</dt><dd>서버에서 다시 확인한다고 생각한 값 중에도 클라이언트 입력을 그대로 믿는 부분이 남아 있을 수 있다는 것을 알게 됐습니다. 이후로는 서버로 들어오는 값마다 서버가 직접 다시 계산할 수 있는 값인지부터 확인합니다.</dd>
       </dl>
     </div>
   </section>

@@ -1,0 +1,134 @@
+{
+  "status": "progress",
+  "title": "Dino Cleaner",
+  "subtitle": "",
+  "tagline": "공룡이 이동 수단인 세계에서 공룡을 세차하는 게임",
+  "note": "",
+  "description": "공룡을 세차하는 3D 게임 Dino Cleaner — 플레이어 애니메이션 · IK, Strategy 패턴 장비 시스템, ASMDEF 패키지 분리.",
+  "thumbnail": {
+    "src": "",
+    "alt": "",
+    "top": false,
+    "width": 0,
+    "height": 0
+  },
+  "period": {
+    "start": "2026.09",
+    "end": ""
+  },
+  "team": "4인 (클라이언트 3인, 기획/PM 1인)",
+  "role": "클라이언트 — 플레이어 · 장비 시스템 구현",
+  "stack": [
+    "Unity 3D",
+    "C#",
+    "Input System",
+    "ASMDEF",
+    "Animation Rigging"
+  ],
+  "info": [],
+  "links": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/Crocobob911/DinoCleaner"
+    }
+  ],
+  "sections": [
+    {
+      "title": "CORE SYSTEMS",
+      "stats": [],
+      "blocks": [
+        {
+          "heading": "Strategy 패턴 기반 장비 시스템",
+          "items": [
+            "장비를 두 갈래의 추상 클래스로 나눴습니다. 손에 드는 도구(청소기, 사다리 같은 설치형 도구)는 [`Tool`](https://github.com/Crocobob911/DinoCleaner/blob/e45e34a883ccecbd05c11d570bb8f8a9154ccc64/Assets/2.%20Scripts/Equipment/HandTool/Tool.cs)의 `UseTool()`을, 이동 장비(기본 신발, 비행용 공룡)는 [`MovementEquipment`](https://github.com/Crocobob911/DinoCleaner/blob/e45e34a883ccecbd05c11d570bb8f8a9154ccc64/Assets/2.%20Scripts/Equipment/Movement/MovementEquipment.cs)의 `CalculateMovement()`를 각자 구현합니다.",
+            "플레이어는 지금 들고 있는 장비의 추상 메서드만 호출하고, 어떤 장비인지는 모릅니다([`PlayerEquipment.UseCurrentTool`](https://github.com/Crocobob911/DinoCleaner/blob/e45e34a883ccecbd05c11d570bb8f8a9154ccc64/Assets/2.%20Scripts/Player/PlayerEquipment.cs#L57-L67)). 한 장비의 동작을 고칠 때 플레이어 코드나 다른 장비 코드를 건드리지 않습니다."
+          ]
+        },
+        {
+          "heading": "플레이어 애니메이션 상태 설계",
+          "items": [
+            "처음에는 필요한 애니메이션 목록을 뽑기 위해 상태 다이어그램을 그려 체크리스트로 썼고, 구현하면서 아래 구조로 정리했습니다.",
+            "자세(서기 · 앉기 · 엎드리기)마다 Idle과 Walk를 `Speed` 값으로 섞는 블렌드 트리로 합치고, 자세 전환은 `Stance` 정수, 점프는 `IsGrounded`로 분기했습니다. 점프는 Jump Up → Jump Loop → Jump Down 순서로 이어집니다.",
+            "이동 중에는 전환 동작 없이 바로 자세가 바뀌도록 `Speed` 조건으로 나눴고, 조준 자세(`IsFiring`)는 상체 마스크를 씌운 UpperBody 레이어로 분리해 하체 자세와 따로 재생되게 했습니다."
+          ],
+          "diagram": "stateDiagram-v2\n    state \"Stand · Idle ↔ Walk\" as Stand\n    state \"Kneel · Idle ↔ Walk\" as Kneel\n    state \"Prone · Idle ↔ Walk\" as Prone\n    state \"Stand To Kneel\" as S2K\n    state \"Kneel To Prone\" as K2P\n    state \"Prone To Kneel\" as P2K\n    state \"Kneel To Stand\" as K2S\n    state \"Jump Up\" as JU\n    state \"Jump Loop\" as JL\n    state \"Jump Down\" as JD\n    [*] --> Stand\n    Stand --> S2K : Ctrl\n    S2K --> Kneel\n    Kneel --> K2P : Ctrl\n    K2P --> Prone\n    Kneel --> K2S : Space\n    Prone --> P2K : Ctrl / Space\n    P2K --> K2S\n    K2S --> Stand\n    Stand --> JU : Space\n    JU --> JL\n    JL --> JD : 착지\n    JD --> Stand"
+        },
+        {
+          "heading": "ASMDEF 패키지 분리",
+          "items": [
+            "팀이 Assembly Definitions(ASMDEF)로 Core, Data, UI 등 패키지를 나눴고, 저는 플레이어 · 장비 영역을 맡았습니다. 패키지 사이에 순환 참조가 생기면 컴파일 오류로 바로 드러납니다."
+          ]
+        }
+      ]
+    }
+  ],
+  "troubleshooting": {
+    "title": "TROUBLESHOOTING",
+    "items": [
+      {
+        "title": "패키지 간 순환 참조와 공용 Data 패키지 도입",
+        "issue": "팀원이 만든 `EventBus` 규격은 이벤트를 `Core` 패키지에 선언하도록 되어 있었습니다. 제가 맡은 장비의 이벤트를 이 규격대로 `Core`에 선언하자, 이벤트가 장비 패키지의 열거형을 쓰고 장비 패키지는 `Core`를 참조하는 순환 참조가 생겨 컴파일 오류가 났습니다.",
+        "decision": "열거형 · 구조체처럼 메서드 없는 데이터만 담는 공용 `Data` 패키지를 참조 계층 최하단에 두자고 팀에 건의했고, 협의를 거쳐 도입했습니다. 각 패키지가 서로를 직접 참조하지 않고 `Data`를 참조하도록 바꿨습니다.",
+        "result": "팀의 `EventBus` 규격을 바꾸지 않고 장비 · 플레이어 이벤트를 발행할 수 있게 됐고, 패키지 의존 방향이 `Data`를 최하단으로 하는 단방향으로 정리됐습니다.",
+        "learned": "패키지 경계를 컴파일러가 검사하게 두면 설계 실수를 일찍 발견할 수 있다는 것을 배웠습니다.",
+        "main": {
+          "show": true,
+          "title": "Dino Cleaner — 패키지 간 순환 참조와 공용 Data 패키지",
+          "issue": "팀 EventBus 규격대로 장비 이벤트를 Core에 선언하자 장비 패키지와 Core 사이에 순환 참조 발생",
+          "decision": "순수 데이터(Enum, Struct)만 담은 공용 Data 패키지를 팀에 건의해 협의 후 도입, 의존성을 단방향으로 정렬",
+          "result": "팀 규격을 바꾸지 않고 장비 이벤트 발행, Data를 최하단에 둔 단방향 의존성으로 정리"
+        }
+      },
+      {
+        "title": "체형 불일치로 인한 파지 클리핑 (IK)",
+        "issue": "실사 비율의 범용 애니메이션 에셋(Mixamo)을 카툰풍 캐릭터에 적용하자, 뼈대 비율 차이로 청소기 장착 시 손이 허공에 뜨거나 몸통을 관통하는 클리핑 현상이 발생했습니다.",
+        "decision": "애니메이션 키프레임을 고치는 대신 Unity Animation Rigging을 도입했습니다. 청소기 위치를 먼저 정하고, 양손이 Two Bone IK로 청소기 그립 위치를 따라가게 했습니다.",
+        "result": "애니메이션이 바뀌어도 양손이 청소기 그립에 붙어 있게 되어, 손이 뜨거나 몸통을 관통하던 클리핑이 사라졌습니다.",
+        "learned": "목표 위치를 기준으로 뼈대를 계산하는 IK 방식과, 이를 스크립트로 제어하는 방법을 익혔습니다.",
+        "main": {
+          "show": true,
+          "title": "Dino Cleaner — 체형 불일치로 인한 파지 클리핑",
+          "issue": "실사 비율 애니메이션(Mixamo)을 카툰풍 캐릭터에 적용하자 손이 허공에 뜨거나 몸통을 관통",
+          "decision": "Animation Rigging 도입, 양손이 Two Bone IK로 청소기 그립을 따라가게 함",
+          "result": "애니메이션이 바뀌어도 양손이 청소기 그립을 따라가 클리핑 해소"
+        }
+      }
+    ]
+  },
+  "retrospective": [],
+  "scope": {
+    "mine": [
+      "플레이어 애니메이션 · IK",
+      "장비 시스템",
+      "청소기 물 발사 모션",
+      "플레이어 · 장비 ASMDEF 분리"
+    ],
+    "team": [
+      "클라이언트 팀원 A — UI",
+      "클라이언트 팀원 B — 인 스테이지 기능",
+      "기획/PM 팀원 — 게임 기획, 일정 관리"
+    ],
+    "together": [
+      "공용 `Data` 패키지 도입 (제가 건의, 팀 협의로 결정)"
+    ]
+  },
+  "skills": [
+    {
+      "kind": "pattern",
+      "name": "Strategy",
+      "where": "손 도구 · 이동 장비",
+      "why": "플레이어는 현재 장비의 추상 메서드만 호출하고 구체 장비를 몰라, 한 장비를 고칠 때 플레이어 코드나 다른 장비 코드를 건드리지 않게"
+    },
+    {
+      "kind": "structure",
+      "name": "ASMDEF",
+      "where": "패키지 분리",
+      "why": "팀이 영역별로 어셈블리를 나눠 순환 참조가 컴파일 오류로 드러나게 하고, 공용 Data 패키지는 제가 건의해 도입"
+    }
+  ],
+  "card": {
+    "summary": "공룡이 이동 수단인 세계에서 공룡을 세차하는 게임. 플레이어 애니메이션 · IK와 청소기 · 사다리 · 비행용 공룡 등 장비 시스템을 맡고 있습니다.",
+    "keywords": "Unity 3D · Input System · ASMDEF · IK",
+    "team": "4인 (클라이언트 3, 기획/PM 1)"
+  }
+}

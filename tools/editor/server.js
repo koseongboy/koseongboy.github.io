@@ -339,7 +339,11 @@ async function handleApi(req, res, url) {
     if (!data || !String(data.title || '').trim()) return send(res, 400, { error: '게임 이름을 입력해 주세요' });
     const exists = fs.existsSync(path.join(portfolio.PROJECTS_DIR, slug + '.json'));
     if (exists && slug !== originalSlug) return send(res, 409, { error: '같은 주소의 프로젝트가 이미 있어요: ' + slug });
-    portfolio.saveProject(slug, data);
+    // 편집 화면이 보내지 않은 항목(예: 예전 화면에 없던 새 칸)은 기존 값을 그대로 유지 — 저장하다 데이터가 지워지지 않게
+    const prevSlug = portfolio.SLUG_RE.test(String(originalSlug || '')) ? originalSlug : null;
+    const prev = prevSlug ? portfolio.readProject(prevSlug) : null;
+    const merged = prev ? Object.assign({}, prev, data) : data;
+    portfolio.saveProject(slug, merged);
     if (originalSlug && originalSlug !== slug && portfolio.SLUG_RE.test(originalSlug)) portfolio.deleteProject(originalSlug);
     portfolio.buildAll();
     blog.buildAll();   // 사이트맵, 글 태그 ↔ 프로젝트 버튼 갱신

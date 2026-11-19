@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dino Cleaner | 고성현 포트폴리오</title>
-<meta name="description" content="공룡을 세차하는 3D 게임 Dino Cleaner — Strategy 패턴, FSM 애니메이션, ASMDEF 모듈화, IK 파지 시스템.">
+<meta name="description" content="공룡을 세차하는 3D 게임 Dino Cleaner — 플레이어 애니메이션 · IK, Strategy 패턴 장비 시스템, ASMDEF 패키지 분리.">
 <link rel="canonical" href="https://koseongboy.github.io/portfolio/projects/dino-cleaner.html">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Dino Cleaner | 고성현 포트폴리오">
-<meta property="og:description" content="공룡을 세차하는 3D 게임 Dino Cleaner — Strategy 패턴, FSM 애니메이션, ASMDEF 모듈화, IK 파지 시스템.">
+<meta property="og:description" content="공룡을 세차하는 3D 게임 Dino Cleaner — 플레이어 애니메이션 · IK, Strategy 패턴 장비 시스템, ASMDEF 패키지 분리.">
 <meta property="og:url" content="https://koseongboy.github.io/portfolio/projects/dino-cleaner.html">
 <meta property="og:site_name" content="KOSEONGBOY.DEV">
 <meta property="og:image" content="https://koseongboy.github.io/assets/img/og-image.png">
@@ -26,6 +26,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&amp;family=Space+Grotesk:wght@400;500;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/style.css">
 <script src="../../assets/js/theme.js" defer></script>
+<script src="../../assets/js/diagram.js" type="module"></script>
 </head>
 <body data-page="project" data-slug="dino-cleaner">
 
@@ -58,7 +59,7 @@
     <dl>
       <dt>Period</dt><dd>2026.09 ~ 진행 중</dd>
       <dt>Team</dt><dd>4인 (클라이언트 3인, 기획/PM 1인)</dd>
-      <dt>Role</dt><dd>클라이언트 아키텍처 설계 및 플레이어 로직 구현</dd>
+      <dt>Role</dt><dd>클라이언트 — 플레이어 · 장비 시스템 구현</dd>
       <dt>Stack</dt><dd><ul class="chips"><li>Unity 3D</li><li>C#</li><li>Input System</li><li>ASMDEF</li><li>Animation Rigging</li></ul></dd>
     </dl>
   </div>
@@ -67,67 +68,104 @@
     <a href="https://github.com/Crocobob911/DinoCleaner" class="btn btn-primary" target="_blank" rel="noopener">GITHUB ↗</a>
   </div>
 
-  <section class="section" aria-labelledby="s1">
-    <h2 id="s1" class="section-title">01 · CORE SYSTEMS</h2>
-    <div class="prose-block">
-      <div>
-        <h3>디자인 패턴을 실제 프로젝트에 적용</h3>
+  <section class="section" aria-labelledby="scope">
+    <h2 id="scope" class="section-title">Scope · 작업 범위</h2>
+    <div class="scope-grid">
+      <div class="scope-col mine">
+        <h3>내가 한 것</h3>
         <ul>
-          <li>플레이어의 좌클릭 액션이 장착 중인 장비에 따라 바뀌도록 Strategy 패턴을 적용해, 새 장비를 조건문 수정 없이 장비 클래스 추가로 붙일 수 있게 했습니다.</li>
+          <li>플레이어 애니메이션 · IK</li>
+          <li>장비 시스템</li>
+          <li>청소기 물 발사 모션</li>
+          <li>플레이어 · 장비 ASMDEF 분리</li>
         </ul>
       </div>
-      <div>
-        <h3>상태 머신 기반 애니메이션 설계</h3>
+      <div class="scope-col">
+        <h3>팀이 한 것</h3>
         <ul>
-          <li>개발 전 애니메이션 상태 머신 다이어그램을 직접 명세하고, 이를 바탕으로 필요한 애니메이션 리스트를 도출해 Unity Animator Controller에 1:1로 연동하여 동작 제어를 구현했습니다.</li>
+          <li>클라이언트 팀원 A — UI</li>
+          <li>클라이언트 팀원 B — 인 스테이지 기능</li>
+          <li>기획/PM 팀원 — 게임 기획, 일정 관리</li>
         </ul>
       </div>
-      <div>
-        <h3>ASMDEF를 활용한 시스템 모듈화</h3>
+      <div class="scope-col">
+        <h3>함께 정한 것</h3>
         <ul>
-          <li>프로젝트 전반에 Assembly Definitions(ASMDEF)를 도입하여 로직을 Core, Data, UI 등 물리적인 패키지 단위로 분리했습니다.</li>
-          <li>패키지 사이에 순환 참조가 생기면 컴파일 단계에서 바로 오류로 드러나게 해, 의존성 방향을 구조로 강제했습니다.</li>
+          <li>공용 <code>Data</code> 패키지 도입 (제가 건의, 팀 협의로 결정)</li>
         </ul>
       </div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="s2">
-    <h2 id="s2" class="section-title">02 · OUTCOMES</h2>
+  <section class="section" aria-labelledby="s1">
+    <h2 id="s1" class="section-title">01 · CORE SYSTEMS</h2>
     <div class="prose-block">
       <div>
-        <h3>객체지향 기반의 아키텍처 설계</h3>
+        <h3>Strategy 패턴 기반 장비 시스템</h3>
         <ul>
-          <li>디자인 패턴을 도입해 장비별 분기 하드코딩을 줄이고, 장비 추가와 조작 체계 변경이 서로에게 미치는 영향을 줄인 구조를 만들었습니다.</li>
+          <li>장비를 두 갈래의 추상 클래스로 나눴습니다. 손에 드는 도구(청소기, 사다리 같은 설치형 도구)는 <a href="https://github.com/Crocobob911/DinoCleaner/blob/e45e34a883ccecbd05c11d570bb8f8a9154ccc64/Assets/2.%20Scripts/Equipment/HandTool/Tool.cs" target="_blank" rel="noopener"><code>Tool</code> ↗</a>의 <code>UseTool()</code>을, 이동 장비(기본 신발, 비행용 공룡)는 <a href="https://github.com/Crocobob911/DinoCleaner/blob/e45e34a883ccecbd05c11d570bb8f8a9154ccc64/Assets/2.%20Scripts/Equipment/Movement/MovementEquipment.cs" target="_blank" rel="noopener"><code>MovementEquipment</code> ↗</a>의 <code>CalculateMovement()</code>를 각자 구현합니다.</li>
+          <li>플레이어는 지금 들고 있는 장비의 추상 메서드만 호출하고, 어떤 장비인지는 모릅니다(<a href="https://github.com/Crocobob911/DinoCleaner/blob/e45e34a883ccecbd05c11d570bb8f8a9154ccc64/Assets/2.%20Scripts/Player/PlayerEquipment.cs#L57-L67" target="_blank" rel="noopener"><code>PlayerEquipment.UseCurrentTool</code> ↗</a>). 한 장비의 동작을 고칠 때 플레이어 코드나 다른 장비 코드를 건드리지 않습니다.</li>
         </ul>
       </div>
       <div>
-        <h3>로직 시각화를 통한 에셋 플래닝</h3>
+        <h3>플레이어 애니메이션 상태 설계</h3>
         <ul>
-          <li>코드 작성 전 애니메이션 상태 머신 다이어그램을 설계해 필요 애니메이션 리스트를 도출했습니다. 이 과정에서 다른 팀원과 협업 명세로 활용할 수 있는 문서 작성 경험을 쌓았습니다.</li>
+          <li>처음에는 필요한 애니메이션 목록을 뽑기 위해 상태 다이어그램을 그려 체크리스트로 썼고, 구현하면서 아래 구조로 정리했습니다.</li>
+          <li>자세(서기 · 앉기 · 엎드리기)마다 Idle과 Walk를 <code>Speed</code> 값으로 섞는 블렌드 트리로 합치고, 자세 전환은 <code>Stance</code> 정수, 점프는 <code>IsGrounded</code>로 분기했습니다. 점프는 Jump Up → Jump Loop → Jump Down 순서로 이어집니다.</li>
+          <li>이동 중에는 전환 동작 없이 바로 자세가 바뀌도록 <code>Speed</code> 조건으로 나눴고, 조준 자세(<code>IsFiring</code>)는 상체 마스크를 씌운 UpperBody 레이어로 분리해 하체 자세와 따로 재생되게 했습니다.</li>
+        </ul>
+        <figure class="diagram"><pre class="mermaid">stateDiagram-v2
+    state &quot;Stand · Idle ↔ Walk&quot; as Stand
+    state &quot;Kneel · Idle ↔ Walk&quot; as Kneel
+    state &quot;Prone · Idle ↔ Walk&quot; as Prone
+    state &quot;Stand To Kneel&quot; as S2K
+    state &quot;Kneel To Prone&quot; as K2P
+    state &quot;Prone To Kneel&quot; as P2K
+    state &quot;Kneel To Stand&quot; as K2S
+    state &quot;Jump Up&quot; as JU
+    state &quot;Jump Loop&quot; as JL
+    state &quot;Jump Down&quot; as JD
+    [*] --&gt; Stand
+    Stand --&gt; S2K : Ctrl
+    S2K --&gt; Kneel
+    Kneel --&gt; K2P : Ctrl
+    K2P --&gt; Prone
+    Kneel --&gt; K2S : Space
+    Prone --&gt; P2K : Ctrl / Space
+    P2K --&gt; K2S
+    K2S --&gt; Stand
+    Stand --&gt; JU : Space
+    JU --&gt; JL
+    JL --&gt; JD : 착지
+    JD --&gt; Stand</pre></figure>
+      </div>
+      <div>
+        <h3>ASMDEF 패키지 분리</h3>
+        <ul>
+          <li>팀이 Assembly Definitions(ASMDEF)로 Core, Data, UI 등 패키지를 나눴고, 저는 플레이어 · 장비 영역을 맡았습니다. 패키지 사이에 순환 참조가 생기면 컴파일 오류로 바로 드러납니다.</li>
         </ul>
       </div>
     </div>
   </section>
 
   <section class="section" aria-labelledby="troubleshooting">
-    <h2 id="troubleshooting" class="section-title">03 · TROUBLESHOOTING</h2>
+    <h2 id="troubleshooting" class="section-title">02 · TROUBLESHOOTING</h2>
     <div class="boss-log">
-      <h3>패키지 간 순환 참조 방어와 구조적 딜레마</h3>
+      <h3>패키지 간 순환 참조와 공용 Data 패키지 도입</h3>
       <dl>
-        <dt class="dt-encounter">ISSUE</dt><dd>장착 청소 도구 변경 이벤트를 UI 시스템으로 전달하는 과정에서, 플레이어 장비 패키지와 <code>IEvent</code>가 선언된 <code>Core</code> 패키지 사이에 순환 참조가 발생했습니다.</dd>
-        <dt class="dt-action">DECISION</dt><dd>로직과 데이터를 분리하기 위해 참조 계층 최하단에 메소드 없이 열거형·구조체 등 순수 데이터만 존재하는 <code>Data</code> 패키지를 신설하고, 의존성 방향을 단방향으로 재정렬했습니다.</dd>
-        <dt class="dt-result">RESULT</dt><dd>ASMDEF가 순환 참조를 컴파일 단계에서 오류로 잡아내 실행 전에 발견했고, <code>Data</code> 패키지를 최하단에 둔 단방향 의존성으로 정리해 순환 참조를 해소했습니다.</dd>
-        <dt class="dt-learned">LEARNED</dt><dd>패키지 경계를 컴파일러가 검사하게 두면 설계 실수를 일찍 발견할 수 있다는 것을 배웠습니다. 다만 장비 종류를 열거형으로 모아 둔 탓에 새 장비를 추가할 때 <code>Data</code> 패키지도 함께 고쳐야 해서, 확장성 측면은 과제로 남아 있습니다.</dd>
+        <dt class="dt-encounter">ISSUE</dt><dd>팀원이 만든 <code>EventBus</code> 규격은 이벤트를 <code>Core</code> 패키지에 선언하도록 되어 있었습니다. 제가 맡은 장비의 이벤트를 이 규격대로 <code>Core</code>에 선언하자, 이벤트가 장비 패키지의 열거형을 쓰고 장비 패키지는 <code>Core</code>를 참조하는 순환 참조가 생겨 컴파일 오류가 났습니다.</dd>
+        <dt class="dt-action">DECISION</dt><dd>열거형 · 구조체처럼 메서드 없는 데이터만 담는 공용 <code>Data</code> 패키지를 참조 계층 최하단에 두자고 팀에 건의했고, 협의를 거쳐 도입했습니다. 각 패키지가 서로를 직접 참조하지 않고 <code>Data</code>를 참조하도록 바꿨습니다.</dd>
+        <dt class="dt-result">RESULT</dt><dd>팀의 <code>EventBus</code> 규격을 바꾸지 않고 장비 · 플레이어 이벤트를 발행할 수 있게 됐고, 패키지 의존 방향이 <code>Data</code>를 최하단으로 하는 단방향으로 정리됐습니다.</dd>
+        <dt class="dt-learned">LEARNED</dt><dd>패키지 경계를 컴파일러가 검사하게 두면 설계 실수를 일찍 발견할 수 있다는 것을 배웠습니다.</dd>
       </dl>
     </div>
     <div class="boss-log">
-      <h3>체형 불일치로 인한 조준 오차 및 파지 이슈 (Inverse Kinematics)</h3>
+      <h3>체형 불일치로 인한 파지 클리핑 (IK)</h3>
       <dl>
         <dt class="dt-encounter">ISSUE</dt><dd>실사 비율의 범용 애니메이션 에셋(Mixamo)을 카툰풍 캐릭터에 적용하자, 뼈대 비율 차이로 청소기 장착 시 손이 허공에 뜨거나 몸통을 관통하는 클리핑 현상이 발생했습니다.</dd>
-        <dt class="dt-action">DECISION</dt><dd>애니메이션 키프레임에 의존하는 대신 Unity Animation Rigging을 도입해 제어의 기준점을 역전시켰습니다. 청소기의 최종 위치를 먼저 씬에 고정하고, 양손이 해당 그립 위치를 Two Bone IK로 역추적하도록 재설계했습니다.</dd>
-        <dt class="dt-result">RESULT</dt><dd>애니메이션이 바뀌어도 양손이 청소기 그립 위치를 따라가게 되어, 손이 허공에 뜨거나 몸통을 관통하던 클리핑이 사라졌습니다.</dd>
-        <dt class="dt-learned">LEARNED</dt><dd>키프레임을 고치는 대신 목표 위치를 기준으로 뼈대를 계산하는 IK 방식과, 이를 스크립트로 제어하는 방법을 익혔습니다.</dd>
+        <dt class="dt-action">DECISION</dt><dd>애니메이션 키프레임을 고치는 대신 Unity Animation Rigging을 도입했습니다. 청소기 위치를 먼저 정하고, 양손이 Two Bone IK로 청소기 그립 위치를 따라가게 했습니다.</dd>
+        <dt class="dt-result">RESULT</dt><dd>애니메이션이 바뀌어도 양손이 청소기 그립에 붙어 있게 되어, 손이 뜨거나 몸통을 관통하던 클리핑이 사라졌습니다.</dd>
+        <dt class="dt-learned">LEARNED</dt><dd>목표 위치를 기준으로 뼈대를 계산하는 IK 방식과, 이를 스크립트로 제어하는 방법을 익혔습니다.</dd>
       </dl>
     </div>
   </section>

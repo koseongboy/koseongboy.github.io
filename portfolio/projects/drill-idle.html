@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Drill Idle | 고성현 포트폴리오</title>
-<meta name="description" content="키 입력이 공장의 성장으로 이어지는 데스크탑 방치형 게임 Drill Idle — OS 레벨 키 후킹, CSV 데이터 파이프라인, 출석 달력.">
+<meta name="description" content="키 입력이 공장의 성장으로 이어지는 데스크탑 방치형 게임 Drill Idle — 전역 키보드 · 마우스 후킹, 시설 · 엔진 시스템, 엔진 성장 기획.">
 <link rel="canonical" href="https://koseongboy.github.io/portfolio/projects/drill-idle.html">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Drill Idle | 고성현 포트폴리오">
-<meta property="og:description" content="키 입력이 공장의 성장으로 이어지는 데스크탑 방치형 게임 Drill Idle — OS 레벨 키 후킹, CSV 데이터 파이프라인, 출석 달력.">
+<meta property="og:description" content="키 입력이 공장의 성장으로 이어지는 데스크탑 방치형 게임 Drill Idle — 전역 키보드 · 마우스 후킹, 시설 · 엔진 시스템, 엔진 성장 기획.">
 <meta property="og:url" content="https://koseongboy.github.io/portfolio/projects/drill-idle.html">
 <meta property="og:site_name" content="KOSEONGBOY.DEV">
 <meta property="og:image" content="https://koseongboy.github.io/assets/img/og-image.png">
@@ -52,14 +52,14 @@
     <p class="tagline">나의 작업(키 입력)이 공장의 성장으로 연결되는 데스크탑 방치형 게임</p>
   </section>
 
-  <img class="detail-cover top" src="../../assets/img/drill-idle-calendar.png" alt="Drill Idle 출석 달력: 2025년 12월, 날짜별 플레이 시간과 키 입력량이 초록색 농도로 표시됨" width="1080" height="608">
+  <img class="detail-cover" src="../../assets/img/drill-idle-desktop.jpg" alt="Drill Idle 플레이 화면: 코드 편집기를 띄워 둔 바탕화면 오른쪽에 세로로 긴 Drill Idle 창이 떠 있고, 그리드 위에 테트리스 블록 모양의 색깔별 엔진과 시설이 배치되어 있음" width="1600" height="901">
 
   <div class="spec">
     <dl>
       <dt>Period</dt><dd>2025.09 ~ 2025.12</dd>
       <dt>Team</dt><dd>3인 (클라이언트/기획 3인)</dd>
-      <dt>Role</dt><dd>클라이언트 개발 및 기획</dd>
-      <dt>Stack</dt><dd><ul class="chips"><li>Unity 2D</li><li>C#</li><li>Windows API</li><li>Addressables</li><li>DOTween</li></ul></dd>
+      <dt>Role</dt><dd>클라이언트 개발 · 엔진 성장 기획</dd>
+      <dt>Stack</dt><dd><ul class="chips"><li>Unity 2D</li><li>C#</li><li>Windows API</li><li>Addressables</li></ul></dd>
     </dl>
   </div>
 
@@ -67,63 +67,106 @@
     <a href="https://github.com/koseongboy/Drill_Game" class="btn btn-primary" target="_blank" rel="noopener">GITHUB ↗</a>
   </div>
 
+  <section class="section" aria-labelledby="scope">
+    <h2 id="scope" class="section-title">Scope · 작업 범위</h2>
+    <div class="scope-grid">
+      <div class="scope-col mine">
+        <h3>내가 한 것</h3>
+        <ul>
+          <li>전역 키보드 · 마우스 후킹과 창 제어</li>
+          <li>시설 시스템 (자동 생산, 시너지 칸 미리보기)</li>
+          <li>엔진 시스템과 엔진 성장 기획</li>
+          <li>초기 CSV 파서 · Addressables 비동기 로딩</li>
+        </ul>
+      </div>
+      <div class="scope-col">
+        <h3>팀이 한 것</h3>
+        <ul>
+          <li>팀원 A — UI 전반, CSV → ScriptableObject 자동 변환, 출석 달력</li>
+          <li>팀원 B — 틱마다 메인 엔진과 맵에 배치된 엔진이 작동하는 코어 시스템</li>
+        </ul>
+      </div>
+      <div class="scope-col">
+        <h3>함께 정한 것</h3>
+        <ul>
+          <li>기획 데이터 CSV 구조</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <section class="section" aria-labelledby="s1">
     <h2 id="s1" class="section-title">01 · CORE SYSTEMS</h2>
-    <div class="highlight-stat">
-      <div><strong>7종 260개+</strong><span>자동 파싱하는 기획 CSV 데이터</span></div>
-    </div>
     <div class="prose-block">
       <div>
-        <h3>기획 데이터 자동 파싱 및 인메모리 캐싱 파이프라인</h3>
+        <h3>OS 레벨 백그라운드 입력 감지</h3>
         <ul>
-          <li>기획자가 작성한 7종 260개 이상의 외부 CSV 데이터를 게임 실행 시 1회 파싱해 Dictionary와 ScriptableObject 형태의 룩업 테이블로 변환했습니다.</li>
-          <li>같은 형식의 데이터는 코드 수정 없이 CSV 행 추가만으로 게임에 반영됩니다.</li>
+          <li>Windows API 저수준 훅(<code>SetWindowsHookEx</code>의 <code>WH_KEYBOARD_LL</code>, <code>WH_MOUSE_LL</code>)으로, 게임 창이 포커스를 잃은 상태에서도 키보드 · 마우스 입력을 받아 공장의 동력으로 바꿨습니다.</li>
+          <li>훅 콜백에서는 입력을 큐에 넣기만 하고 바로 다음 훅으로 넘긴 뒤, <code>Update()</code>에서 큐를 비우며 입력 횟수를 셉니다. 콜백이 오래 걸리면 시스템 전체의 입력이 느려지기 때문입니다.</li>
+          <li>훅 콜백 끝에서 <code>CallNextHookEx</code>를 호출해, 다른 프로그램의 입력을 막지 않습니다.</li>
+        </ul>
+        <figure class="code-figure"><figcaption><code>WindowController</code> · 일부 생략 · <a href="https://github.com/koseongboy/Drill_Game/blob/5543e6e18eecab97b0729d1262d2388b639e2637/Assets/1_Play/1_Scripts/Managers/Mono/WindowController.cs#L130-L143" target="_blank" rel="noopener">훅 콜백 ↗</a> · <a href="https://github.com/koseongboy/Drill_Game/blob/5543e6e18eecab97b0729d1262d2388b639e2637/Assets/1_Play/1_Scripts/Managers/Mono/WindowController.cs#L224-L233" target="_blank" rel="noopener">훅 등록 ↗</a> · <a href="https://github.com/koseongboy/Drill_Game/blob/5543e6e18eecab97b0729d1262d2388b639e2637/Assets/1_Play/1_Scripts/Managers/Mono/WindowController.cs#L334-L344" target="_blank" rel="noopener">입력 처리 ↗</a></figcaption><pre class="code-block"><code><span class="tok-c">// 전역 키보드 훅: 게임 창이 포커스를 잃어도 키 입력을 받는다</span>
+<span class="tok-k">private</span> IntPtr HookCallback(<span class="tok-k">int</span> nCode, IntPtr wParam, IntPtr lParam)
+{
+    <span class="tok-k">if</span> (nCode &gt;= 0 &amp;&amp; (wParam == (IntPtr)WM_KEYUP || wParam == (IntPtr)WM_SYSKEYUP))
+    {
+        <span class="tok-k">int</span> vkCode = Marshal.ReadInt32(lParam);
+        lock (queueLock) { keyEventQueue.Enqueue(vkCode); } <span class="tok-c">// 콜백에서는 큐에 넣기만</span>
+    }
+    <span class="tok-k">return</span> CallNextHookEx(hookId, nCode, wParam, lParam); <span class="tok-c">// 다른 프로그램으로 입력을 그대로 넘김</span>
+}
+
+<span class="tok-c">// 훅 등록 (마우스는 WH_MOUSE_LL로 같은 방식)</span>
+hookId = SetWindowsHookEx(WH_KEYBOARD_LL, keyboardProcPtr, hModule, 0);
+mouseHookId = SetWindowsHookEx(WH_MOUSE_LL, mouseProcPtr, hModule, 0);
+
+<span class="tok-c">// 메인 스레드: 큐에 쌓인 입력을 꺼내 횟수만 센다 (키 값은 쓰지 않음)</span>
+<span class="tok-k">void</span> Update()
+{
+    lock (queueLock)
+    {
+        <span class="tok-k">while</span> (keyEventQueue.Count &gt; 0)
+        {
+            keyEventQueue.Dequeue();
+            InputCountManager.Instance.addInputCount();
+        }
+    }
+}</code></pre></figure>
+      </div>
+      <div>
+        <h3>시설 시스템</h3>
+        <ul>
+          <li>드릴 · 채굴기 · 연구소 · 가공 시설 등을 공통 <code>FacilityEntity</code>에서 상속해, 각 시설이 자기 생산 동작만 구현하도록 했습니다.</li>
+          <li>시설은 데이터에 정의된 상대 좌표 목록으로 모양을 가지고 그리드에 배치되며, 배치할 때 시너지가 적용되는 칸을 미리 보여 줍니다.</li>
+          <li>배치한 시설이 동력을 받아 자동으로 생산하는 흐름을 구현했습니다.</li>
         </ul>
       </div>
       <div>
-        <h3>OS 레벨 백그라운드 키 입력 감지</h3>
+        <h3>엔진 성장 시스템 (기획 · 구현)</h3>
         <ul>
-          <li>Windows API의 저수준 키보드 훅(<code>SetWindowsHookEx(WH_KEYBOARD_LL)</code>, <code>LowLevelKeyboardProc</code>)으로, 게임 창이 포커스를 잃은 상태에서도 키 입력을 감지해 인게임 동력 자원으로 변환하는 시스템을 개발했습니다.</li>
+          <li>엔진이 레벨업할 때마다 칸 모양이 커지고 색깔별로 진화하는 성장 방식을 제안했습니다. 테트리스 블록처럼 모양이 다른 엔진을 판에 맞춰 배치하는 구조입니다.</li>
+          <li>엔진 형태 · 스프라이트 · 색상 변경을 구현하고, 엔진은 프리팹 하나와 스프라이트 두 장으로 표현해 종류가 늘어도 프리팹이 늘지 않게 했습니다.</li>
+          <li>키보드 입력 횟수가 공장의 동력이 되는 게임 루프와, 동력 장치와 생산 장치를 나누는 구조를 기획했습니다.</li>
         </ul>
       </div>
       <div>
-        <h3>GitHub 잔디 스타일 출석 달력</h3>
+        <h3>초기 CSV 데이터 파이프라인</h3>
         <ul>
-          <li>하루의 접속 시간과 키 입력량을 달력에 기록하고, GitHub 잔디 심기처럼 활동량에 따라 날짜 칸의 초록색 농도를 다르게 표시해 플레이 기록을 한눈에 볼 수 있게 했습니다.</li>
-        </ul>
-      </div>
-      <div>
-        <h3>게임 루프 기획</h3>
-        <ul>
-          <li>키보드 입력 횟수가 공장의 동력을 가속시키는 메커니즘을 기획했습니다.</li>
-          <li>동력 장치와 생산 장치를 분리하는 시스템을 기획했습니다.</li>
+          <li>헤더 줄을 키로 삼아 CSV 행을 <code>Dictionary</code>로 바꾸는 파서를 만들어, 컬럼이 바뀌어도 파서 코드를 고치지 않게 했습니다(<a href="https://github.com/koseongboy/Drill_Game/blob/874fd72/Assets/1_Play/5_Data/CSV_Data.cs" target="_blank" rel="noopener"><code>CSV_Data</code> ↗</a>). CSV와 스프라이트는 Addressables로 비동기 로드하고, 여러 테이블을 <code>Task.WhenAll</code>로 동시에 불러왔습니다.</li>
+          <li>이후 팀원이 CSV를 ScriptableObject로 자동 변환하는 방식으로 바꿨습니다.</li>
         </ul>
       </div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="s2">
-    <h2 id="s2" class="section-title">02 · OUTCOMES</h2>
-    <div class="prose-block">
-      <div>
-        <h3>데이터 구조화 및 자동화 역량</h3>
-        <ul>
-          <li>기획자가 관리하는 CSV 테이블을 게임 객체로 변환하는 파이프라인을 만들어, 기획 데이터 변경이 코드 수정 없이 반영되는 흐름을 구축했습니다.</li>
-          <li>문서화된 기획 가이드라인을 클라이언트 시스템으로 옮기는 작업을 맡았습니다.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" aria-labelledby="troubleshooting">
-    <h2 id="troubleshooting" class="section-title">03 · TROUBLESHOOTING</h2>
+  <section class="section" aria-labelledby="retrospective">
+    <h2 id="retrospective" class="section-title">02 · RETROSPECTIVE</h2>
     <div class="boss-log">
-      <h3>OS 레벨 전역 후킹의 보안 취약점 진단과 구조적 타협</h3>
+      <h3>전역 키 후킹의 보안 위험</h3>
       <dl>
-        <dt class="dt-encounter">ISSUE</dt><dd>백그라운드 입력 감지를 위해 <code>SetWindowsHookEx</code> 전역 후킹을 구현했으나, 수집된 키 코드가 메모리에 적재되면 클라이언트 변조로 키로거로 악용될 수 있고, 백신 프로그램에 악성 코드로 오탐지될 위험도 컸습니다.</dd>
-        <dt class="dt-action">DECISION</dt><dd>Raw Input API로의 전환도 검토했지만, 기한 내 입력 구조 재구축은 리스크가 크다고 판단했습니다. 대신 어떤 키가 눌렸는지 식별하는 로직을 완전히 삭제하고, 이벤트 발생 시 의미 없는 더미 데이터만 큐잉하도록 마스킹했습니다.</dd>
-        <dt class="dt-result">RESULT</dt><dd><strong>막은 것</strong> — 키 식별 로직을 삭제해, 어떤 키가 눌렸는지가 게임 메모리에 남지 않습니다. <strong>못 막은 것</strong> — 저수준 전역 훅 자체는 계속 동작하므로 백신 오탐지 위험은 그대로 남아 있습니다.</dd>
-        <dt class="dt-learned">LEARNED</dt><dd>Raw Input(<code>RIDEV_INPUTSINK</code>)도 백그라운드 키 입력을 받는다는 점은 같아서, API 교체만으로는 이 문제가 해결되지 않는다는 것을 확인했습니다. 수집하는 정보를 최소화하는 것이 핵심이라는 점을 배웠습니다.</dd>
+        <dt class="dt-encounter">CONTEXT</dt><dd>백그라운드 입력을 받기 위해 쓴 저수준 전역 훅은 키로거와 같은 API라, 백신에 악성 코드로 오탐지될 위험이 있습니다. 게임은 입력 횟수만 쓰고 어떤 키인지는 사용하지 않지만, 훅 콜백에서 키 코드(<code>vkCode</code>)를 읽어 큐에 넣는 코드가 남아 있어 키 값이 잠시 메모리에 올라옵니다. Raw Input(<code>RIDEV_INPUTSINK</code>)으로 바꾸는 것도 검토했지만, 백그라운드 키 입력을 받는다는 점은 같아 오탐 위험이 줄지 않고, 기한 안에 입력 구조를 다시 짜기도 어려워 훅을 유지했습니다.</dd>
+        <dt class="dt-action">IDEA</dt><dd>콜백에서 키 코드를 읽지 않고 입력 횟수만 늘리면(<code>Interlocked.Increment</code>), 큐도 필요 없고 키 값이 메모리에 올라오지 않습니다. 오탐 위험은 훅을 쓰는 한 남으므로, 배포한다면 실행 파일 코드 서명과 입력 수집 범위를 알리는 안내가 필요합니다.</dd>
+        <dt class="dt-learned">LEARNED</dt><dd>입력 API를 바꾸는 것보다, 기능에 필요한 정보가 무엇인지 먼저 정하고 그 이상은 읽지 않는 것이 보안 위험을 줄이는 방법이라는 것을 배웠습니다.</dd>
       </dl>
     </div>
   </section>

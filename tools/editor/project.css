@@ -1,0 +1,47 @@
+/* 프로젝트 편집 페이지 (로컬 편집기 전용) — write.css 위에 덧씌움 */
+.p-main { padding-bottom: 64px; gap: 20px; }
+.p-main code { font-size: 0.85em; }
+.p-card { border: 1px solid var(--line); background: var(--bg); padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
+.p-card-more { border-width: 1px; }
+.p-h { margin: 0; font-family: var(--font-display); font-size: 15px; font-weight: 700; letter-spacing: 0.06em; }
+.p-h small { font-family: var(--font-body); font-weight: 400; font-size: 13px; letter-spacing: 0; color: var(--muted); margin-left: 6px; }
+.p-big { font-size: 22px !important; font-weight: 700; }
+.p-col { display: flex; flex-direction: column; gap: 10px; }
+.p-check { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-2); cursor: pointer; }
+.p-check small { color: var(--muted); }
+.p-seg { display: inline-flex; border: 1px solid var(--line); width: max-content; }
+.p-seg label { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 14px; font-weight: 700; cursor: pointer; }
+.p-seg label + label { border-left: 1px solid var(--line); }
+.p-seg label:has(input:checked) { background: var(--accent); color: var(--on-accent); }
+.p-seg input { accent-color: var(--on-accent); }
+.p-linkbtn { display: inline-flex; align-items: center; text-decoration: none; }
+.w-field input:disabled { opacity: 0.5; }
+
+.p-list { display: flex; flex-direction: column; gap: 10px; }
+.p-list:empty { display: none; }
+.p-row { border: 1px solid var(--line); background: var(--surface); padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+.p-row .p-row { background: var(--bg); }
+.p-row-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.p-row-head .p-num { font-family: var(--font-display); font-weight: 700; color: var(--accent); min-width: 2ch; }
+.p-row-head .w-field { flex: 1 1 240px; }
+.p-inline { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: flex-end; }
+.p-inline > .w-field { flex: 1 1 200px; }
+.p-tools { display: inline-flex; gap: 4px; margin-left: auto; }
+.p-icon { min-width: 36px; min-height: 36px; padding: 0 8px; font: inherit; font-size: 14px; cursor: pointer; background: var(--bg); color: var(--text-2); border: 1px solid var(--line); }
+.p-icon:hover { color: var(--accent); border-color: var(--accent); }
+.p-icon.danger:hover { color: var(--danger); border-color: var(--danger); }
+.p-icon:disabled { opacity: 0.35; cursor: default; }
+.p-sub { font-size: 13px; font-weight: 700; color: var(--text-2); margin: 2px 0 -4px; }
+.p-add { align-self: flex-start; }
+.p-row .p-add { min-height: 34px; font-size: 13px; padding: 0 12px; }
+.p-main-summary { border: 1px dashed var(--line); padding: 8px 12px; }
+.p-main-summary summary { cursor: pointer; font-size: 13px; font-weight: 700; color: var(--text-2); }
+.p-main-summary[open] { display: flex; flex-direction: column; gap: 10px; }
+/* write.css 의 .w-field input 스타일이 체크박스·라디오에 붙지 않게 */
+.w-field .p-seg input, .p-check input, .w-field input[type="checkbox"] { width: auto; min-height: 0; padding: 0; border: 0; margin: 0; }
+.p-main-summary[hidden] { display: none; }
+/* 세로로 쌓이는 곳에서는 write.css 의 flex-basis(180px)가 높이로 적용되지 않게 */
+.p-card > .w-field, .p-row > .w-field, .p-main-summary > .w-field, .w-more-body > .w-field { flex: none; }
+.p-linkbtn[hidden] { display: none; }
+.w-field select { font: inherit; font-size: 15px; color: var(--text); background: var(--deep); border: 2px solid var(--border); padding: 8px 10px; min-height: 42px; }
+.w-field select:focus { outline: none; border-color: var(--accent); }

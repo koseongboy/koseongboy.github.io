@@ -1,0 +1,108 @@
+{
+  "status": "done",
+  "title": "Drill Idle",
+  "subtitle": "",
+  "tagline": "나의 작업(키 입력)이 공장의 성장으로 연결되는 데스크탑 방치형 게임",
+  "note": "",
+  "description": "키 입력이 공장의 성장으로 이어지는 데스크탑 방치형 게임 Drill Idle — 전역 키보드 · 마우스 후킹, 시설 · 엔진 시스템, 엔진 성장 기획.",
+  "thumbnail": {
+    "src": "assets/img/drill-idle-desktop.jpg",
+    "alt": "Drill Idle 플레이 화면: 코드 편집기를 띄워 둔 바탕화면 오른쪽에 세로로 긴 Drill Idle 창이 떠 있고, 그리드 위에 테트리스 블록 모양의 색깔별 엔진과 시설이 배치되어 있음",
+    "top": false,
+    "width": 1600,
+    "height": 901
+  },
+  "period": {
+    "start": "2025.09",
+    "end": "2025.12"
+  },
+  "team": "3인 (클라이언트/기획 3인)",
+  "role": "클라이언트 개발 · 엔진 성장 기획",
+  "stack": [
+    "Unity 2D",
+    "C#",
+    "Windows API",
+    "Addressables"
+  ],
+  "info": [],
+  "links": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/koseongboy/Drill_Game"
+    }
+  ],
+  "sections": [
+    {
+      "title": "CORE SYSTEMS",
+      "stats": [],
+      "blocks": [
+        {
+          "heading": "OS 레벨 백그라운드 입력 감지",
+          "items": [
+            "Windows API 저수준 훅(`SetWindowsHookEx`의 `WH_KEYBOARD_LL`, `WH_MOUSE_LL`)으로, 게임 창이 포커스를 잃은 상태에서도 키보드 · 마우스 입력을 받아 공장의 동력으로 바꿨습니다.",
+            "훅 콜백에서는 입력을 큐에 넣기만 하고 바로 다음 훅으로 넘긴 뒤, `Update()`에서 큐를 비우며 입력 횟수를 셉니다. 콜백이 오래 걸리면 시스템 전체의 입력이 느려지기 때문입니다.",
+            "훅 콜백 끝에서 `CallNextHookEx`를 호출해, 다른 프로그램의 입력을 막지 않습니다."
+          ],
+          "code": "// 전역 키보드 훅: 게임 창이 포커스를 잃어도 키 입력을 받는다\nprivate IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)\n{\n    if (nCode >= 0 && (wParam == (IntPtr)WM_KEYUP || wParam == (IntPtr)WM_SYSKEYUP))\n    {\n        int vkCode = Marshal.ReadInt32(lParam);\n        lock (queueLock) { keyEventQueue.Enqueue(vkCode); } // 콜백에서는 큐에 넣기만\n    }\n    return CallNextHookEx(hookId, nCode, wParam, lParam); // 다른 프로그램으로 입력을 그대로 넘김\n}\n\n// 훅 등록 (마우스는 WH_MOUSE_LL로 같은 방식)\nhookId = SetWindowsHookEx(WH_KEYBOARD_LL, keyboardProcPtr, hModule, 0);\nmouseHookId = SetWindowsHookEx(WH_MOUSE_LL, mouseProcPtr, hModule, 0);\n\n// 메인 스레드: 큐에 쌓인 입력을 꺼내 횟수만 센다 (키 값은 쓰지 않음)\nvoid Update()\n{\n    lock (queueLock)\n    {\n        while (keyEventQueue.Count > 0)\n        {\n            keyEventQueue.Dequeue();\n            InputCountManager.Instance.addInputCount();\n        }\n    }\n}",
+          "codeNote": "`WindowController` · 일부 생략 · [훅 콜백](https://github.com/koseongboy/Drill_Game/blob/5543e6e18eecab97b0729d1262d2388b639e2637/Assets/1_Play/1_Scripts/Managers/Mono/WindowController.cs#L130-L143) · [훅 등록](https://github.com/koseongboy/Drill_Game/blob/5543e6e18eecab97b0729d1262d2388b639e2637/Assets/1_Play/1_Scripts/Managers/Mono/WindowController.cs#L224-L233) · [입력 처리](https://github.com/koseongboy/Drill_Game/blob/5543e6e18eecab97b0729d1262d2388b639e2637/Assets/1_Play/1_Scripts/Managers/Mono/WindowController.cs#L334-L344)"
+        },
+        {
+          "heading": "시설 시스템",
+          "items": [
+            "드릴 · 채굴기 · 연구소 · 가공 시설 등을 공통 `FacilityEntity`에서 상속해, 각 시설이 자기 생산 동작만 구현하도록 했습니다.",
+            "시설은 데이터에 정의된 상대 좌표 목록으로 모양을 가지고 그리드에 배치되며, 배치할 때 시너지가 적용되는 칸을 미리 보여 줍니다.",
+            "배치한 시설이 동력을 받아 자동으로 생산하는 흐름을 구현했습니다."
+          ]
+        },
+        {
+          "heading": "엔진 성장 시스템 (기획 · 구현)",
+          "items": [
+            "엔진이 레벨업할 때마다 칸 모양이 커지고 색깔별로 진화하는 성장 방식을 제안했습니다. 테트리스 블록처럼 모양이 다른 엔진을 판에 맞춰 배치하는 구조입니다.",
+            "엔진 형태 · 스프라이트 · 색상 변경을 구현하고, 엔진은 프리팹 하나와 스프라이트 두 장으로 표현해 종류가 늘어도 프리팹이 늘지 않게 했습니다.",
+            "키보드 입력 횟수가 공장의 동력이 되는 게임 루프와, 동력 장치와 생산 장치를 나누는 구조를 기획했습니다."
+          ]
+        },
+        {
+          "heading": "초기 CSV 데이터 파이프라인",
+          "items": [
+            "헤더 줄을 키로 삼아 CSV 행을 `Dictionary`로 바꾸는 파서를 만들어, 컬럼이 바뀌어도 파서 코드를 고치지 않게 했습니다([`CSV_Data`](https://github.com/koseongboy/Drill_Game/blob/874fd72/Assets/1_Play/5_Data/CSV_Data.cs)). CSV와 스프라이트는 Addressables로 비동기 로드하고, 여러 테이블을 `Task.WhenAll`로 동시에 불러왔습니다.",
+            "이후 팀원이 CSV를 ScriptableObject로 자동 변환하는 방식으로 바꿨습니다."
+          ]
+        }
+      ]
+    }
+  ],
+  "troubleshooting": {
+    "title": "TROUBLESHOOTING",
+    "items": []
+  },
+  "retrospective": [
+    {
+      "title": "전역 키 후킹의 보안 위험",
+      "context": "백그라운드 입력을 받기 위해 쓴 저수준 전역 훅은 키로거와 같은 API라, 백신에 악성 코드로 오탐지될 위험이 있습니다. 게임은 입력 횟수만 쓰고 어떤 키인지는 사용하지 않지만, 훅 콜백에서 키 코드(`vkCode`)를 읽어 큐에 넣는 코드가 남아 있어 키 값이 잠시 메모리에 올라옵니다. Raw Input(`RIDEV_INPUTSINK`)으로 바꾸는 것도 검토했지만, 백그라운드 키 입력을 받는다는 점은 같아 오탐 위험이 줄지 않고, 기한 안에 입력 구조를 다시 짜기도 어려워 훅을 유지했습니다.",
+      "idea": "콜백에서 키 코드를 읽지 않고 입력 횟수만 늘리면(`Interlocked.Increment`), 큐도 필요 없고 키 값이 메모리에 올라오지 않습니다. 오탐 위험은 훅을 쓰는 한 남으므로, 배포한다면 실행 파일 코드 서명과 입력 수집 범위를 알리는 안내가 필요합니다.",
+      "learned": "입력 API를 바꾸는 것보다, 기능에 필요한 정보가 무엇인지 먼저 정하고 그 이상은 읽지 않는 것이 보안 위험을 줄이는 방법이라는 것을 배웠습니다."
+    }
+  ],
+  "scope": {
+    "mine": [
+      "전역 키보드 · 마우스 후킹과 창 제어",
+      "시설 시스템 (자동 생산, 시너지 칸 미리보기)",
+      "엔진 시스템과 엔진 성장 기획",
+      "초기 CSV 파서 · Addressables 비동기 로딩"
+    ],
+    "team": [
+      "팀원 A — UI 전반, CSV → ScriptableObject 자동 변환, 출석 달력",
+      "팀원 B — 틱마다 메인 엔진과 맵에 배치된 엔진이 작동하는 코어 시스템"
+    ],
+    "together": [
+      "기획 데이터 CSV 구조"
+    ]
+  },
+  "skills": [],
+  "card": {
+    "summary": "키보드 · 마우스 입력이 공장의 동력이 되는 데스크탑 방치형 게임. Windows API 저수준 훅으로 게임 창 밖의 입력을 받는 기능과 시설 · 엔진 시스템을 구현하고, 엔진이 레벨업마다 모양과 색이 바뀌는 성장 방식을 기획했습니다.",
+    "keywords": "Windows API · Addressables",
+    "team": "3인 (클라이언트/기획)"
+  }
+}
