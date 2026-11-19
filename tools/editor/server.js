@@ -192,8 +192,10 @@ async function gitStatus() {
       } catch {}
     } else if (untracked && !p.startsWith('posts/') && !p.startsWith('assets/img/posts/')) {
       // 글/글 이미지 말고 새로 생긴 파일은 직접 확인하고 체크하도록
-      suggested = IMAGE_EXT.has(path.extname(p).toLowerCase()) ? isReferenced(p) : false;
-      if (!suggested) note = '어느 페이지에서도 쓰지 않는 새 파일';
+      // 이미지·스크립트·스타일 등 사이트 자원은 페이지에서 쓰이면 기본 체크
+      const isAsset = p.startsWith('assets/') || IMAGE_EXT.has(path.extname(p).toLowerCase());
+      suggested = isAsset ? isReferenced(p) : false;
+      if (!suggested) note = isAsset ? '어느 페이지에서도 쓰지 않는 새 파일' : '새 파일 — 올릴지 직접 확인하세요';
     }
     files.push({ path: p, code, kind, suggested, note });
   }
