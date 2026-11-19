@@ -4,3 +4,6 @@ references/
 _site/
 .DS_Store
 Thumbs.db
+
+# 개인 작업 문서 (피드백 등) — 저장소에 올리지 않음
+docs/
