@@ -100,3 +100,7 @@
 .ed-git-del { background: #fde8e6; color: #b3261e; }
 .ed-git-path { min-width: 0; overflow-wrap: anywhere; display: flex; flex-direction: column; }
 .ed-git-path small { color: #b3261e; font-size: 12px; }
+
+/* 서버 끄기 */
+.ed-btn-off { color: #b3261e; }
+.ed-btn-off:hover { background: #fde8e6; }

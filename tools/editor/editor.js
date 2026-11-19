@@ -151,6 +151,19 @@
     ? h('a', { class: 'ed-btn ed-btn-link', href: '/__editor/write?slug=' + encodeURIComponent(POST_SLUG) }, '✎ 이 글 수정')
     : h('a', { class: 'ed-btn ed-btn-link', href: '/__editor/write' }, '✍ 새 글 쓰기');
   if (IS_POST) editBtn.hidden = true;
+  const offBtn = h('button', { type: 'button', class: 'ed-btn ed-btn-off', title: '편집 서버(edit.cmd) 끄기', 'aria-label': '편집 서버 끄기', onclick: () => shutdown() }, '⏻ 끄기');
+  let serverOff = false;
+  async function shutdown() {
+    const msg = dirty
+      ? '저장 안 한 수정이 있어요. 저장하지 않고 편집 서버를 끌까요?'
+      : '편집 서버(edit.cmd)를 끌까요? 다시 켜려면 edit.cmd 를 실행해야 해요.';
+    if (!confirm(msg)) return;
+    serverOff = true;
+    try { await fetch('/__editor/shutdown', { method: 'POST' }); } catch {}
+    dirty = false;
+    toolbar.textContent = '';
+    toolbar.append(h('strong', { class: 'ed-title' }, '편집 서버를 껐어요.'), h('span', { class: 'ed-status' }, '다시 켜려면 edit.cmd 를 실행하세요. 이 탭은 닫아도 돼요.'));
+  }
   const publishBtn = h('button', { type: 'button', class: 'ed-btn ed-btn-git', title: '바뀐 파일을 GitHub에 올려 사이트에 반영', onclick: () => openPublish() }, '⇪ 커밋 & 푸시');
   const toolbar = h('div', { class: 'ed-toolbar', 'data-editor': '', role: 'toolbar', 'aria-label': '편집기' },
     h('div', { class: 'ed-segmented', role: 'group', 'aria-label': '모드' }, viewBtn, editBtn),
@@ -158,6 +171,7 @@
     liveEl,
     writeLink,
     publishBtn,
+    offBtn,
     h('span', { class: 'ed-edit-only' },
       status,
       undoBtn,
@@ -310,7 +324,7 @@
     if (!window.EventSource) { liveEl.textContent = '실시간 반영 불가'; return; }
     const es = new EventSource('/__editor/events');
     es.addEventListener('open', () => { liveEl.textContent = '● 실시간 반영'; liveEl.classList.add('ed-live-on'); });
-    es.addEventListener('error', () => { liveEl.textContent = '○ 서버 연결 끊김'; liveEl.classList.remove('ed-live-on'); });
+    es.addEventListener('error', () => { if (serverOff) { es.close(); return; } liveEl.textContent = '○ 서버 연결 끊김'; liveEl.classList.remove('ed-live-on'); });
     es.addEventListener('change', (e) => { try { onFilesChanged(JSON.parse(e.data)); } catch {} });
   })();
 
@@ -556,6 +570,7 @@
     const clone = ROOT_EL.cloneNode(true);
     clone.querySelectorAll('[data-editor]').forEach((n) => n.remove());
     clone.removeAttribute('data-theme');   // 다크/라이트 선택은 방문자 브라우저 상태 — 파일에 저장하지 않음
+    clone.removeAttribute('data-resume');  // 이력 접기 상태도 마찬가지
     clone.querySelectorAll('link[rel="stylesheet"][href*="?v="]').forEach((l) => l.setAttribute('href', l.getAttribute('href').replace(/\?v=\d+$/, '')));
     clone.querySelectorAll('[contenteditable], [spellcheck]').forEach((n) => { n.removeAttribute('contenteditable'); n.removeAttribute('spellcheck'); });
     const all = [clone, ...clone.querySelectorAll('[class]')];

@@ -243,3 +243,33 @@ code { font-family: var(--font-mono); font-size: 0.88em; background: var(--surfa
   html { scroll-behavior: auto; }
   .btn { transition: none; }
 }
+
+/* ---------- resume (포트폴리오 이력, 접기 가능) ---------- */
+.resume-toggle {
+  min-height: 40px; padding: 0 16px; cursor: pointer;
+  font-family: var(--font-display); font-size: 14px; font-weight: 700;
+  background: transparent; color: var(--text); border: 2px solid var(--text);
+}
+.resume-toggle:hover { background: var(--text); color: var(--bg); }
+.resume-toggle-open { display: none; }
+:root[data-resume="closed"] .resume-toggle-open { display: inline; }
+:root[data-resume="closed"] .resume-toggle-close { display: none; }
+:root[data-resume="closed"] .resume-body { display: none; }
+:root[data-resume="closed"] .resume { padding-bottom: 40px; }
+.resume-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 40px 56px; }
+.resume-group { display: flex; flex-direction: column; gap: 12px; }
+.resume-label { margin: 0; font-size: 14px; font-weight: 700; color: var(--muted); }
+.resume-list { margin: 0; padding: 0; list-style: none; }
+.resume-list li { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 4px 20px; padding: 14px 0; border-top: 1px solid var(--line); }
+.resume-date { font-family: var(--font-display); font-size: 15px; font-weight: 500; color: var(--muted); padding-top: 2px; }
+.resume-main { display: flex; flex-direction: column; gap: 4px; }
+.resume-main strong { font-size: 18px; }
+.resume-main em { font-style: normal; color: var(--accent); margin-left: 4px; }
+.resume-main span { font-size: 15px; line-height: 1.6; color: var(--text-2); }
+@media (max-width: 520px) {
+  .resume-list li { grid-template-columns: minmax(0, 1fr); }
+}
+@media print {
+  :root[data-resume="closed"] .resume-body { display: grid; }
+  .resume-toggle { display: none; }
+}

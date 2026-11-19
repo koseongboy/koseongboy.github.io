@@ -27,6 +27,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/style.css">
 <script src="../assets/js/theme.js" defer></script>
+<script>try{var r=new URLSearchParams(location.search).get('resume');if(r==='closed'||r==='open')localStorage.setItem('resume',r);if(localStorage.getItem('resume')==='closed')document.documentElement.setAttribute('data-resume','closed')}catch(e){}</script>
+<script src="../assets/js/resume.js" defer></script>
 </head>
 <body>
 
@@ -35,6 +37,7 @@
     <a href="#top" class="logo">KO SEONGHYEON</a>
     <div class="nav-links">
       <a href="../">Blog</a>
+      <a href="#resume">Resume</a>
       <a href="#work">Work</a>
       <a href="#troubleshooting">Troubleshooting</a>
       <a href="#skills">Skills</a>
@@ -58,6 +61,44 @@
         <a href="#work" class="btn btn-primary">Selected Work ↓</a>
         <a href="https://github.com/koseongboy" class="btn btn-secondary" target="_blank" rel="noopener">GitHub ↗</a>
         <a href="../" class="btn btn-secondary">Dev Blog →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="resume" class="section resume" aria-labelledby="resume-title">
+    <div class="section-head">
+      <h2 id="resume-title" class="section-title">Resume</h2>
+      <button type="button" class="resume-toggle" aria-controls="resume-body" aria-expanded="true"><span class="resume-toggle-close">이력 접기 ↑</span><span class="resume-toggle-open">이력 펼치기 ↓</span></button>
+    </div>
+    <div id="resume-body" class="resume-body">
+      <div class="resume-group">
+        <h3 class="resume-label">학력</h3>
+        <ul class="resume-list">
+          <li><span class="resume-date">2021.03 — 2028.08</span><div class="resume-main"><strong>중앙대학교 소프트웨어학부</strong><span>졸업 예정 · 학점 3.5 / 4.5</span></div></li>
+        </ul>
+      </div>
+      <div class="resume-group">
+        <h3 class="resume-label">자격 · 어학</h3>
+        <ul class="resume-list">
+          <li><span class="resume-date">2026.10</span><div class="resume-main"><strong>TOPCIT Level 4 <em>635점</em></strong><span>정보통신기획평가원(IITP)</span></div></li>
+          <li><span class="resume-date">2026.03</span><div class="resume-main"><strong>TOEIC <em>730점</em></strong><span>영어</span></div></li>
+        </ul>
+      </div>
+      <div class="resume-group">
+        <h3 class="resume-label">IT 활용능력</h3>
+        <ul class="resume-list">
+          <li><span class="resume-date">고급</span><div class="resume-main"><strong>C#</strong><span>유니티 환경에서 게임 클라이언트 및 UI 로직 구현에 능숙함.</span></div></li>
+          <li><span class="resume-date">고급</span><div class="resume-main"><strong>Unity</strong><span>3D(시뮬레이션, LCG 장르) / 2D(플랫포머, Idle 장르) 게임 개발 경험 보유.</span></div></li>
+          <li><span class="resume-date">중급</span><div class="resume-main"><strong>Python</strong><span>코딩 테스트 및 알고리즘 문제 해결을 위해 능숙하게 사용함.</span></div></li>
+          <li><span class="resume-date">중급</span><div class="resume-main"><strong>Git</strong><span>기능 단위의 브랜치 분기 및 관리, 병합을 통해 안정적인 소스코드 버전 관리 및 협업 파이프라인 유지 가능.</span></div></li>
+          <li><span class="resume-date">초급</span><div class="resume-main"><strong>C++</strong><span>C# 기반으로 설계하던 객체지향 게임 로직을 C++로 전환하여 구현하는 역량을 기르고 있음.</span></div></li>
+        </ul>
+      </div>
+      <div class="resume-group">
+        <h3 class="resume-label">병역</h3>
+        <ul class="resume-list">
+          <li><span class="resume-date">—</span><div class="resume-main"><strong>군필</strong></div></li>
+        </ul>
       </div>
     </div>
   </section>

@@ -305,6 +305,16 @@ async function handleApi(req, res, url) {
     return send(res, 200, { path: rel });
   }
 
+  /* ---------- 서버 끄기 (편집 툴바의 ⏻ 버튼) ---------- */
+  if (req.method === 'POST' && url.pathname === '/__editor/shutdown') {
+    send(res, 200, { ok: true });
+    console.log('\n  편집 화면에서 서버를 껐어요. 다시 켜려면 edit.cmd 를 실행하세요.\n');
+    for (const c of sseClients) { try { c.end(); } catch {} }
+    server.close();
+    setTimeout(() => process.exit(0), 300);
+    return;
+  }
+
   /* ---------- 포트폴리오 프로젝트 ---------- */
   if (req.method === 'GET' && (url.pathname === '/__editor/project' || url.pathname === '/__editor/project/')) {
     return send(res, 200, fs.readFileSync(path.join(EDITOR_DIR, 'project.html')), MIME['.html']);
