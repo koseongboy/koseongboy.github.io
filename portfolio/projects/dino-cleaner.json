@@ -6,11 +6,11 @@
   "note": "",
   "description": "공룡을 세차하는 3D 게임 Dino Cleaner — 플레이어 애니메이션 · IK, Strategy 패턴 장비 시스템, ASMDEF 패키지 분리.",
   "thumbnail": {
-    "src": "",
-    "alt": "",
+    "src": "assets/img/dino-cleaner-play.jpg",
+    "alt": "Dino Cleaner 개발 중인 Unity 에디터 Play 모드 화면: 원시인 캐릭터가 물총 청소기를 들고 공중의 상자를 향해 물줄기를 쏘고 있고, 팔이 조준 방향을 따라 움직임",
     "top": false,
-    "width": 0,
-    "height": 0
+    "width": 1000,
+    "height": 562
   },
   "period": {
     "start": "2026.09",
