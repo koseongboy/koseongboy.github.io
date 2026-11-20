@@ -5,14 +5,32 @@
   "tagline": "건물에 거미줄을 걸어 스윙하며 도시를 가로지르는 VR 게임",
   "note": "",
   "description": "거미줄 스윙 VR 게임 VR Web Swing — 맵 기믹 콘텐츠 개발과, AI 에이전트(Claude Code)에게 구현을 맡기고 기준 · 검증은 직접 하는 작업 방식.",
-  "thumbnail": null,
-  "period": { "start": "2026.10", "end": "" },
+  "thumbnail": {
+    "src": "assets/img/vr-web-swing-play.jpg",
+    "alt": "VR Web Swing 플레이 화면: 유리 외벽 빌딩 사이로 뻗은 통로 위에 발판과 기믹이 이어지고, 화면 가운데 조준점과 오른쪽 위 이동 거리 HUD가 보임",
+    "top": false,
+    "width": 889,
+    "height": 500
+  },
+  "period": {
+    "start": "2026.10",
+    "end": ""
+  },
   "team": "4인 (콘텐츠 1, PM 1, 기반 시스템 1, 실기기 개발 · 테스트 1)",
   "role": "콘텐츠 개발 — 맵 기믹 · 난이도",
-  "stack": ["Unity 3D", "C#", "XR Interaction Toolkit", "OpenXR", "Claude Code"],
+  "stack": [
+    "Unity 3D",
+    "C#",
+    "XR Interaction Toolkit",
+    "OpenXR",
+    "Claude Code"
+  ],
   "info": [],
   "links": [
-    { "label": "GitHub (내 작업 브랜치)", "url": "https://github.com/kjh99660/CAU_VRProject_2026_2/tree/koseongboy" }
+    {
+      "label": "GitHub (내 작업 브랜치)",
+      "url": "https://github.com/kjh99660/CAU_VRProject_2026_2/tree/koseongboy"
+    }
   ],
   "sections": [
     {
