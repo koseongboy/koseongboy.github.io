@@ -149,7 +149,7 @@ const THEME_INIT = `<script>try{var t=localStorage.getItem('theme');if(t==='dark
 // 썸네일에 마우스를 올리면 화면이 서서히 까맣게 가려지는 효과 (thumbnail.blackout = 가려진 뒤 보일 문구)
 function blackoutWrap(t, img) {
   if (!t.blackout) return img;
-  return `<div class="blackout-thumb">${img}<span class="blackout-hint" aria-hidden="true"><span class="hint-hover">마우스를 올려 보세요</span><span class="hint-touch">길게 눌러 보세요</span></span><span class="blackout-cover" aria-hidden="true"><span>${esc(t.blackout)}</span></span></div>`;
+  return `<div class="blackout-thumb">${img}<span class="blackout-hint" aria-hidden="true"><span class="hint-hover">마우스를 올려 보세요</span><span class="hint-touch">길게 눌러 보세요</span></span><span class="blackout-cover" aria-hidden="true"><span class="blackout-badge">SPOILER</span><span>${esc(t.blackout)}</span></span></div>`;
 }
 
 function detailPage(p, all) {
