@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&amp;family=Space+Grotesk:wght@400;500;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/css/style.css?v=91a35352">
+<link rel="stylesheet" href="../../assets/css/style.css?v=d604d2ad">
 <script src="../../assets/js/theme.js" defer></script>
 <script src="../../assets/js/diagram.js" type="module"></script>
 </head>
@@ -110,9 +110,7 @@
       <div>
         <h3>플레이어 애니메이션 상태 설계</h3>
         <ul>
-          <li>처음에는 필요한 애니메이션 목록을 뽑기 위해 상태 다이어그램을 그려 체크리스트로 썼고, 구현하면서 아래 구조로 정리했습니다.</li>
-          <li>자세(서기 · 앉기 · 엎드리기)마다 Idle과 Walk를 <code>Speed</code> 값으로 섞는 블렌드 트리로 합치고, 자세 전환은 <code>Stance</code> 정수, 점프는 <code>IsGrounded</code>로 분기했습니다. 점프는 Jump Up → Jump Loop → Jump Down 순서로 이어집니다.</li>
-          <li>이동 중에는 전환 동작 없이 바로 자세가 바뀌도록 <code>Speed</code> 조건으로 나눴고, 조준 자세(<code>IsFiring</code>)는 상체 마스크를 씌운 UpperBody 레이어로 분리해 하체 자세와 따로 재생되게 했습니다.</li>
+          <li>먼저 상태 머신 다이어그램을 그려 필요한 애니메이션 목록을 뽑았고, 실제 애니메이터 컨트롤러를 구성할 때도 이 다이어그램을 기준으로 삼았습니다.</li>
         </ul>
         <figure class="diagram"><pre class="mermaid">stateDiagram-v2
     state &quot;Stand · Idle ↔ Walk&quot; as Stand
@@ -180,6 +178,7 @@
     </div>
   </section>
 </main>
+<script>document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.jump-link');if(!a)return;var t=document.getElementById(a.getAttribute('href').slice(1));if(!t)return;t.classList.remove('flash');void t.offsetWidth;t.classList.add('flash');setTimeout(function(){t.classList.remove('flash')},2400)});</script>
 
 <footer class="site-footer"><p class="copyright">© 2026 Ko Seonghyeon</p></footer>
 </body>

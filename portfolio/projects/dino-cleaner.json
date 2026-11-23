@@ -47,9 +47,7 @@
         {
           "heading": "플레이어 애니메이션 상태 설계",
           "items": [
-            "처음에는 필요한 애니메이션 목록을 뽑기 위해 상태 다이어그램을 그려 체크리스트로 썼고, 구현하면서 아래 구조로 정리했습니다.",
-            "자세(서기 · 앉기 · 엎드리기)마다 Idle과 Walk를 `Speed` 값으로 섞는 블렌드 트리로 합치고, 자세 전환은 `Stance` 정수, 점프는 `IsGrounded`로 분기했습니다. 점프는 Jump Up → Jump Loop → Jump Down 순서로 이어집니다.",
-            "이동 중에는 전환 동작 없이 바로 자세가 바뀌도록 `Speed` 조건으로 나눴고, 조준 자세(`IsFiring`)는 상체 마스크를 씌운 UpperBody 레이어로 분리해 하체 자세와 따로 재생되게 했습니다."
+            "먼저 상태 머신 다이어그램을 그려 필요한 애니메이션 목록을 뽑았고, 실제 애니메이터 컨트롤러를 구성할 때도 이 다이어그램을 기준으로 삼았습니다."
           ],
           "diagram": "stateDiagram-v2\n    state \"Stand · Idle ↔ Walk\" as Stand\n    state \"Kneel · Idle ↔ Walk\" as Kneel\n    state \"Prone · Idle ↔ Walk\" as Prone\n    state \"Stand To Kneel\" as S2K\n    state \"Kneel To Prone\" as K2P\n    state \"Prone To Kneel\" as P2K\n    state \"Kneel To Stand\" as K2S\n    state \"Jump Up\" as JU\n    state \"Jump Loop\" as JL\n    state \"Jump Down\" as JD\n    [*] --> Stand\n    Stand --> S2K : Ctrl\n    S2K --> Kneel\n    Kneel --> K2P : Ctrl\n    K2P --> Prone\n    Kneel --> K2S : Space\n    Prone --> P2K : Ctrl / Space\n    P2K --> K2S\n    K2S --> Stand\n    Stand --> JU : Space\n    JU --> JL\n    JL --> JD : 착지\n    JD --> Stand"
         },
@@ -127,7 +125,7 @@
     }
   ],
   "card": {
-    "summary": "공룡이 이동 수단인 세계에서 공룡을 세차하는 게임. 플레이어 애니메이션 · IK와 청소기 · 사다리 · 비행용 공룡 등 장비 시스템을 맡고 있습니다.",
+    "summary": "공룡이 이동 수단인 세계에서 공룡을 세차하는 게임",
     "keywords": "Unity 3D · Input System · ASMDEF · IK",
     "team": "4인 (클라이언트 3, 기획/PM 1)"
   }

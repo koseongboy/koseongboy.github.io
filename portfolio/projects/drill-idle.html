@@ -24,8 +24,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&amp;family=Space+Grotesk:wght@400;500;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/css/style.css?v=91a35352">
+<link rel="stylesheet" href="../../assets/css/style.css?v=d604d2ad">
 <script src="../../assets/js/theme.js" defer></script>
+<script src="../../assets/js/diagram.js" type="module"></script>
 </head>
 <body data-page="project" data-slug="drill-idle">
 
@@ -101,37 +102,14 @@
       <div>
         <h3>OS 레벨 백그라운드 입력 감지</h3>
         <ul>
-          <li>Windows API 저수준 훅(<code>SetWindowsHookEx</code>의 <code>WH_KEYBOARD_LL</code>, <code>WH_MOUSE_LL</code>)으로, 게임 창이 포커스를 잃은 상태에서도 키보드 · 마우스 입력을 받아 공장의 동력으로 바꿨습니다.</li>
-          <li>훅 콜백에서는 입력을 큐에 넣기만 하고 바로 다음 훅으로 넘긴 뒤, <code>Update()</code>에서 큐를 비우며 입력 횟수를 셉니다. 콜백이 오래 걸리면 시스템 전체의 입력이 느려지기 때문입니다.</li>
-          <li>훅 콜백 끝에서 <code>CallNextHookEx</code>를 호출해, 다른 프로그램의 입력을 막지 않습니다.</li>
+          <li>게임 창이 포커스를 잃은 상태에서도 키보드 · 마우스 입력을 받아 공장의 동력으로 바꿨습니다.</li>
+          <li>훅 콜백에서는 입력을 대기 큐에 넣기만 하고 바로 다음 프로그램으로 넘겨, 시스템 전체의 입력이 느려지거나 막히지 않게 했습니다. <a href="https://github.com/koseongboy/Drill_Game/blob/5543e6e18eecab97b0729d1262d2388b639e2637/Assets/1_Play/1_Scripts/Managers/Mono/WindowController.cs#L130-L143" target="_blank" rel="noopener">코드 ↗</a></li>
         </ul>
-        <figure class="code-figure"><figcaption><code>WindowController</code> · 일부 생략 · <a href="https://github.com/koseongboy/Drill_Game/blob/5543e6e18eecab97b0729d1262d2388b639e2637/Assets/1_Play/1_Scripts/Managers/Mono/WindowController.cs#L130-L143" target="_blank" rel="noopener">훅 콜백 ↗</a> · <a href="https://github.com/koseongboy/Drill_Game/blob/5543e6e18eecab97b0729d1262d2388b639e2637/Assets/1_Play/1_Scripts/Managers/Mono/WindowController.cs#L224-L233" target="_blank" rel="noopener">훅 등록 ↗</a> · <a href="https://github.com/koseongboy/Drill_Game/blob/5543e6e18eecab97b0729d1262d2388b639e2637/Assets/1_Play/1_Scripts/Managers/Mono/WindowController.cs#L334-L344" target="_blank" rel="noopener">입력 처리 ↗</a></figcaption><pre class="code-block"><code><span class="tok-c">// 전역 키보드 훅: 게임 창이 포커스를 잃어도 키 입력을 받는다</span>
-<span class="tok-k">private</span> IntPtr HookCallback(<span class="tok-k">int</span> nCode, IntPtr wParam, IntPtr lParam)
-{
-    <span class="tok-k">if</span> (nCode &gt;= 0 &amp;&amp; (wParam == (IntPtr)WM_KEYUP || wParam == (IntPtr)WM_SYSKEYUP))
-    {
-        <span class="tok-k">int</span> vkCode = Marshal.ReadInt32(lParam);
-        lock (queueLock) { keyEventQueue.Enqueue(vkCode); } <span class="tok-c">// 콜백에서는 큐에 넣기만</span>
-    }
-    <span class="tok-k">return</span> CallNextHookEx(hookId, nCode, wParam, lParam); <span class="tok-c">// 다른 프로그램으로 입력을 그대로 넘김</span>
-}
-
-<span class="tok-c">// 훅 등록 (마우스는 WH_MOUSE_LL로 같은 방식)</span>
-hookId = SetWindowsHookEx(WH_KEYBOARD_LL, keyboardProcPtr, hModule, 0);
-mouseHookId = SetWindowsHookEx(WH_MOUSE_LL, mouseProcPtr, hModule, 0);
-
-<span class="tok-c">// 메인 스레드: 큐에 쌓인 입력을 꺼내 횟수만 센다 (키 값은 쓰지 않음)</span>
-<span class="tok-k">void</span> Update()
-{
-    lock (queueLock)
-    {
-        <span class="tok-k">while</span> (keyEventQueue.Count &gt; 0)
-        {
-            keyEventQueue.Dequeue();
-            InputCountManager.Instance.addInputCount();
-        }
-    }
-}</code></pre></figure>
+        <figure class="diagram"><pre class="mermaid">flowchart LR
+    A[&quot;키보드 · 마우스 입력&quot;] --&gt; B[&quot;훅 콜백: 입력을 대기 큐에 넣기&quot;]
+    B --&gt; C[&quot;다음 프로그램으로 훅 넘기기&quot;]
+    B -.-&gt; D[&quot;메인 스레드 Update(): 큐를 비우며 입력 횟수 증가&quot;]
+    D --&gt; E[&quot;공장 동력&quot;]</pre></figure>
       </div>
       <div>
         <h3>시설 시스템</h3>
@@ -164,9 +142,9 @@ mouseHookId = SetWindowsHookEx(WH_MOUSE_LL, mouseProcPtr, hModule, 0);
     <div class="boss-log">
       <h3>전역 키 후킹의 보안 위험</h3>
       <dl>
-        <dt class="dt-encounter">CONTEXT</dt><dd>백그라운드 입력을 받기 위해 쓴 저수준 전역 훅은 키로거와 같은 API라, 백신에 악성 코드로 오탐지될 위험이 있습니다. 게임은 입력 횟수만 쓰고 어떤 키인지는 사용하지 않지만, 훅 콜백에서 키 코드(<code>vkCode</code>)를 읽어 큐에 넣는 코드가 남아 있어 키 값이 잠시 메모리에 올라옵니다. Raw Input(<code>RIDEV_INPUTSINK</code>)으로 바꾸는 것도 검토했지만, 백그라운드 키 입력을 받는다는 점은 같아 오탐 위험이 줄지 않고, 기한 안에 입력 구조를 다시 짜기도 어려워 훅을 유지했습니다.</dd>
-        <dt class="dt-action">IDEA</dt><dd>콜백에서 키 코드를 읽지 않고 입력 횟수만 늘리면(<code>Interlocked.Increment</code>), 큐도 필요 없고 키 값이 메모리에 올라오지 않습니다. 오탐 위험은 훅을 쓰는 한 남으므로, 배포한다면 실행 파일 코드 서명과 입력 수집 범위를 알리는 안내가 필요합니다.</dd>
-        <dt class="dt-learned">LEARNED</dt><dd>입력 API를 바꾸는 것보다, 기능에 필요한 정보가 무엇인지 먼저 정하고 그 이상은 읽지 않는 것이 보안 위험을 줄이는 방법이라는 것을 배웠습니다.</dd>
+        <dt class="dt-encounter">CONTEXT</dt><dd>저수준 전역 훅은 키로거와 같은 API라 백신에 오탐지될 위험이 있고, 입력 횟수만 쓰는데도 콜백에서 키 코드(<code>vkCode</code>)를 읽어 키 값이 잠시 메모리에 올라옵니다. Raw Input도 검토했지만 오탐 위험은 같고 기한 안에 구조를 다시 짜기 어려워 훅을 유지했습니다.</dd>
+        <dt class="dt-action">IDEA</dt><dd>콜백에서 키 코드를 읽지 않고 횟수만 늘리면(<code>Interlocked.Increment</code>) 큐도 필요 없고 키 값도 남지 않습니다. 배포한다면 코드 서명과 입력 수집 범위 안내도 필요합니다.</dd>
+        <dt class="dt-learned">LEARNED</dt><dd>API를 바꾸기보다, 기능에 필요한 정보만 읽는 것이 보안 위험을 줄이는 방법이라는 것을 배웠습니다.</dd>
       </dl>
     </div>
   </section>
@@ -181,6 +159,7 @@ mouseHookId = SetWindowsHookEx(WH_MOUSE_LL, mouseProcPtr, hModule, 0);
     </div>
   </section>
 </main>
+<script>document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.jump-link');if(!a)return;var t=document.getElementById(a.getAttribute('href').slice(1));if(!t)return;t.classList.remove('flash');void t.offsetWidth;t.classList.add('flash');setTimeout(function(){t.classList.remove('flash')},2400)});</script>
 
 <footer class="site-footer"><p class="copyright">© 2026 Ko Seonghyeon</p></footer>
 </body>

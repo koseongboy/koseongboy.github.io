@@ -30,7 +30,9 @@ function inline(s) {
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     // [글자](https://주소) → 새 탭 링크 (http/https만)
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1 ↗</a>');
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1 ↗</a>')
+    // [글자](#아이디) → 같은 페이지 안으로 이동 (타임라인 항목 등, 도착하면 한 번 강조)
+    .replace(/\[([^\]]+)\]\(#([\w-]+)\)/g, '<a href="#$2" class="jump-link">$1 ↑</a>');
 }
 // 코드 블록용 간단한 C# 문법 강조 (빌드 시점에 처리, 외부 스크립트 없음)
 const KEYWORDS = 'abstract|async|await|base|bool|break|byte|case|catch|class|const|continue|default|else|enum|false|float|for|foreach|if|in|int|interface|internal|is|new|null|out|override|private|protected|public|readonly|return|static|string|struct|switch|this|throw|true|try|ulong|using|var|virtual|void|while|yield';
@@ -55,7 +57,7 @@ function timelineHtml(tl) {
       : `<ul>${a.items.map((it) => `<li>${inline(it)}</li>`).join('')}</ul>`;
     return `<details class="tl-att"${a.video ? ' open' : ''}><summary>${inline(a.label || '첨부')}</summary>${body}${a.note ? `<p class="tl-note">${inline(a.note)}</p>` : ''}</details>`;
   };
-  return `        <ol class="timeline">\n${tl.map((t) => `          <li><span class="tl-date">${esc(t.date)}</span><div class="tl-body"><strong>${inline(t.title)}</strong>${t.text ? `<p>${inline(t.text)}</p>` : ''}${t.attachments.map(att).join('')}</div></li>`).join('\n')}\n        </ol>\n`;
+  return `        <ol class="timeline">\n${tl.map((t) => `          <li${t.id ? ` id="${t.id}"` : ''}><span class="tl-date">${esc(t.date)}</span><div class="tl-body"><strong>${inline(t.title)}</strong>${t.text ? `<p>${inline(t.text)}</p>` : ''}${t.attachments.map(att).join('')}</div></li>`).join('\n')}\n        </ol>\n`;
 }
 const pad2 = (n) => String(n).padStart(2, '0');
 const nonEmpty = (a) => (Array.isArray(a) ? a : []).filter((x) => x != null && String(x).trim() !== '');
@@ -85,7 +87,7 @@ function normalize(d) {
     thumbnail: {
       src: s(d.thumbnail && d.thumbnail.src), alt: s(d.thumbnail && d.thumbnail.alt), top: !!(d.thumbnail && d.thumbnail.top),
       width: Number(d.thumbnail && d.thumbnail.width) || 0, height: Number(d.thumbnail && d.thumbnail.height) || 0,
-      blackout: s(d.thumbnail && d.thumbnail.blackout),
+      blackout: s(d.thumbnail && d.thumbnail.blackout), video: s(d.thumbnail && d.thumbnail.video),
     },
     period: { start: s(d.period && d.period.start), end: s(d.period && d.period.end) },
     team: s(d.team), role: s(d.role),
@@ -102,7 +104,7 @@ function normalize(d) {
         images: Array.isArray(b.images) ? b.images.filter((im) => im && im.src).map((im) => ({ src: String(im.src), alt: String(im.alt || ''), caption: String(im.caption || ''), width: im.width, height: im.height })) : [],
         // 타임라인: [{ date, title, text, attachments: [{ label, code | video(+poster) | items }] }]
         timeline: Array.isArray(b.timeline) ? b.timeline.filter((t) => t && (t.title || t.text)).map((t) => ({
-          date: s(t.date), title: s(t.title), text: s(t.text),
+          id: s(t.id).replace(/[^\w-]/g, ''), date: s(t.date), title: s(t.title), text: s(t.text),
           attachments: (t.attachments || []).map((a) => ({
             label: s(a.label), code: String(a.code || '').replace(/\s+$/, ''), video: s(a.video), poster: s(a.poster),
             items: nonEmpty(a.items).map(s), note: s(a.note),
@@ -113,7 +115,7 @@ function normalize(d) {
     troubleshooting: {
       title: s(d.troubleshooting && d.troubleshooting.title) || e.troubleshooting.title,
       items: ((d.troubleshooting && d.troubleshooting.items) || []).map((t) => ({
-        title: s(t.title), issue: s(t.issue), decision: s(t.decision), result: s(t.result), learned: s(t.learned),
+        title: s(t.title), issue: s(t.issue), decision: s(t.decision), result: s(t.result), learned: s(t.learned), diagram: String(t.diagram || '').trim(),
         main: {
           show: !(t.main && t.main.show === false),
           title: s(t.main && t.main.title), issue: s(t.main && t.main.issue), decision: s(t.main && t.main.decision), result: s(t.main && t.main.result),
@@ -177,7 +179,10 @@ function detailPage(p, all) {
   const pageTitle = `${fullTitle(p)} | ${OWNER} 포트폴리오`;
   const desc = metaDescription(p);
   const t = p.thumbnail;
-  const cover = t.src
+  const yt = (t.video.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([\w-]{11})/) || [])[1];
+  const cover = yt
+    ? `<div class="detail-cover detail-cover-video"><iframe src="https://www.youtube-nocookie.com/embed/${yt}?rel=0" title="${esc(p.title)} 영상" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`
+    : t.src
     ? blackoutWrap(t, `<img class="detail-cover${t.top ? ' top' : ''}" src="../../${esc(t.src)}" alt="${esc(t.alt)}"${t.width && t.height ? ` width="${t.width}" height="${t.height}"` : ''}>`)
     : `<div class="detail-cover-placeholder">${esc(placeholderText(p))}</div>`;
 
@@ -249,7 +254,8 @@ ${tr.items.map((it) => `    <div class="boss-log">
         <dt class="dt-action">DECISION</dt><dd>${inline(it.decision)}</dd>
         <dt class="dt-result">RESULT</dt><dd>${inline(it.result)}</dd>${it.learned ? `
         <dt class="dt-learned">LEARNED</dt><dd>${inline(it.learned)}</dd>` : ''}
-      </dl>
+      </dl>${it.diagram ? `
+      <figure class="diagram"><pre class="mermaid">${esc(it.diagram)}</pre></figure>` : ''}
     </div>`).join('\n')}
   </section>
 `;
@@ -311,7 +317,7 @@ ${THEME_INIT}
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&amp;family=Space+Grotesk:wght@400;500;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/style.css">
 <script src="../../assets/js/theme.js" defer></script>
-${p.sections.some((sec) => sec.blocks.some((b) => b.diagram)) ? '<script src="../../assets/js/diagram.js" type="module"></script>\n' : ''}</head>
+${p.sections.some((sec) => sec.blocks.some((b) => b.diagram)) || p.troubleshooting.items.some((t) => t.diagram) ? '<script src="../../assets/js/diagram.js" type="module"></script>\n' : ''}</head>
 <body data-page="project" data-slug="${esc(p.slug)}">
 
 <header class="site-header">
@@ -345,12 +351,17 @@ ${specRows}
     </dl>
   </div>
 ${links}${scope}${sections}${trouble}${retro}${more}</main>
+<script>document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.jump-link');if(!a)return;var t=document.getElementById(a.getAttribute('href').slice(1));if(!t)return;t.classList.remove('flash');void t.offsetWidth;t.classList.add('flash');setTimeout(function(){t.classList.remove('flash')},2400)});</script>
 
 <footer class="site-footer"><p class="copyright">© 2026 Ko Seonghyeon</p></footer>
 </body>
 </html>
 `;
 }
+
+/** YouTube 링크 앞에 붙이는 아이콘 */
+const YT_ICON = '<svg class="yt-icon" viewBox="0 0 28 20" aria-hidden="true"><rect width="28" height="20" rx="5" fill="#FF0000"/><path d="M11 5.5v9l8-4.5z" fill="#fff"/></svg>';
+const linkIcon = (url) => (/^https?:\/\/([\w-]+\.)?(youtube\.com|youtu\.be)\//.test(url) ? YT_ICON : '');
 
 /* ---------------- 포트폴리오 메인 영역 ---------------- */
 function workCards(all) {
@@ -363,7 +374,7 @@ function workCards(all) {
     const meta = [periodCard(p), p.card.team || p.team, p.note].filter(Boolean).join(' · ');
     const summary = p.card.summary || p.tagline;
     const keywords = p.card.keywords || p.stack.join(' · ');
-    const links = p.links.map((l) => `<a href="${esc(l.url)}"${/^https?:/.test(l.url) ? ' target="_blank" rel="noopener"' : ''}>${esc(l.label)} ↗</a>`).join('');
+    const links = p.links.map((l) => `<a href="${esc(l.url)}"${linkIcon(l.url) ? ' class="link-yt"' : ''}${/^https?:/.test(l.url) ? ' target="_blank" rel="noopener"' : ''}>${linkIcon(l.url)}${esc(l.label)} ↗</a>`).join('');
     return `      <article class="quest">
         <div class="quest-body">
           <div class="quest-meta"><span class="quest-num">${p.num}</span>${statusBadge(p)}<span>${esc(meta)}</span></div>

@@ -74,7 +74,8 @@
                   "label": "보낸 코드 일부 — StateManager.cs",
                   "code": "[System.Serializable]\npublic class CustomStateSchema\n{\n    [Tooltip(\"JSON에 들어갈 키 이름 (예: QuestState, HasKey)\")]\n    public string keyName;\n\n    [Tooltip(\"이 키에 들어갈 수 있는 값들 (Enum 대신 문자열로 선택지 정의)\")]\n    public List<string> availableOptions = new List<string>();\n}\n\n// 기본 필드는 체이닝으로, 커스텀 키는 Enum 값으로 설정\nStateManager.Instance.State\n    .SetScene(\"Dungeon\")\n    .SetCustom(\"weapon_type\", EWeaponType.Sword);"
                 }
-              ]
+              ],
+              "id": "proposal-1"
             },
             {
               "date": "7/7",
@@ -99,10 +100,11 @@
                   "poster": "assets/img/csv-incantation-tool-poster.jpg",
                   "note": "SDK 개발진이 Unity에 익숙하지 않아, 에디터 툴이 실제로 어떻게 동작하는지(파일을 넣고 버튼 하나로 데이터가 생기는 흐름) 보여 주려고 함께 보냈습니다."
                 }
-              ]
+              ],
+              "id": "proposal-2"
             },
             {
-              "date": "통화",
+              "date": "협의",
               "title": "실무진 제안으로 입력 파일을 게임 상태 스키마로 변경",
               "text": "룰북은 게임 제작자가 아니라, 이미 만들어진 게임에 제3자가 정의해 적용하는 파일이 될 것이라는 실무진의 의견을 듣고, 생성기의 입력을 게임 제작자가 직접 정의하는 게임 상태 스키마로 바꾸는 데 서로 동의했습니다."
             },
@@ -122,20 +124,18 @@
         {
           "heading": "게임 상태 스키마와 차단 조건 정의",
           "items": [
-            "SDK는 게임 상태를 JSON 키 · 값으로 받아 룰북과 대조합니다. 우리 게임의 상태를 `scene`, `room`, `roomID`, `chapter`, `progress`, `event` 6개 키와 허용값으로 정의해 실무진과 확정했습니다.",
-            "보스 방 NPC 대화, 연출 상자 열기, 로비 튜토리얼 대화처럼 방송 화면을 가려야 하는 경우를 게임 상태 조합으로 정리해 전달했고, 실무진은 이를 바탕으로 룰북을 작성했습니다."
+            "SDK는 게임 상태를 JSON 키 · 값으로 받아 룰북과 대조합니다. 우리 게임의 상태를 6개 키와 허용값으로 정의해 실무진과 확정했습니다.",
+            "방송 화면을 가려야 하는 시나리오와 그때의 상태 조합을 명세했고, 실무진은 이를 바탕으로 룰북을 작성했습니다."
           ]
         },
         {
           "heading": "Reporter 적용과 확장",
           "items": [
-            "연동 가이드의 Reporter 예제(상태를 한 클래스에 모으고, 보고 중에 생긴 변화는 끝난 뒤 한 번 더 보고)를 바탕으로 연동했습니다.",
-            "예제에 없던 부분을 더했습니다. 문자열 대신 제너레이터가 만든 Enum으로 상태를 받고, 여러 값을 한 번에 바꾸는 `UpdateState()`를 추가했습니다. 싱글톤으로 만들어 씬이 바뀌어도 유지되게 했습니다.",
-            "씬마다 보고 컴포넌트를 두고, 포탈 · 상자 · NPC 같은 상태를 바꾸는 오브젝트에서 Reporter를 호출하게 해 게임 오브젝트가 SDK API를 직접 부르지 않게 했습니다.",
+            "연동 가이드의 Reporter 예제를 바탕으로 연동했습니다.",
+            "씬마다 보고 컴포넌트를 두고, 상태를 바꾸는 오브젝트에서 Reporter를 호출하게 해 게임 오브젝트가 SDK API를 직접 부르지 않게 했습니다.",
             "실무진이 준 Docker 테스트 서버와 OBS를 연결해, 룰북 조건에 맞는 상태에서 방송 화면이 가려지는지 E2E로 확인했습니다."
           ],
-          "code": "// 가이드의 Reporter 예제에 추가한 일괄 업데이트:\n// 여러 값을 다 바꾼 뒤 한 번만 보고해, 어긋난 중간 상태가 전송되지 않게 한다\npublic void UpdateState(System.Action<SpoilerReporter> updateAction)\n{\n    isBatching = true;\n    updateAction?.Invoke(this);\n    isBatching = false;\n    Report();\n}\n\npublic void SetRoom(ERoom newRoom, string newRoomID = \"\")\n{\n    if (Room == newRoom && RoomID == newRoomID) return;\n    room = newRoom;\n    roomID = newRoomID;\n    if (!isBatching) Report();\n}\n\n// 사용처: 포탈로 방을 옮길 때 (키 · 값은 제너레이터가 만든 Enum)\nSpoilerReporter.Instance.UpdateState(r =>\n{\n    r.SetRoom(targetERoom, targetRoomID);\n    r.SetProgress(progress);\n});",
-          "codeNote": "`SpoilerReporter`, `Portal` · 일부 생략 · 기업 납품 결과물이라 코드 비공개"
+          "diagram": "flowchart LR\n    P[\"포탈 (방 이동)\"] --> REP\n    C[\"상자 (열기)\"] --> REP\n    N[\"NPC (대화)\"] --> REP\n    REP[\"Reporter<br/>게임 상태를 한 곳에 모음\"] -- \"상태가 바뀌면 보고\" --> SDK[\"SDK\"]"
         }
       ]
     }
@@ -146,26 +146,27 @@
       {
         "title": "SDK 사용성 개선 제안 — 2안 중 코드 제너레이터 채택",
         "issue": "SDK는 게임 상태의 JSON 키를 문자열로 받고, 이 키가 룰북의 경로와 정확히 일치해야 합니다. 키를 문자열로 직접 쓰면 오타가 나도 에러 없이 스포일러 차단만 빠지고, 룰북이 바뀔 때마다 게임 코드와 수동으로 대조해야 했습니다.",
-        "decision": "실무진에게 두 가지 안을 장단점과 함께 제안했습니다. 1안은 개발자가 인스펙터에서 보고할 키와 값을 직접 정의하는 상태 관리 컴포넌트로, 동작하는 코드로 보냈습니다(커스텀이 자유롭지만 처음 설정 비용이 큼). 2안은 룰북 JSON을 에디터 창에 끌어다 놓으면 키 상수와 Enum이 담긴 C# 코드를 자동으로 만드는 툴로, 사용 시나리오와 예상 생성 코드를 담은 문서에 Unity에 익숙하지 않은 SDK 개발진을 위해 예전에 만든 CSV → 코드 변환 툴의 사용 영상을 함께 보냈습니다(설정 비용이 작고, 파일이 바뀌면 다시 생성만 하면 됨). 이후 통화에서 실무진이 \"룰북은 게임 제작자가 아니라 제3자가 이미 만들어진 게임에 정의하는 파일\"이라는 점을 짚었고, 생성기의 입력을 게임 제작자가 정의하는 게임 상태 스키마로 바꾸는 데 동의했습니다.",
-        "result": "다음 날 2안이 SDK 0.0.5에 `Window > W3GS > Rulebook Generator`로 들어갔고, 내가 정리한 우리 게임의 상태 정의가 스키마 샘플로 포함됐습니다. 우리 게임도 생성된 Enum으로 상태를 보고해, 키 · 값 오타가 실행 중 누락이 아니라 컴파일 에러로 잡힙니다.",
+        "decision": "[1안](#proposal-1)과 [2안](#proposal-2)을 제안했고, 실무진과의 협의를 통해 수정된 2안이 채택됐습니다.",
+        "result": "휴먼 에러를 컴파일 에러로 전환할 수 있었습니다.",
         "learned": "외부 팀에 제안할 때 불편함만 전달하지 않고, 선택지마다 비용과 장단점을 정리하고 사용 시나리오와 결과물을 보여 주면 상대가 바로 판단할 수 있다는 것을 배웠습니다.",
         "main": {
           "show": true,
           "title": "외부 SDK — 툴 제안 채택",
           "issue": "상태 키를 문자열로 쓰면 오타가 나도 에러 없이 스포일러 차단이 빠짐",
-          "decision": "인스펙터 상태 관리자(1안)와 JSON → C# 코드 생성 툴(2안)을 장단점과 함께 제안, 통화로 입력을 게임 상태 스키마로 조정",
+          "decision": "인스펙터 상태 관리자(1안)와 JSON → C# 코드 생성 툴(2안)을 장단점과 함께 제안, 협의로 입력을 게임 상태 스키마로 조정",
           "result": "2안이 다음 날 SDK 0.0.5에 채택, 우리 게임 스키마가 공식 샘플로 포함"
         }
       },
       {
         "title": "Reporter 예제의 중간 상태 전송 문제 — 가이드 개선 반영",
-        "issue": "가이드의 Reporter 예제는 값을 하나 바꿀 때마다 보고하고, 보고 중에 생긴 변화는 끝난 뒤 한 번 더 보냅니다. 방을 옮길 때처럼 여러 값을 연달아 바꾸면 첫 보고에는 일부만 바뀐 상태가 전송됩니다. 이 보고가 차단인지 허용인지 불분명해, 가려야 할 화면이 보이거나 보여야 할 화면이 가려지는 순간이 생길 수 있었습니다.",
-        "decision": "여러 값을 다 바꾼 뒤 한 번만 보고하는 `UpdateState()` 일괄 업데이트를 만들고, 씬이 바뀌어도 유지되는 싱글톤 형태와 함께 코드와 사용 예시를 정리해 실무진에게 보냈습니다. SDK 기능이 아니라 가이드 예제에 넣자는 제안으로 범위를 정했습니다.",
+        "issue": "가이드의 Reporter 예제는 값을 하나 바꿀 때마다 보고해, 방을 옮길 때처럼 여러 값을 연달아 바꾸면 일부만 바뀐 상태가 전송되는 문제가 발생했습니다.",
+        "decision": "여러 값을 다 바꾼 뒤 한 번만 보고하는 일괄 업데이트를 만들고, 코드와 사용 예시를 정리해 실무진에게 보냈습니다. SDK 기능이 아니라 가이드 예제에 넣자는 제안으로 범위를 정했습니다.",
         "result": "실무진이 같은 날 연동 가이드를 이 방식대로 수정해 반영했고, 우리 게임도 방 이동 · 씬 전환 보고를 모두 일괄 업데이트로 처리합니다.",
         "learned": "외부 SDK의 예제를 그대로 쓰지 않고 실제 게임 흐름에 넣어 보며 문제를 찾고, 기능 추가 요청이 아니라 예제 개선처럼 상대가 받아들이기 쉬운 범위로 제안하는 방법을 배웠습니다.",
         "main": {
           "show": false
-        }
+        },
+        "diagram": "flowchart LR\n    subgraph NEW[\"일괄 업데이트\"]\n        direction TB\n        B1[\"방 · 진행도 모두 바꾸기\"] --> R3[\"보고 1회\"]\n    end\n    subgraph OLD[\"기존 예제\"]\n        direction TB\n        A1[\"방 바꾸기\"] --> R1[\"보고 (방만 바뀐 중간 상태)\"] --> A2[\"진행도 바꾸기\"] --> R2[\"보고\"]\n    end\n    NEW ~~~ OLD"
       }
     ]
   },
@@ -178,7 +179,7 @@
     }
   ],
   "card": {
-    "summary": "외부 SDK 연동 데모용 2D 로그라이크를 만들어 납품하고, 실무진에게 SDK 사용성 개선안을 제안했습니다. JSON → C# 코드 생성 툴 제안이 다음 날 SDK에 채택됐고, Reporter 일괄 업데이트 예제가 연동 가이드에 반영됐습니다.",
+    "summary": "방송 스포일러 차단 SDK를 시연하기 위해 만든 2D 로그라이크 데모 게임",
     "keywords": "Editor Scripting · SDK 연동 · PCG",
     "team": "1인"
   },

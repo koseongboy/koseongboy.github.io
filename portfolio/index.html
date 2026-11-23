@@ -25,9 +25,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/style.css?v=91a35352">
+<link rel="stylesheet" href="../assets/css/style.css?v=d604d2ad">
 <script src="../assets/js/theme.js" defer></script>
-<script>try{var r=new URLSearchParams(location.search).get('resume');if(r==='closed'||r==='open')localStorage.setItem('resume',r);if(localStorage.getItem('resume')==='closed')document.documentElement.setAttribute('data-resume','closed')}catch(e){}</script>
+<script>try{if(new URLSearchParams(location.search).get('resume')!=='open')document.documentElement.setAttribute('data-resume','closed')}catch(e){document.documentElement.setAttribute('data-resume','closed')}</script>
 <script src="../assets/js/resume.js" defer></script>
 </head>
 <body>
@@ -65,10 +65,20 @@
     </div>
   </section>
 
+  <section id="about" class="section" aria-labelledby="about-title">
+    <h2 id="about-title" class="section-title">About</h2>
+    <dl class="about-grid">
+      <div><dt>이름</dt><dd>고성현 (Ko Seonghyeon)</dd></div>
+      <div><dt>학력</dt><dd>중앙대학교 소프트웨어학부</dd></div>
+      <div><dt>졸업</dt><dd>2027.08 (예정)</dd></div>
+      <div><dt>이메일</dt><dd><a href="mailto:koseonghyeon08@gmail.com">koseonghyeon08@gmail.com</a></dd></div>
+    </dl>
+  </section>
+
   <section id="resume" class="section resume" aria-labelledby="resume-title">
     <div class="section-head">
       <h2 id="resume-title" class="section-title">Resume</h2>
-      <button type="button" class="resume-toggle" aria-controls="resume-body" aria-expanded="true"><span class="resume-toggle-close">이력 접기 ↑</span><span class="resume-toggle-open">이력 펼치기 ↓</span></button>
+      <button type="button" class="resume-toggle" aria-controls="resume-body" aria-expanded="false"><span class="resume-toggle-close">이력 접기 ↑</span><span class="resume-toggle-open">이력 펼치기 ↓</span></button>
     </div>
     <div id="resume-body" class="resume-body">
       <div class="resume-group">
@@ -85,30 +95,12 @@
         </ul>
       </div>
       <div class="resume-group">
-        <h3 class="resume-label">IT 활용능력</h3>
-        <ul class="resume-list">
-          <li><span class="resume-date">C# · Unity</span><div class="resume-main"><strong>Unity 게임 클라이언트 4개</strong><span>3D(시뮬레이션, LCG 장르) · 2D(플랫포머, Idle 장르) — Spell Arena 카드 효과 엔진, Drill Idle 전역 입력 후킹 · 시설 시스템, Dino Cleaner 장비·애니메이션 구조, 외부 SDK 연동 검증 프레임워크</span></div></li>
-          <li><span class="resume-date">Git</span><div class="resume-main"><strong>팀 프로젝트 3개</strong><span>브랜치로 작업 분리 · <code>.gitignore</code>와 레포 정리</span></div></li>
-          <li><span class="resume-date">Python</span><div class="resume-main"><strong>알고리즘 문제 풀이</strong><span>코딩 테스트와 알고리즘 문제 해결에 사용</span></div></li>
-        </ul>
-      </div>
-      <div class="resume-group">
         <h3 class="resume-label">병역</h3>
         <ul class="resume-list">
           <li><span class="resume-date">—</span><div class="resume-main"><strong>군필</strong></div></li>
         </ul>
       </div>
     </div>
-  </section>
-
-  <section id="about" class="section" aria-labelledby="about-title">
-    <h2 id="about-title" class="section-title">About</h2>
-    <dl class="about-grid">
-      <div><dt>이름</dt><dd>고성현 (Ko Seonghyeon)</dd></div>
-      <div><dt>학력</dt><dd>중앙대학교 소프트웨어학부</dd></div>
-      <div><dt>졸업</dt><dd>2027.08 (예정)</dd></div>
-      <div><dt>이메일</dt><dd><a href="mailto:koseonghyeon08@gmail.com">koseonghyeon08@gmail.com</a></dd></div>
-    </dl>
   </section>
 
   <section id="work" class="section" aria-labelledby="work-title">
@@ -125,7 +117,7 @@
         <div class="quest-body">
           <div class="quest-meta"><span class="quest-num">01</span><span class="status status-progress">진행 중</span><span>2026.10 — · 4인 (콘텐츠/PM/기반 시스템/실기기)</span></div>
           <h3><a href="projects/vr-web-swing.html" class="quest-link">VR Web Swing</a></h3>
-          <p>건물에 거미줄을 걸어 스윙하는 VR 게임. 맵 기믹과 배치 규칙 · 난이도를 맡았고, 구현은 AI 에이전트에게 맡기되 작업 규칙 · 수치 기준 · 계획 검증은 직접 하는 방식으로 개발하고 있습니다.</p>
+          <p>건물에 거미줄을 걸어 스윙하며 도시를 가로지르는 VR 게임</p>
           <div class="stack-line">Unity XR · Claude Code · AI 워크플로</div>
           <div class="quest-links"><span class="quest-more">자세히 보기 →</span><a href="https://github.com/kjh99660/CAU_VRProject_2026_2/tree/koseongboy" target="_blank" rel="noopener">GitHub (내 작업 브랜치) ↗</a></div>
         </div>
@@ -136,7 +128,7 @@
         <div class="quest-body">
           <div class="quest-meta"><span class="quest-num">02</span><span class="status status-progress">진행 중</span><span>2026.09 — · 4인 (클라이언트 3, 기획/PM 1)</span></div>
           <h3><a href="projects/dino-cleaner.html" class="quest-link">Dino Cleaner</a></h3>
-          <p>공룡이 이동 수단인 세계에서 공룡을 세차하는 게임. 플레이어 애니메이션 · IK와 청소기 · 사다리 · 비행용 공룡 등 장비 시스템을 맡고 있습니다.</p>
+          <p>공룡이 이동 수단인 세계에서 공룡을 세차하는 게임</p>
           <div class="stack-line">Unity 3D · Input System · ASMDEF · IK</div>
           <div class="quest-links"><span class="quest-more">자세히 보기 →</span><a href="https://github.com/Crocobob911/DinoCleaner" target="_blank" rel="noopener">GitHub ↗</a></div>
         </div>
@@ -147,7 +139,7 @@
         <div class="quest-body">
           <div class="quest-meta"><span class="quest-num">03</span><span class="status status-done">완료</span><span>2026.05 — 2026.07 · 1인 · 기업 협력 프로젝트</span></div>
           <h3><a href="projects/module-framework.html" class="quest-link"><span class="partner-tag">[엘에스웨어 협력]</span> 외부 모듈 검증 프레임워크</a></h3>
-          <p>외부 SDK 연동 데모용 2D 로그라이크를 만들어 납품하고, 실무진에게 SDK 사용성 개선안을 제안했습니다. JSON → C# 코드 생성 툴 제안이 다음 날 SDK에 채택됐고, Reporter 일괄 업데이트 예제가 연동 가이드에 반영됐습니다.</p>
+          <p>방송 스포일러 차단 SDK를 시연하기 위해 만든 2D 로그라이크 데모 게임</p>
           <div class="stack-line">Editor Scripting · SDK 연동 · PCG</div>
           <div class="quest-links"><span class="quest-more">자세히 보기 →</span></div>
         </div>
@@ -158,9 +150,9 @@
         <div class="quest-body">
           <div class="quest-meta"><span class="quest-num">04</span><span class="status status-done">완료</span><span>2026.03 — 2026.07 · 3인 (클라이언트 1, 기획/PM 1, 백엔드 1)</span></div>
           <h3><a href="projects/spell-arena.html" class="quest-link">Spell Arena</a></h3>
-          <p>제시된 단어로 영창을 만들어 평가받는 대전 카드 게임. NGO 기반 호스트 권한(Listen Server) 구조와 MVC/Command 패턴, 28종 효과·20종 상태이상을 모듈화한 데이터 주도 엔진으로 130종 카드를 구현했습니다. 기존 효과를 조합한 신규 카드는 추가 공수 15분+ → 1분 내외.</p>
+          <p>제시된 단어들로 영창을 만들고, 평가받아 데미지 보너스를 얻는 대전 카드 게임</p>
           <div class="stack-line">NGO · MVC · Command</div>
-          <div class="quest-links"><span class="quest-more">자세히 보기 →</span><a href="https://github.com/koseongboy/Spell_Battle" target="_blank" rel="noopener">GitHub ↗</a><a href="https://www.youtube.com/watch?v=-QaFugYqSeE" target="_blank" rel="noopener">Teaser ↗</a></div>
+          <div class="quest-links"><span class="quest-more">자세히 보기 →</span><a href="https://github.com/koseongboy/Spell_Battle" target="_blank" rel="noopener">GitHub ↗</a><a href="https://www.youtube.com/watch?v=-QaFugYqSeE" class="link-yt" target="_blank" rel="noopener"><svg class="yt-icon" viewBox="0 0 28 20" aria-hidden="true"><rect width="28" height="20" rx="5" fill="#FF0000"/><path d="M11 5.5v9l8-4.5z" fill="#fff"/></svg>Teaser ↗</a></div>
         </div>
         <img class="quest-thumb" src="../assets/img/spell-arena.jpg" alt="Spell Arena 영창 화면: 보라색 마법진 위에 '이 자리에서 선언하노니! 고요한 종말을 목도하라!' 영창 문구" loading="lazy" width="1490" height="835">
       </article>
@@ -169,7 +161,7 @@
         <div class="quest-body">
           <div class="quest-meta"><span class="quest-num">05</span><span class="status status-done">완료</span><span>2025.09 — 2025.12 · 3인 (클라이언트/기획)</span></div>
           <h3><a href="projects/drill-idle.html" class="quest-link">Drill Idle</a></h3>
-          <p>키보드 · 마우스 입력이 공장의 동력이 되는 데스크탑 방치형 게임. Windows API 저수준 훅으로 게임 창 밖의 입력을 받는 기능과 시설 · 엔진 시스템을 구현하고, 엔진이 레벨업마다 모양과 색이 바뀌는 성장 방식을 기획했습니다.</p>
+          <p>키보드 · 마우스 입력이 공장의 동력이 되는 데스크탑 방치형 게임</p>
           <div class="stack-line">Windows API · Addressables</div>
           <div class="quest-links"><span class="quest-more">자세히 보기 →</span><a href="https://github.com/koseongboy/Drill_Game" target="_blank" rel="noopener">GitHub ↗</a></div>
         </div>
@@ -187,7 +179,7 @@
       <h3><a class="skill-proj" href="projects/vr-web-swing.html#troubleshooting">VR Web Swing</a> — AI의 공용 씬 수정으로 인한 머지 충돌</h3>
       <div class="case-grid">
         <div class="case-col issue"><span>ISSUE</span><p>&quot;팀원 씬은 꼭 필요할 때만&quot; 규칙에도 AI가 메인 씬을 수정해 팀원 작업과 충돌</p></div>
-        <div class="case-col"><span>DECISION</span><p>Git GUI로 사전 감지 → 내 씬 백업 후 팀원 기준으로 복구, 공용 씬은 바꾸기 전에 멈추고 승인받도록 규칙 변경</p></div>
+        <div class="case-col"><span>DECISION</span><p>공용 씬은 바꾸기 전에 멈추고 승인받도록 AI 작업 규칙 변경</p></div>
         <div class="case-col"><span>RESULT</span><p>공유 자원에는 판단 기준 대신 멈춤 지점을 두는 원칙</p></div>
       </div>
     </article>
@@ -214,7 +206,7 @@
       <h3><a class="skill-proj" href="projects/module-framework.html#troubleshooting">외부 SDK</a> — 툴 제안 채택</h3>
       <div class="case-grid">
         <div class="case-col issue"><span>ISSUE</span><p>상태 키를 문자열로 쓰면 오타가 나도 에러 없이 스포일러 차단이 빠짐</p></div>
-        <div class="case-col"><span>DECISION</span><p>인스펙터 상태 관리자(1안)와 JSON → C# 코드 생성 툴(2안)을 장단점과 함께 제안, 통화로 입력을 게임 상태 스키마로 조정</p></div>
+        <div class="case-col"><span>DECISION</span><p>인스펙터 상태 관리자(1안)와 JSON → C# 코드 생성 툴(2안)을 장단점과 함께 제안, 협의로 입력을 게임 상태 스키마로 조정</p></div>
         <div class="case-col"><span>RESULT</span><p>2안이 다음 날 SDK 0.0.5에 채택, 우리 게임 스키마가 공식 샘플로 포함</p></div>
       </div>
     </article>

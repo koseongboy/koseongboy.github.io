@@ -25,7 +25,7 @@
   const toastEl = $('p-toast');
   const F = {
     title: $('p-title'), subtitle: $('p-subtitle'), tagline: $('p-tagline'),
-    thumbAlt: $('p-thumb-alt'), thumbTop: $('p-thumb-top'),
+    thumbAlt: $('p-thumb-alt'), thumbTop: $('p-thumb-top'), thumbVideo: $('p-thumb-video'),
     start: $('p-start'), end: $('p-end'), team: $('p-team'), role: $('p-role'), stack: $('p-stack'),
     troubleTitle: $('p-trouble-title'),
     note: $('p-note'), slug: $('p-slug'), desc: $('p-desc'),
@@ -164,6 +164,7 @@
     const codeNote = field('코드 설명', b.codeNote || '', { placeholder: '예: SpellController.EndRecording() · [전체 코드](https://github.com/...)' });
     row.append(h('div', { class: 'p-inline' }, heading, rowTools(row, list)), items, code, codeNote, diagram);
     row.get = () => ({
+      ...b, // 편집 화면에 없는 값(이미지 · 타임라인 등)은 그대로 보존
       heading: heading.input.value,
       items: items.input.value.split('\n').map((x) => x.trim()).filter(Boolean),
       code: code.input.value.replace(/\s+$/, ''), codeNote: codeNote.input.value.trim(),
@@ -218,6 +219,7 @@
     const sync = () => { details.hidden = !show.checked; };
     show.addEventListener('change', sync); sync();
     row.get = () => ({
+      ...t, // 편집 화면에 없는 값(다이어그램 등)은 그대로 보존
       title: title.input.value, issue: issue.input.value, decision: decision.input.value, result: result.input.value, learned: learned.input.value,
       main: { show: show.checked, title: mTitle.input.value, issue: mIssue.input.value, decision: mDecision.input.value, result: mResult.input.value },
     });
@@ -299,7 +301,7 @@
     statusRadios.forEach((r) => { r.checked = r.value === (d.status || 'done'); });
     F.title.value = d.title || ''; F.subtitle.value = d.subtitle || ''; F.tagline.value = d.tagline || '';
     thumb = { src: (d.thumbnail || {}).src || '', width: (d.thumbnail || {}).width || 0, height: (d.thumbnail || {}).height || 0, blackout: (d.thumbnail || {}).blackout || '' };
-    F.thumbAlt.value = (d.thumbnail || {}).alt || ''; F.thumbTop.checked = !!(d.thumbnail || {}).top;
+    F.thumbAlt.value = (d.thumbnail || {}).alt || ''; F.thumbTop.checked = !!(d.thumbnail || {}).top; F.thumbVideo.value = (d.thumbnail || {}).video || '';
     F.start.value = (d.period || {}).start || ''; F.end.value = (d.period || {}).end || '';
     F.team.value = d.team || ''; F.role.value = d.role || ''; F.stack.value = (d.stack || []).join(', ');
     F.troubleTitle.value = (d.troubleshooting || {}).title || '';
@@ -329,7 +331,7 @@
       status: getStatus(),
       title: F.title.value, subtitle: F.subtitle.value, tagline: F.tagline.value,
       note: F.note.value, description: F.desc.value,
-      thumbnail: { src: thumb.src, alt: F.thumbAlt.value, top: F.thumbTop.checked, width: thumb.width, height: thumb.height, ...(thumb.blackout ? { blackout: thumb.blackout } : {}) },
+      thumbnail: { src: thumb.src, alt: F.thumbAlt.value, top: F.thumbTop.checked, width: thumb.width, height: thumb.height, ...(thumb.blackout ? { blackout: thumb.blackout } : {}), ...(F.thumbVideo.value.trim() ? { video: F.thumbVideo.value.trim() } : {}) },
       period: { start: F.start.value, end: F.end.value },
       team: F.team.value, role: F.role.value, stack: F.stack.value.split(',').map((x) => x.trim()).filter(Boolean),
       info: [...lists.info.children].map((r) => r.get()),

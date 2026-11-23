@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&amp;family=Space+Grotesk:wght@400;500;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/css/style.css?v=91a35352">
+<link rel="stylesheet" href="../../assets/css/style.css?v=d604d2ad">
 <script src="../../assets/js/theme.js" defer></script>
 <script src="../../assets/js/diagram.js" type="module"></script>
 </head>
@@ -53,7 +53,7 @@
     <p class="tagline">제시된 단어들로 창의적인 영창을 만들고, 평가받아 데미지 보너스를 얻는 카드 게임</p>
   </section>
 
-  <img class="detail-cover" src="../../assets/img/spell-arena.jpg" alt="Spell Arena 영창 화면: 보라색 마법진 위에 '이 자리에서 선언하노니! 고요한 종말을 목도하라!' 영창 문구" width="1490" height="835">
+  <div class="detail-cover detail-cover-video"><iframe src="https://www.youtube-nocookie.com/embed/-QaFugYqSeE?rel=0" title="Spell Arena 영상" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
 
   <div class="spec">
     <dl>
@@ -111,53 +111,23 @@
         <h3>데이터 주도 카드 효과 엔진 구축</h3>
         <ul>
           <li>130종의 카드마다 스크립트를 개별 작성하는 대신, 28종의 효과 타입과 20종 이상의 상태이상, 7종의 조건절을 모듈화한 공통 연산 엔진을 구축했습니다.</li>
-          <li>이미 있는 효과 타입을 조합한 카드는 [C# 스크립트 작성 → 컴파일 → 씬 연결] 과정 없이 [CSV 데이터 1행 추가]만으로 추가됩니다. 새로운 효과 타입이 필요할 때만 커맨드 코드를 작성합니다.</li>
+          <li>이미 있는 효과 타입을 조합한 카드는 CSV 데이터 1행 추가만으로 추가됩니다.</li>
           <li>효과 컬럼은 기획 팀원과 함께 정하고, 저는 컬럼마다 실행할 동작을 커맨드로 정의해 카드를 커맨드 묶음(매크로 커맨드)으로 실행하는 엔진을 만들었습니다.</li>
         </ul>
       </div>
       <div>
         <h3>네트워크 동기화 및 아키텍처 설계</h3>
         <ul>
-          <li>Unity NGO로 로비 생성과 인게임 흐름을 구현했습니다. 호스트가 서버를 겸하는 Listen Server 구조라, 주문 발동은 호스트(서버)가 처리합니다.</li>
-          <li>클라이언트는 카드 ID와 대기표(Task ID)만 보내고, 서버가 마나를 자기 상태로 확인 · 차감하고, 효과를 카드 ID로 다시 조립하고, 점수를 평가 서버에서 직접 조회합니다.</li>
-          <li>한계: 호스트 자체의 변조는 막지 못하고, 마나 비용은 클라이언트가 보낸 값(<code>declaredCost</code>)을 그대로 씁니다. 자세한 내용은 아래 회고에 정리했습니다.</li>
+          <li>Unity NGO로 로비 생성과 인게임 흐름을 구현했습니다.</li>
+          <li>파라미터를 간소화해 클라이언트는 카드 ID와 대기표(Task ID)만 보냅니다. <a href="https://github.com/koseongboy/Spell_Battle/blob/8eb45fa9b05f3c6dbec2b223afeca66334e1d8df/Assets/Scripts/Controllers/SpellController.cs#L492-L530" target="_blank" rel="noopener">서버 검증 코드 ↗</a></li>
           <li>'클라이언트 – 게임 서버 – 웹 서버' 3계층 통신 구조 중 클라이언트와 게임 서버 구간을 구현했습니다. 웹 서버는 백엔드 팀원이 담당했습니다.</li>
         </ul>
-        <figure class="code-figure"><figcaption><code>SpellController.ExecuteSpellVerificationAndBattleAsync()</code> · 일부 생략 · <a href="https://github.com/koseongboy/Spell_Battle/blob/8eb45fa9b05f3c6dbec2b223afeca66334e1d8df/Assets/Scripts/Controllers/SpellController.cs#L492-L530" target="_blank" rel="noopener">전체 코드 ↗</a></figcaption><pre class="code-block"><code><span class="tok-c">// [서버] 클라이언트가 보낸 카드 ID와 대기표로 다시 검증한 뒤 발동</span>
-<span class="tok-k">private</span> <span class="tok-k">async</span> Task ExecuteSpellVerificationAndBattleAsync(
-    <span class="tok-k">int</span>[] cardIds, <span class="tok-k">int</span> declaredCost, <span class="tok-k">string</span> taskId, <span class="tok-k">ulong</span> senderId, <span class="tok-k">float</span> audioLength)
-{
-    PlayerModel caster = MatchManager.Instance.GetPlayerById(senderId);
-    PlayerModel target = /* 상대 플레이어 */;
-
-    <span class="tok-c">// 1. 마나는 서버의 플레이어 상태로 확인 · 차감</span>
-    <span class="tok-k">if</span> (caster == <span class="tok-k">null</span> || !caster.TryUseMana(declaredCost)) <span class="tok-k">return</span>;
-
-    <span class="tok-c">// 2. 효과는 카드 ID로 서버에서 다시 조립하고 커맨드 정렬</span>
-    SpellPayload serverPayload = <span class="tok-k">new</span> SpellPayload();
-    <span class="tok-k">foreach</span> (<span class="tok-k">int</span> id <span class="tok-k">in</span> cardIds)
-    {
-        <span class="tok-k">var</span> card = CardDatabase.Instance.GetCardById(id);
-        <span class="tok-k">if</span> (card != <span class="tok-k">null</span>) serverPayload.EnqueuePendingCard(card);
-    }
-    serverPayload.CompileSpell(caster, target);
-
-    <span class="tok-c">// 3. 점수는 대기표(Task ID)로 평가 서버에서 직접 조회</span>
-    TaskStatusResponse evalResult = <span class="tok-k">await</span> WebServerModel.Instance.GetEvaluationResultAsync(taskId);
-    <span class="tok-k">float</span> verifiedScore = evalResult != <span class="tok-k">null</span> ? evalResult.score : 0f;
-
-    <span class="tok-c">// 4. 발동 연출 후 커맨드를 순서대로 실행</span>
-    PhaseManager.Instance.ServerSetPhase(GamePhase.Battle);
-    ShowIncantationPopupClientRpc(/* 인식 문장, 속성, 영창자, 음성 길이 */);
-    StartCoroutine(ExecuteBattleRoutine(serverPayload, caster, verifiedScore, audioLength));
-}</code></pre></figure>
       </div>
       <div>
         <h3>카드 발동 흐름 설계</h3>
         <ul>
           <li>카드를 발동했을 때 클라이언트 · 게임 서버 · 웹 서버가 주고받는 순서를 설계해 시퀀스 다이어그램(Mermaid)으로 정리하고, 이 다이어그램을 기준으로 백엔드 팀원과 소통했습니다.</li>
           <li>백엔드 팀원이 이 다이어그램에 맞춰 대기표(Task ID) 발급과 판정 결과 조회 API를 추가했습니다. <a href="https://github.com/koseongboy/Spell_Battle/commit/8e200079b4ef84ce19eba4640b69bd59e588e357" target="_blank" rel="noopener">커밋 ↗</a> · <a href="https://github.com/koseongboy/Spell_Battle/blob/8e200079b4ef84ce19eba4640b69bd59e588e357/Assets/Server/index.js#L129-L198" target="_blank" rel="noopener">웹 서버 코드 ↗</a></li>
-          <li>구현에서는 결과 화면에 점수를 보여 주기 위해 클라이언트가 폴링하고, 주문이 확정되면 게임 서버가 대기표로 점수를 한 번 더 조회해 검증합니다.</li>
         </ul>
         <figure class="diagram"><pre class="mermaid">sequenceDiagram
     participant C1 as 시전자 (Client)
@@ -184,47 +154,19 @@
       <div>
         <h3>음성 녹음 및 사운드 파이프라인</h3>
         <ul>
-          <li>Unity Microphone으로 플레이어의 음성 영창을 녹음해 웹 서버로 전송하고, 판정 결과를 1초 간격으로 최대 20회 조회(폴링)해 응답이 없으면 기본 점수로 넘어가도록 구현했습니다.</li>
-          <li>판정 점수는 점수에 비례한 효과 배율로 데미지에 반영했습니다. 지금은 평가 서버를 닫아 둔 상태라, 서버 없이도 게임이 실행되도록 배율을 1로 고정해 두었습니다.</li>
-          <li>녹음에 소리가 전혀 없으면 서버로 보내지 않고 재녹음을 안내합니다.</li>
-          <li>업로드가 끝나면 상대 클라이언트가 음성을 미리 내려받게 해, 주문이 확정되는 순간 바로 재생되도록 했습니다. 다운로드에 실패해도 무음 클립으로 대신해 진행이 멈추지 않습니다.</li>
-          <li>인게임 사운드(BGM/SFX) 제어 매니저를 구현했습니다.</li>
+          <li>Unity Microphone으로 음성 영창을 녹음해 웹 서버로 보내고, 판정 결과는 폴링으로 조회해 응답이 없으면 기본 점수로 넘어가게 했습니다. 소리가 전혀 없는 녹음은 보내지 않고 재녹음을 안내합니다. <a href="https://github.com/koseongboy/Spell_Battle/blob/8eb45fa9b05f3c6dbec2b223afeca66334e1d8df/Assets/Scripts/Controllers/SpellController.cs#L192-L260" target="_blank" rel="noopener">코드 ↗</a></li>
+          <li>상대 클라이언트는 업로드가 끝난 음성을 미리 받아 두어 주문이 확정되는 즉시 재생하고, 다운로드에 실패하면 무음 클립으로 대신해 진행이 멈추지 않습니다.</li>
+          <li>판정 점수는 데미지 배율로 반영했습니다. 지금은 평가 서버를 닫아 두어 배율을 1로 고정했습니다.</li>
+          <li>인게임 BGM · SFX 제어 매니저를 구현했습니다.</li>
         </ul>
-        <figure class="code-figure"><figcaption><code>SpellController.EndRecording()</code> · 일부 생략 · <a href="https://github.com/koseongboy/Spell_Battle/blob/8eb45fa9b05f3c6dbec2b223afeca66334e1d8df/Assets/Scripts/Controllers/SpellController.cs#L192-L260" target="_blank" rel="noopener">전체 코드 ↗</a></figcaption><pre class="code-block"><code><span class="tok-c">// [클라이언트] 녹음 종료 → 평가 서버 업로드 → 결과 폴링</span>
-<span class="tok-k">public</span> <span class="tok-k">async</span> Task EndRecording()
-{
-    CommonUIController.Instance.ShowLoading();
-    <span class="tok-k">byte</span>[] myWavData = SoundManager.Instance.StopRecording();
-    LastRecordedClip = CreateClipFromWavBytes(myWavData);
-
-    <span class="tok-c">// 무음이면 AI 평가 요청을 보내지 않고 재녹음 유도</span>
-    <span class="tok-k">if</span> (SoundManager.Instance.IsAudioSilent(LastRecordedClip, 0.04f))
-    {
-        <span class="tok-k">await</span> Task.Delay(2000);
-        CommonUIController.Instance.DoneLoading();
-        CommonUIController.Instance.ShowRedAlert(<span class="tok-s">&quot;목소리가 작습니다. 다시 녹음해주세요&quot;</span>);
-        <span class="tok-k">return</span>;
-    }
-
-    <span class="tok-k">var</span> uploadResult = <span class="tok-k">await</span> WebServerModel.Instance.UploadVoiceAsync(myWavData, /* 생략 */);
-    <span class="tok-k">if</span> (uploadResult == <span class="tok-k">null</span>) <span class="tok-k">return</span>;
-
-    currentAudioUrl = uploadResult.audioUrl;
-    currentTaskId = uploadResult.taskId;
-    <span class="tok-c">// 상대가 발동 시점에 바로 재생할 수 있도록 음성을 미리 내려받게 한다</span>
-    ShareAudioUrlServerRpc(currentAudioUrl);
-
-    <span class="tok-c">// AI 평가는 비동기 작업이므로 1초 간격으로 최대 maxAttempts(20)회 폴링</span>
-    TaskStatusResponse evalResult = <span class="tok-k">null</span>;
-    <span class="tok-k">int</span> attempt = 0;
-    <span class="tok-k">while</span> (evalResult == <span class="tok-k">null</span> &amp;&amp; attempt &lt; maxAttempts)
-    {
-        <span class="tok-k">await</span> Task.Delay(1000);
-        evalResult = <span class="tok-k">await</span> WebServerModel.Instance.GetEvaluationResultAsync(currentTaskId);
-        attempt++;
-    }
-    PhaseManager.Instance.DoneEval(evalResult);
-}</code></pre></figure>
+        <figure class="diagram"><pre class="mermaid">flowchart LR
+    A[&quot;녹음 종료&quot;] --&gt; B{&quot;소리가 있나?&quot;}
+    B -- 무음 --&gt; R[&quot;재녹음 안내&quot;]
+    B -- 있음 --&gt; U[&quot;평가 서버에 업로드&quot;]
+    U --&gt; S[&quot;상대에게 음성 공유 · 미리 다운로드&quot;]
+    U --&gt; P[&quot;결과 폴링 (1초 × 최대 20회)&quot;]
+    P -- 결과 도착 --&gt; OK[&quot;판정 점수 반영&quot;]
+    P -- 시간 초과 --&gt; D[&quot;기본 점수로 진행&quot;]</pre></figure>
       </div>
     </div>
   </section>
@@ -235,8 +177,8 @@
       <h3>기획 팀원과 병렬로 진행한 카드 효과 데이터화</h3>
       <dl>
         <dt class="dt-encounter">ISSUE</dt><dd>처음에는 CSV에서 카드 이름 · 설명 텍스트 같은 기본 정보만 읽고, 효과는 카드마다 코드로 따로 구현했습니다. 카드를 추가하거나 효과를 고칠 때마다 코드 작업이 필요해, 기획이 바뀌면 구현이 따라가야만 하는 구조였습니다.</dd>
-        <dt class="dt-action">DECISION</dt><dd>기획 팀원이 효과를 컬럼으로 정리하자고 제안했고, 저는 이를 실행할 구조를 맡았습니다. 먼저 기존 CSV 테이블에 효과 이름 컬럼만 추가해 둘이 함께 볼 규격을 정한 뒤, 그 컬럼을 기준으로 작업을 나눠 병렬로 진행했습니다. 기획 팀원은 카드 행의 빈칸을 채우고, 저는 각 컬럼이 수행할 동작을 커맨드로 정의했습니다. 카드는 효과 커맨드들을 묶은 매크로 커맨드가 되고, 선택한 카드들은 커맨드 큐에서 순서대로 실행됩니다.</dd>
-        <dt class="dt-result">RESULT</dt><dd>카드별 효과 코드 없이 130종을 구현했습니다. 이미 있는 효과를 조합한 카드는 추가 공수가 15분 이상에서 1분 내외로 줄었고, 기획 팀원이 CSV에 행을 넣는 것만으로 직접 추가할 수 있게 됐습니다.</dd>
+        <dt class="dt-action">DECISION</dt><dd>기획 팀원과 협력해, 기획 팀원이 정리한 컬럼 구조에 맞춰 각 컬럼이 수행할 커맨드를 정의하고 구현했습니다. 카드는 이 커맨드들을 묶은 매크로 커맨드로 실행됩니다.</dd>
+        <dt class="dt-result">RESULT</dt><dd>이미 있는 효과를 조합한 카드는 추가 공수가 15분 이상에서 1분 내외로 줄었고, 기획 팀원이 CSV에 행을 넣는 것만으로 직접 추가할 수 있게 됐습니다.</dd>
         <dt class="dt-learned">LEARNED</dt><dd>컬럼 이름이라는 작은 규격을 먼저 합의하니, 서로의 작업이 끝나기를 기다리지 않고 동시에 진행할 수 있었습니다. 팀원의 제안을 실제로 동작하는 구조로 구체화하는 것도 개발자의 역할이라는 것을 배웠습니다.</dd>
       </dl>
     </div>
@@ -289,6 +231,7 @@
     </div>
   </section>
 </main>
+<script>document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.jump-link');if(!a)return;var t=document.getElementById(a.getAttribute('href').slice(1));if(!t)return;t.classList.remove('flash');void t.offsetWidth;t.classList.add('flash');setTimeout(function(){t.classList.remove('flash')},2400)});</script>
 
 <footer class="site-footer"><p class="copyright">© 2026 Ko Seonghyeon</p></footer>
 </body>

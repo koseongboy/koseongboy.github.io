@@ -1,4 +1,4 @@
-/* 포트폴리오 이력 접기 / 펼치기. 선택은 브라우저에 기억 (?resume=closed 링크로 접힌 상태로 열 수 있음) */
+/* 포트폴리오 이력 접기 / 펼치기. 항상 접힌 상태로 시작 (?resume=open 링크로 펼친 상태로 열 수 있음) */
 (function () {
   var root = document.documentElement;
   function sync() {
@@ -10,7 +10,6 @@
     if (!btn) return;
     var closed = root.getAttribute('data-resume') !== 'closed';
     if (closed) root.setAttribute('data-resume', 'closed'); else root.removeAttribute('data-resume');
-    try { localStorage.setItem('resume', closed ? 'closed' : 'open'); } catch (err) {}
     sync();
   });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync); else sync();
