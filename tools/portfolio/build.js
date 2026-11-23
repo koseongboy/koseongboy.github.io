@@ -324,7 +324,6 @@ ${p.sections.some((sec) => sec.blocks.some((b) => b.diagram)) || p.troubleshooti
   <nav class="container" aria-label="주요 메뉴">
     <a href="../" class="logo">KO SEONGHYEON</a>
     <div class="nav-links">
-      <a href="../../">Blog</a>
       <a href="../#work">Work</a>
       <a href="../#troubleshooting">Troubleshooting</a>
       <a href="../#skills">Skills</a>
