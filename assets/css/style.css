@@ -309,6 +309,11 @@ code { font-family: var(--font-mono); font-size: 0.88em; background: var(--surfa
 .tok-c { color: var(--code-c); }
 .tok-a { color: var(--code-a); }
 .code-figure a, .diagram + p a { color: var(--accent); }
+.slide-viewer { margin: 16px 0 0; border: 1px solid var(--line); background: var(--surface); }
+.slide-scroll { aspect-ratio: 16 / 9; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: contain; }
+.slide-scroll img { display: block; width: 100%; height: auto; scroll-snap-align: start; }
+.slide-scroll img + img { border-top: 1px solid var(--line); }
+.slide-viewer figcaption { padding: 10px 16px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
 
 /* ---------- 썸네일 블랙아웃 (기업 협력 프로젝트: 방송 화면 차단 시연) ---------- */
 .blackout-thumb { position: relative; overflow: hidden; }

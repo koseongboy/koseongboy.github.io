@@ -88,6 +88,7 @@ function normalize(d) {
         heading: s(b.heading), items: nonEmpty(b.items).map(s),
         code: String(b.code || '').replace(/\s+$/, ''), codeNote: s(b.codeNote),
         diagram: String(b.diagram || '').trim(),
+        images: Array.isArray(b.images) ? b.images.filter((im) => im && im.src).map((im) => ({ src: String(im.src), alt: String(im.alt || ''), caption: String(im.caption || ''), width: im.width, height: im.height })) : [],
       })).filter((b) => b.heading || b.items.length || b.code || b.diagram),
     })).filter((sec) => sec.title || sec.stats.length || sec.blocks.length),
     troubleshooting: {
@@ -205,7 +206,8 @@ ${sec.stats.map((x) => `      <div><strong>${inline(x.value)}</strong><span>${in
 ${sec.blocks.map((b) => `      <div>
 ${b.heading ? `        <h3>${inline(b.heading)}</h3>\n` : ''}${b.items.length ? `        <ul>
 ${b.items.map((it) => `          <li>${inline(it)}</li>`).join('\n')}
-        </ul>\n` : ''}${b.code ? `        <figure class="code-figure">${b.codeNote ? `<figcaption>${inline(b.codeNote)}</figcaption>` : ''}<pre class="code-block"><code>${highlight(b.code)}</code></pre></figure>\n` : ''}${b.diagram ? `        <figure class="diagram"><pre class="mermaid">${esc(b.diagram)}</pre></figure>\n` : ''}      </div>`).join('\n')}
+        </ul>\n` : ''}${b.code ? `        <figure class="code-figure">${b.codeNote ? `<figcaption>${inline(b.codeNote)}</figcaption>` : ''}<pre class="code-block"><code>${highlight(b.code)}</code></pre></figure>\n` : ''}${b.images.length ? `        <figure class="slide-viewer"><div class="slide-scroll" tabindex="0" aria-label="슬라이드 ${b.images.length}장, 스크롤해서 보기">${b.images.map((im) => `<img src="../../${esc(im.src)}" alt="${esc(im.alt)}" loading="lazy"${im.width && im.height ? ` width="${im.width}" height="${im.height}"` : ""}>`).join("")}</div>${b.images.some((im) => im.caption) ? `<figcaption>${b.images.filter((im) => im.caption).map((im) => inline(im.caption)).join(" ")} · 스크롤해서 ${b.images.length}장 보기</figcaption>` : ""}</figure>
+` : ""}${b.diagram ? `        <figure class="diagram"><pre class="mermaid">${esc(b.diagram)}</pre></figure>\n` : ''}      </div>`).join('\n')}
     </div>` : '';
     return `
   <section class="section" aria-labelledby="s${n}">
