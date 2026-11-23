@@ -167,7 +167,7 @@ function git(args) {
   });
 }
 
-/** 바뀐 파일 목록. suggested = 기본으로 체크할지 (임시저장 글·관련 없는 새 파일은 기본 해제) */
+/** 바뀐 파일 목록. 기본은 전부 체크(suggested), 확인이 필요한 파일엔 note로 안내만 */
 async function gitStatus() {
   const [branchOut, raw] = await Promise.all([
     git(['rev-parse', '--abbrev-ref', 'HEAD']),
@@ -188,14 +188,14 @@ async function gitStatus() {
     if (p.startsWith('posts/') && p.endsWith('.md')) {
       try {
         const { meta } = blog.parseSource(fs.readFileSync(path.join(ROOT, p), 'utf8'));
-        if (meta.draft) { suggested = false; note = '임시저장 글 (공개 저장소에 올라가요)'; }
+        if (meta.draft) note = '임시저장 글 (공개 저장소에 올라가요)';
       } catch {}
     } else if (untracked && !p.startsWith('posts/') && !p.startsWith('assets/img/posts/')) {
       // 글/글 이미지 말고 새로 생긴 파일은 직접 확인하고 체크하도록
       // 이미지·스크립트·스타일 등 사이트 자원은 페이지에서 쓰이면 기본 체크
       const isAsset = p.startsWith('assets/') || IMAGE_EXT.has(path.extname(p).toLowerCase());
-      suggested = isAsset ? isReferenced(p) : false;
-      if (!suggested) note = isAsset ? '어느 페이지에서도 쓰지 않는 새 파일' : '새 파일 — 올릴지 직접 확인하세요';
+      // 기본은 전부 체크. 확인이 필요한 파일은 안내만 붙임
+      if (!(isAsset && isReferenced(p))) note = isAsset ? '어느 페이지에서도 쓰지 않는 새 파일' : '새 파일';
     }
     files.push({ path: p, code, kind, suggested, note });
   }
@@ -362,6 +362,8 @@ async function handleApi(req, res, url) {
   }
 
   if (req.method === 'GET' && url.pathname === '/__editor/git/status') {
+    // 올리기 전에 다시 빌드해 생성 페이지 · CSS 버전(?v=)을 최신으로 맞춤
+    try { portfolio.buildAll(); blog.buildAll(); } catch (err) { return send(res, 500, { error: '빌드 실패: ' + err.message }); }
     return send(res, 200, await gitStatus());
   }
 

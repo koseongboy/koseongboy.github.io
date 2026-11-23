@@ -427,7 +427,18 @@ function replaceRegion(html, name, content) {
 }
 
 /* ---------------- 빌드 ---------------- */
+/** CSS 캐시 무효화: 링크에 내용 해시(?v=)를 붙여, 스타일이 바뀌면 브라우저가 새로 받게 함 */
+function bustCss(html) {
+  return html.replace(/(assets\/css\/([\w-]+)\.css)(\?v=[0-9a-f]+)?"/g, (m, p, name) => {
+    const f = path.join(ROOT, 'assets', 'css', name + '.css');
+    if (!fs.existsSync(f)) return m;
+    const v = require('crypto').createHash('md5').update(fs.readFileSync(f)).digest('hex').slice(0, 8);
+    return p + '?v=' + v + '"';
+  });
+}
+
 function write(file, content) {
+  if (file.endsWith('.html')) content = bustCss(content);
   if (fs.existsSync(file) && fs.readFileSync(file, 'utf8') === content) return false;
   fs.writeFileSync(file, content, 'utf8');
   return true;
