@@ -46,6 +46,17 @@ function highlight(src) {
   }
   return out + esc(src.slice(last));
 }
+
+/** 타임라인 블록: 날짜 · 제목 · 설명 + 실제로 보낸 자료(코드 · 영상 · 목록)를 접어서 보여 줌 */
+function timelineHtml(tl) {
+  const att = (a) => {
+    const body = a.code ? `<pre class="code-block"><code>${highlight(a.code)}</code></pre>`
+      : a.video ? `<video controls muted playsinline preload="none"${a.poster ? ` poster="../../${esc(a.poster)}"` : ''} src="../../${esc(a.video)}"></video>`
+      : `<ul>${a.items.map((it) => `<li>${inline(it)}</li>`).join('')}</ul>`;
+    return `<details class="tl-att"${a.video ? ' open' : ''}><summary>${inline(a.label || '첨부')}</summary>${body}${a.note ? `<p class="tl-note">${inline(a.note)}</p>` : ''}</details>`;
+  };
+  return `        <ol class="timeline">\n${tl.map((t) => `          <li><span class="tl-date">${esc(t.date)}</span><div class="tl-body"><strong>${inline(t.title)}</strong>${t.text ? `<p>${inline(t.text)}</p>` : ''}${t.attachments.map(att).join('')}</div></li>`).join('\n')}\n        </ol>\n`;
+}
 const pad2 = (n) => String(n).padStart(2, '0');
 const nonEmpty = (a) => (Array.isArray(a) ? a : []).filter((x) => x != null && String(x).trim() !== '');
 
@@ -89,7 +100,15 @@ function normalize(d) {
         code: String(b.code || '').replace(/\s+$/, ''), codeNote: s(b.codeNote),
         diagram: String(b.diagram || '').trim(),
         images: Array.isArray(b.images) ? b.images.filter((im) => im && im.src).map((im) => ({ src: String(im.src), alt: String(im.alt || ''), caption: String(im.caption || ''), width: im.width, height: im.height })) : [],
-      })).filter((b) => b.heading || b.items.length || b.code || b.diagram),
+        // 타임라인: [{ date, title, text, attachments: [{ label, code | video(+poster) | items }] }]
+        timeline: Array.isArray(b.timeline) ? b.timeline.filter((t) => t && (t.title || t.text)).map((t) => ({
+          date: s(t.date), title: s(t.title), text: s(t.text),
+          attachments: (t.attachments || []).map((a) => ({
+            label: s(a.label), code: String(a.code || '').replace(/\s+$/, ''), video: s(a.video), poster: s(a.poster),
+            items: nonEmpty(a.items).map(s), note: s(a.note),
+          })).filter((a) => a.code || a.video || a.items.length),
+        })) : [],
+      })).filter((b) => b.heading || b.items.length || b.code || b.diagram || b.timeline.length),
     })).filter((sec) => sec.title || sec.stats.length || sec.blocks.length),
     troubleshooting: {
       title: s(d.troubleshooting && d.troubleshooting.title) || e.troubleshooting.title,
@@ -207,7 +226,7 @@ ${sec.blocks.map((b) => `      <div>
 ${b.heading ? `        <h3>${inline(b.heading)}</h3>\n` : ''}${b.items.length ? `        <ul>
 ${b.items.map((it) => `          <li>${inline(it)}</li>`).join('\n')}
         </ul>\n` : ''}${b.code ? `        <figure class="code-figure">${b.codeNote ? `<figcaption>${inline(b.codeNote)}</figcaption>` : ''}<pre class="code-block"><code>${highlight(b.code)}</code></pre></figure>\n` : ''}${b.images.length ? `        <figure class="slide-viewer"><div class="slide-scroll" tabindex="0" aria-label="슬라이드 ${b.images.length}장, 스크롤해서 보기">${b.images.map((im) => `<img src="../../${esc(im.src)}" alt="${esc(im.alt)}" loading="lazy"${im.width && im.height ? ` width="${im.width}" height="${im.height}"` : ""}>`).join("")}</div>${b.images.some((im) => im.caption) ? `<figcaption>${b.images.filter((im) => im.caption).map((im) => inline(im.caption)).join(" ")} · 스크롤해서 ${b.images.length}장 보기</figcaption>` : ""}</figure>
-` : ""}${b.diagram ? `        <figure class="diagram"><pre class="mermaid">${esc(b.diagram)}</pre></figure>\n` : ''}      </div>`).join('\n')}
+` : ""}${b.timeline.length ? timelineHtml(b.timeline) : ''}${b.diagram ? `        <figure class="diagram"><pre class="mermaid">${esc(b.diagram)}</pre></figure>\n` : ''}      </div>`).join('\n')}
     </div>` : '';
     return `
   <section class="section" aria-labelledby="s${n}">

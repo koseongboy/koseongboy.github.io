@@ -313,6 +313,20 @@ code { font-family: var(--font-mono); font-size: 0.88em; background: var(--surfa
 .slide-scroll { aspect-ratio: 16 / 9; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: contain; }
 .slide-scroll img { display: block; width: 100%; height: auto; scroll-snap-align: start; }
 .slide-scroll img + img { border-top: 1px solid var(--line); }
+.timeline { list-style: none; margin: 16px 0 0; padding: 0; border-left: 2px solid var(--line); }
+.timeline > li { position: relative; display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 0 0 24px 18px; }
+.timeline > li::before { content: ''; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
+.tl-date { font-family: var(--font-mono); font-size: 13px; color: var(--muted); padding-top: 2px; }
+.tl-body > strong { display: block; }
+.tl-body > p { margin: 4px 0 0; color: var(--text-2); }
+.tl-att { margin-top: 10px; border: 1px solid var(--line); background: var(--surface); }
+.tl-att > summary { cursor: pointer; padding: 8px 12px; font-size: 14px; color: var(--muted); }
+.tl-att[open] > summary { border-bottom: 1px solid var(--line); }
+.tl-att .code-block { margin: 0; border: 0; }
+.tl-att video { display: block; width: 100%; height: auto; background: #000; }
+.tl-att ul { margin: 0; padding: 10px 16px 10px 32px; }
+.tl-note { margin: 0; padding: 8px 12px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+@media (max-width: 600px) { .timeline > li { grid-template-columns: 1fr; gap: 2px; } }
 .slide-viewer figcaption { padding: 10px 16px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
 
 /* ---------- 썸네일 블랙아웃 (기업 협력 프로젝트: 방송 화면 차단 시연) ---------- */
