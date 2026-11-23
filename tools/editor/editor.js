@@ -170,6 +170,7 @@
     pageSelect,
     liveEl,
     writeLink,
+    h('a', { class: 'ed-btn ed-btn-link', href: '/__docs/', title: 'docs 폴더의 자소서 · 메모 미리보기 (실시간 반영, 읽기 전용)' }, '📄 자소서'),
     publishBtn,
     offBtn,
     h('span', { class: 'ed-edit-only' },

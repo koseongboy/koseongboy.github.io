@@ -8,7 +8,8 @@
  * - HTML 페이지에 편집기 스크립트를 주입해서 보여줍니다 (원본 파일에는 넣지 않음).
  * - 보기 모드 / 편집 모드 전환. 파일이 바뀌면(직접 수정, Claude 수정 등) 열린 화면에 바로 반영됩니다.
  * - 저장하면 해당 .html 파일을 덮어쓰고, 업로드한 이미지는 assets/img/ 에 저장합니다.
- * - 외부 의존성 없음. 내 컴퓨터(127.0.0.1)에서만 접속됩니다.
+ * - 외부 의존성 없음. 내 컴퓨터(127.0.0.1)와, Tailscale이 켜져 있으면 내 Tailscale 기기에서만 접속됩니다.
+ *   (Tailscale 주소에만 따로 열고 LAN · 인터넷에는 열지 않음. 끄려면 NO_TAILSCALE=1)
  */
 'use strict';
 
@@ -16,8 +17,10 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { exec, execFile } = require('child_process');
+const os = require('os');
 const blog = require('../blog/build.js');
 const portfolio = require('../portfolio/build.js');
+const docsView = require('./docs.js');   // docs/ 자소서 미리보기 (/__docs/)
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const EDITOR_DIR = __dirname;
@@ -26,7 +29,7 @@ const PORT = Number(process.env.PORT) || 4000;
 const HOST = '127.0.0.1';
 const MAX_UPLOAD = 20 * 1024 * 1024;
 
-const BLOCKED_DIRS = ['.git', 'references', 'tools', 'node_modules', '_site'];
+const BLOCKED_DIRS = ['.git', 'references', 'tools', 'node_modules', '_site', 'docs'];   // docs 는 /__docs/ 미리보기로만
 const IMAGE_EXT = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp']);
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -405,6 +408,7 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   try {
     if (url.pathname.startsWith('/__editor/')) return await handleApi(req, res, url);
+    if (docsView.handle(req, res, url)) return;
     if (req.method !== 'GET' && req.method !== 'HEAD') return send(res, 405, 'Method Not Allowed', 'text/plain');
 
     let abs = resolveSitePath(url.pathname);
@@ -431,11 +435,33 @@ server.on('error', (err) => {
   process.exit(1);
 });
 
+/** 이 PC의 Tailscale IPv4 (100.64.0.0/10). 없으면 null */
+function tailscaleIp() {
+  for (const list of Object.values(os.networkInterfaces())) {
+    for (const a of list || []) {
+      if (a.family !== 'IPv4' && a.family !== 4) continue;
+      const [x, y] = a.address.split('.').map(Number);
+      if (x === 100 && y >= 64 && y <= 127) return a.address;
+    }
+  }
+  return null;
+}
+
 server.listen(PORT, HOST, () => {
   startWatcher();
+  docsView.startWatcher();
   const link = `http://localhost:${PORT}/`;
   console.log('\n  포트폴리오 편집 서버 실행 중 (보기 / 편집 모드, 실시간 반영)');
   console.log('  ' + link);
+  const ts = process.env.NO_TAILSCALE ? null : tailscaleIp();
+  if (ts) {
+    // 같은 화면을 Tailscale 주소에도 열어, 밖에서 노트북으로 실시간 확인 · 편집 (LAN · 인터넷에는 열지 않음)
+    const tsServer = http.createServer(server.listeners('request')[0]);
+    tsServer.on('error', (err) => console.error('  Tailscale 주소로 열지 못했어요: ' + err.message));
+    tsServer.listen(PORT, ts, () => console.log('  노트북(Tailscale): http://' + ts + ':' + PORT + '/'));
+  } else if (!process.env.NO_TAILSCALE) {
+    console.log('  Tailscale 주소가 없어 이 PC에서만 열려요 (Tailscale 실행 · 로그인 후 다시 켜 주세요)');
+  }
   console.log('  종료: Ctrl+C\n');
   if (!process.env.NO_OPEN) {
     const cmd = process.platform === 'win32' ? `start "" "${link}"` : process.platform === 'darwin' ? `open "${link}"` : `xdg-open "${link}"`;
