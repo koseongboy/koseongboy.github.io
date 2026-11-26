@@ -355,7 +355,10 @@ function buildAll(opts = {}) {
   home = replaceRegion(home, 'TAGS', homeTags(published));
   write(indexPath, home);
 
-  write(path.join(ROOT, 'sitemap.xml'), sitemap(published));
+  const sitemapXml = sitemap(published);
+  write(path.join(ROOT, 'sitemap.xml'), sitemapXml);
+  // GSC가 /sitemap.xml의 예전 "가져올 수 없음" 결과를 캐시해 다시 시도하지 않아, 새 경로로도 제공
+  write(path.join(ROOT, 'sitemap', 'sitemap.xml'), sitemapXml);
   write(path.join(ROOT, 'feed.xml'), feed(published));
   return { total: all.length, published: published.length };
 }
