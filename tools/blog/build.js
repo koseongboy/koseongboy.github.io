@@ -152,7 +152,13 @@ function relatedProjects(tags, projects) {
   return projects.filter((pr) => [...pr.keys].some((k) => keys.has(k)));
 }
 
+/** 마크다운의 ```mermaid 코드 블록(언어 이름 대소문자 무관)을 Mermaid 다이어그램(<pre class="mermaid">)으로 바꿈 */
+const MERMAID_BLOCK_RE = /<pre\b[^>]*>\s*<code\b(?=[^>]*(?:data-language="mermaid"|class="[^"]*\blang(?:uage)?-mermaid\b))[^>]*>([\s\S]*?)<\/code>\s*<\/pre>/gi;
+const mermaidBlocks = (html) => String(html || '').replace(MERMAID_BLOCK_RE, (m, src) => `<figure class="diagram"><pre class="mermaid">${src}</pre></figure>`);
+
 function postPage(p, prev, next, projects = readProjects()) {
+  p = { ...p, body: mermaidBlocks(p.body) };
+  const hasDiagram = /<pre class="mermaid">/.test(p.body);
   const related = relatedProjects(p.tags, projects);
   const url = `${SITE}/posts/${encodeURIComponent(p.slug)}.html`;
   const cover = p.coverPath ? `${SITE}/${p.coverPath}` : '';
@@ -235,7 +241,7 @@ ${p.body || ''}
 <footer class="site-footer"><p class="copyright">© 2026 koseongboy · <a href="../feed.xml">RSS</a></p></footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>if (window.hljs) document.querySelectorAll('.post-body pre code').forEach(function (el) { hljs.highlightElement(el); });</script>
-</body>
+${hasDiagram ? '<script type="module" src="../assets/js/diagram.js"></script>\n' : ''}</body>
 </html>
 `;
 }

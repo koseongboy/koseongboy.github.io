@@ -87,6 +87,50 @@
     },
   });
 
+  /* ---------------- Mermaid 미리보기 ----------------
+   * 마크다운 모드 미리보기 영역의 ```mermaid 코드 블록을 그림으로 바꿔 보여 줌 (글 페이지와 같은 Mermaid 버전).
+   * 미리보기가 다시 그려지면(내용 수정) 블록이 코드로 돌아오므로, 변화를 감지해 다시 그림. */
+  const editorDark = $('w-editor').matches('.toastui-editor-dark') || !!$('w-editor').querySelector('.toastui-editor-dark');
+  let mermaidP = null;
+  const loadMermaid = () => mermaidP || (mermaidP = import('https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs')
+    .then(({ default: mermaid }) => {
+      mermaid.initialize({ startOnLoad: false, theme: editorDark ? 'dark' : 'neutral', fontFamily: "'Noto Sans KR', sans-serif" });
+      return mermaid;
+    }));
+  const svgCache = new Map(); // 같은 코드는 다시 그리지 않음 (입력할 때마다 깜빡이지 않게)
+  let mermaidSeq = 0;
+  let mermaidTimer = 0;
+  const isMermaidCode = (c) => /^mermaid$/i.test(c.getAttribute('data-language') || '') || /\blang(?:uage)?-mermaid\b/i.test(c.className);
+  async function renderMermaidPreview() {
+    const preview = document.querySelector('#w-editor .toastui-editor-md-preview');
+    if (!preview) return;
+    const blocks = [...preview.querySelectorAll('pre > code')].filter(isMermaidCode);
+    if (!blocks.length) return;
+    let mermaid;
+    try { mermaid = await loadMermaid(); } catch { mermaidP = null; return; }
+    for (const code of blocks) {
+      const pre = code.parentElement;
+      const src = code.textContent;
+      let svg = svgCache.get(src);
+      if (svg == null) {
+        const id = 'w-mermaid-' + (++mermaidSeq);
+        try { svg = (await mermaid.render(id, src)).svg; } catch (err) {
+          svg = '';
+          pre.dataset.mermaidError = 'Mermaid 문법 오류: ' + String((err && err.message) || err).split('\n')[0];
+        }
+        document.getElementById('d' + id)?.remove(); // 실패 시 남는 임시 요소 정리
+        if (svg) svgCache.set(src, svg);
+      }
+      if (!svg || !code.isConnected) continue; // 오류면 코드 그대로 둠
+      pre.classList.add('w-mermaid');
+      pre.innerHTML = svg; // pre 자체는 남겨 두어 에디터가 미리보기를 갱신할 때 그대로 교체되게 함
+    }
+  }
+  new MutationObserver(() => {
+    clearTimeout(mermaidTimer);
+    mermaidTimer = setTimeout(renderMermaidPreview, 250);
+  }).observe($('w-editor'), { childList: true, subtree: true });
+
   /* ---------------- 상태 표시 ---------------- */
   function setDirty(v) {
     if (loading) return;
