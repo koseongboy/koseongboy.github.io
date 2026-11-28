@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11/28 개발일지 | KOSEONGBOY.DEV</title>
+<meta name="description" content="방치형 게임 만들기 그 위대한 시작 기존 캡스톤 디자인에서 만든 Drill Idle ( github )에서 &quot;게임 바깥의 입력이 공장의 동력이 된다 -&gt; 생산성 도구로써의 역할도 가능하다&quot; 의 기획 구조를 버리는 것은 아쉽다고 생각하게 됨. 출시를 해…">
+<meta name="author" content="고성보이 (koseongboy)">
+<link rel="canonical" href="https://koseongboy.github.io/posts/2026-11-28-1830-11-28-%EA%B0%9C%EB%B0%9C%EC%9D%BC%EC%A7%80.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="11/28 개발일지">
+<meta property="og:description" content="방치형 게임 만들기 그 위대한 시작 기존 캡스톤 디자인에서 만든 Drill Idle ( github )에서 &quot;게임 바깥의 입력이 공장의 동력이 된다 -&gt; 생산성 도구로써의 역할도 가능하다&quot; 의 기획 구조를 버리는 것은 아쉽다고 생각하게 됨. 출시를 해…">
+<meta property="og:url" content="https://koseongboy.github.io/posts/2026-11-28-1830-11-28-%EA%B0%9C%EB%B0%9C%EC%9D%BC%EC%A7%80.html">
+<meta property="og:site_name" content="KOSEONGBOY.DEV">
+<meta property="og:image" content="https://koseongboy.github.io/assets/img/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="KOSEONGBOY.DEV — 고성보이 Game Client Engineer 개발 블로그 &amp; 포트폴리오">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://koseongboy.github.io/assets/img/og-image.png">
+<meta property="article:published_time" content="2026-11-28">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0f12" media="(prefers-color-scheme: dark)">
+<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="alternate" type="application/rss+xml" title="KOSEONGBOY.DEV" href="../feed.xml">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%231f3fd1'/%3E%3Crect x='3' y='3' width='3' height='10' fill='white'/%3E%3Cpath d='M7 8L11.5 3H14L9.5 8L14 13H11.5Z' fill='white'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&amp;family=Space+Grotesk:wght@400;500;700&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css?v=d604d2ad">
+<link rel="stylesheet" href="../assets/css/blog.css?v=c0534799">
+<script src="../assets/js/theme.js" defer></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"11/28 개발일지","datePublished":"2026-11-28","author":{"@type":"Person","name":"고성보이"},"description":"방치형 게임 만들기 그 위대한 시작 기존 캡스톤 디자인에서 만든 Drill Idle ( github )에서 \"게임 바깥의 입력이 공장의 동력이 된다 -> 생산성 도구로써의 역할도 가능하다\" 의 기획 구조를 버리는 것은 아쉽다고 생각하게 됨. 출시를 해…","mainEntityOfPage":"https://koseongboy.github.io/posts/2026-11-28-1830-11-28-%EA%B0%9C%EB%B0%9C%EC%9D%BC%EC%A7%80.html","image":"https://koseongboy.github.io/assets/img/posts/image-20261128101717.png"}</script>
+</head>
+<body data-page="post" data-slug="2026-11-28-1830-11-28-개발일지">
+
+<header class="site-header">
+  <nav class="container" aria-label="주요 메뉴">
+    <a href="../" class="logo">KOSEONGBOY.DEV</a>
+    <div class="nav-links">
+      <a href="../" aria-current="page">Blog</a>
+      <a href="../portfolio/">Portfolio</a>
+      <a href="https://github.com/koseongboy" target="_blank" rel="noopener">GitHub ↗</a>
+      <button type="button" class="theme-toggle" aria-label="라이트/다크 모드 전환"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+  <div class="post-wrap">
+    <div class="breadcrumb"><a href="../">← 모든 글</a></div>
+    <article>
+      <header class="post-header">
+        <div><a class="cat-badge" href="../?category=DevLog">DevLog</a></div>
+        <h1>11/28 개발일지</h1>
+        <div class="post-meta"><time datetime="2026-11-28">2026.11.28</time><span>·</span><span>6분 읽기</span></div>
+        <ul class="post-tags"><li><a href="../?tag=%EA%B8%B0%ED%9A%8D">#기획</a></li><li><a href="../?tag=%EA%B2%80%EC%A6%9D">#검증</a></li></ul>
+        
+      </header>
+      
+      <div class="post-body">
+<!-- POST:BODY -->
+<h1>방치형 게임 만들기 그 위대한 시작</h1><p>기존 캡스톤 디자인에서 만든 Drill Idle (<a href="https://github.com/koseongboy/Drill_Game">github</a>)에서 "게임 바깥의 입력이 공장의 동력이 된다 -&gt; 생산성 도구로써의 역할도 가능하다" 의 기획 구조를 버리는 것은 아쉽다고 생각하게 됨.</p><h2>출시를 해보자!</h2><p>1인 개발을 목표로 출시를 해보는 것이 최종적인 목표</p><h2>프로젝트 계획 수립</h2><p>우선 이번 프로젝트는 투 트랙으로 진행할 예정</p><ol><li><p>게임 출시</p></li><li><p>윈도우 키보드 마우스 입력 후킹 패키지 출시 (오픈소스 기여)</p></li></ol><h3>왜 이렇게 했느냐</h3><p>솔직히 말하면 그냥 게임만 만들어도 되긴 하는데, cpp 포트폴리오가 아예 없는 건 너무한 것 같아서 오픈소스 기여를 통해 cpp 공부 해보려 함.</p><p><br></p><p>고로 절대로 ai가 코드를 직접 짜게 만들지 않고, 내가 코드를 손 수 써보는 것이 목표. (cpp 한정)</p><h1>정한 기획 / 기능</h1><h3>1. 바꿀 공장의 기본적 동작</h3><div data-language="Mermaid" class="toastui-editor-ww-code-block"><pre><code data-language="Mermaid">flowchart LR
+    IN["키보드 · 마우스 입력"] --&gt; PW["동력"]
+    PW --&gt; M["채굴기"]
+    M --&gt; R["원자재"]
+    R --&gt; P["가공 시설"]
+    P --&gt; I["중간 재료"]
+    I --&gt; A["합성 시설"]
+    A --&gt; C["부품"]
+    C --&gt; F["최종 장치 조립"]</code></pre></div><p>기본적인 틀은 새티스팩토리에서 가져옴. 아직 완전히 기본적인 틀이기 때문에 추후 세세한 기획을 해야할 듯.</p><h3>2. 프로젝트 구조</h3><p>ASEMDEF를 적용해 참조 방향을 컴파일 타임에서 정의. 게다가 컴파일 타임까지 감소.</p><div data-language="Mermaid" class="toastui-editor-ww-code-block"><pre><code data-language="Mermaid">graph TD
+  UI[Indiman.UI] --&gt; Power[Indiman.Power]
+  UI --&gt; Production[Indiman.Production]
+  UI --&gt; Core[Indiman.Core]
+  Power --&gt; Core
+  Production --&gt; Core
+  Core --&gt; Data[Indiman.Data]
+  UI --&gt; Data
+  Power --&gt; Data
+  Production --&gt; Data
+  TestsE[Indiman.Tests.EditMode] -.-&gt; Production
+  TestsE -.-&gt; Power
+  TestsE -.-&gt; Core
+  TestsE -.-&gt; Data
+  TestsP[Indiman.Tests.PlayMode] -.-&gt; Production
+  TestsP -.-&gt; Power
+  TestsP -.-&gt; Core
+  TestsP -.-&gt; Data</code></pre></div><p>위는 클로드가 짜준 참조 형태인데, 기능 구현하면서 수정하게 될 듯.</p><h3>3. 생산성 도구로써의 역할</h3><p>기본적인 게임 형태는 화면 우측에 플로팅 된 공장의 형태 (n*n 그리드, 탑뷰)</p><p><img src="../assets/img/posts/image-20261128101717.png" alt="image" contenteditable="false"><br></p><p><br></p><p>화면을 접을 수 있고 그렇게 된다면 하단에 게임 상태를 보여주는 Bar 형태 위에 캐릭터가 주기적으로 응원? 을 해주는 판떼기같은게 있음</p><p><br></p><p>추가로 키보드 마우스 입력 후킹이 감지될 때 마다 (혹은 몇 묶음이 감지될 떄 마다) 화면 하단에서 입자들이 뾰로롱~ 올라와서 하단 Bar로 흘러들어가는 형태를 보여주고 싶음.</p><p><img src="../assets/img/posts/image-20261128102028.png" alt="image" contenteditable="false"><br></p><p><br></p><p>물론 캐릭터 / 파티클은 설정으로 끌 수 있음.</p><h3>후킹의 성능과 보안성 검증</h3><h4>1. 저수준 훅 vs Raw Input</h4><p>저수준 훅의 경우 동기 방식이기 때문에 입력 -&gt; 집계 -&gt; 넘김 순서로 작동한다. 사실 집계 자체는 큰 오버헤드가 없을 수 있으나 유니티가 돌아가면서 훅을 잡는 스레드가 막히게 될 경우가 있다. (씬 로딩, 프레임 드랍 등의 무거운 상황일 때) 이때 오버헤드가 발생한다.</p><p>따라서 cpp로 구현한 dll 안에 전용 스레드를 두고, 해당 스레드가 훅을 잡고, 유니티는 이를 읽어가도록 해야 한다.</p><p><br></p><p>Raw Input의 경우 비동기적으로 입력의 사본을 생성해 넘겨주기 때문에 입력 지연이 생기지 않는다. 이렇게 생각하면 무조건 raw input이 좋은거 아닌가? 싶겠지만 치명적인 문제가 있다. 바로 Unity Input System이 이미 Raw Input을 받고 있다는 점. Raw Input은 한 프로세스당 한  번만 등록 가능하고, 다시 등록하면 이를 덮어쓴다. Unity가 Raw Input을 등록하고 있기 때문에 키 입력을 못 받는 경우가 생길 수도, 혹은 키 입력을 받느라 게임 단축키를 이용 못 할 수도 있다.</p><h4>2. 다른 저수준 훅 프로그램과의 충돌</h4><p>이전 <a href="https://github.com/koseongboy/Drill_Game">Drill Idle</a>개발 시 빌드한 게임과 디스코드(단축키 설정 ON)를 같이 켜놨을 때, 외부 키 입력을 받지 못했던 버그가 있었다.</p><p><br></p><p>문제를 클로드와 상담했는데, 클로드에게 내 프로젝트 코드를 분석해달라고 했다. 그랬더니 예상되는 문제 상황을 두 가지 받았다. 근데 만족스럽진 않아서 구현해보고 테스트 해봐야할 것 같다.</p><h4>3. AI 토큰 사용량을 입력으로?</h4><p>요즘 ai 에이전트를 이용해 작업을 하는 사람이 많다. 이때 AFK 상태가 되는 경우들이 있는데 일을 한 게 아니지 않는가. (엄)</p><p>그래서 일단은 AI 작업량 -&gt; 토큰 사용량으로 가정하고 여러 시나리오를 구상해봤다.</p><ol><li><p><strong>로컬 로그 읽기</strong>: 클로드의 경우 <code data-backticks="1">~/.claude/projects/&lt;프로젝트&gt;/&lt;세션&gt;.jsonl</code>폴더에 응답마다 토큰 사용량 등을 남기는 걸 검증했다. 그러나 로그 형식이 AI 모델마다 전부 다르고, 당장에라도 로그 형식이 바뀌면 유지보수가 매우 불편해진다. 또한 사용자(게이머)가 직접 폴더 연동을 해 주어야 하는 불편함이 있다.</p></li><li><p><strong>OTLP 연동</strong>: 기업에서 토큰 사용량 등을 추적하기 위해 ai가 자기가 토큰을 사용하면 특정 서버에 push해 밀어넣는 OpenTelemetry라는 기술이 있다고 한다. 그러나 회사 pc 등에서 텔레메트리 설정 변경이 정책 위반일 수도 있고, 우리 프로그램이 사용하는 포트를 이미 회사에서 사용중일 수도 있다.</p></li></ol><p>줴라이.. 그럼 토큰 말고 다른 건 있을까? 이번엔 제미나이를 갈궈봤다.</p><ul><li><p><strong>작업 폴더 파일 변경 횟수:</strong> AI가 한 게 아니라 그냥 파일이 변동되더라도 전부 반영해버려서 기각</p></li><li><p><strong>클립보드 변경 횟수:</strong> 진심?</p></li><li><p><strong>AI 도구 실행 · 포커스 시간:</strong> ai 도구가 세상에 몇 개나 있는 줄 알고 모든 창 이름을 기억해서 포커스 시간을 측정함?</p></li><li><p><strong>Git 통계:</strong> 아직 인간이 ai를 이길 수 있구나</p></li></ul><p>이러한 이유들로 인해 ai 사용량은 배제하기로 했다. 프롬프트 입력하면서 생긴 키보드 입력이 들어갈 테니깐..</p><h4>4. 접힌 화면에 대한 검증</h4><p>게임 창의 영역은 화면 전체이지만, 테두리가 없고 나머지가 투명한 형식으로 진행할 예정. -&gt; 투명한 부분에 대한 클릭이 통과되어 뒤 창으로 갈 수 있을까?</p><p>유니티 상에서 게임 오브젝트라면 클릭을 받고, 아니면 윈도우 api를 통해 뒤로 흘려보내게 하면 가능</p><p><br></p><p>애초에 투명하게 하는게 가능할까? -&gt; UniWindowController라는 친구가 이미 깃헙에 오픈소스로 공개되어있음. 확인해보면 될 듯</p><h4>5. 가장 중요한 아트</h4><p>대 황족 아트 님님님들께서 과연 내 프로젝트에 몸담아 주실까?</p><p>모르겠다. 일단 동작하는 프로토타입을 만들고, 테마를 적용할 수 있도록 구현한 뒤 여러 테마를 받아보도록 하자.</p><p><br></p><p>아트를 못 구했을 때 로컬 ai를 통해 이미지를 뽑아보는걸 목표로 해보자</p>
+<!-- /POST:BODY -->
+      </div>
+    </article>
+    <nav class="post-nav" aria-label="이전 글 / 다음 글">
+      <a class="prev" href="2026-11-14-2101-%EC%9C%A0%EB%8B%88%ED%8B%B0-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%ED%84%B0.html"><small>← 이전 글</small><span>유니티 애니메이터 공부</span></a>
+      <span class="spacer"></span>
+    </nav>
+  </div>
+</main>
+
+<footer class="site-footer"><p class="copyright">© 2026 koseongboy · <a href="../feed.xml">RSS</a></p></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>if (window.hljs) document.querySelectorAll('.post-body pre code').forEach(function (el) { hljs.highlightElement(el); });</script>
+</body>
+</html>

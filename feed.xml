@@ -6,6 +6,14 @@
   <description>고성보이의 게임 클라이언트 개발 블로그</description>
   <language>ko</language>
   <item>
+    <title>11/28 개발일지</title>
+    <link>https://koseongboy.github.io/posts/2026-11-28-1830-11-28-%EA%B0%9C%EB%B0%9C%EC%9D%BC%EC%A7%80.html</link>
+    <guid>https://koseongboy.github.io/posts/2026-11-28-1830-11-28-%EA%B0%9C%EB%B0%9C%EC%9D%BC%EC%A7%80.html</guid>
+    <pubDate>Sat, 28 Nov 2026 00:00:00 GMT</pubDate>
+    <category>DevLog</category>
+    <description>방치형 게임 만들기 그 위대한 시작 기존 캡스톤 디자인에서 만든 Drill Idle ( github )에서 &quot;게임 바깥의 입력이 공장의 동력이 된다 -&gt; 생산성 도구로써의 역할도 가능하다&quot; 의 기획 구조를 버리는 것은 아쉽다고 생각하게 됨. 출시를 해…</description>
+  </item>
+  <item>
     <title>유니티 애니메이터 공부</title>
     <link>https://koseongboy.github.io/posts/2026-11-14-2101-%EC%9C%A0%EB%8B%88%ED%8B%B0-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%ED%84%B0.html</link>
     <guid>https://koseongboy.github.io/posts/2026-11-14-2101-%EC%9C%A0%EB%8B%88%ED%8B%B0-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%ED%84%B0.html</guid>
